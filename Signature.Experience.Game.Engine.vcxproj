@@ -73,6 +73,12 @@
     <OutDir>$(ProjectDir)Engine\</OutDir>
     <IntDir>$(ProjectDir)Temp\</IntDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)Engine\</OutDir>
+    <IntDir>$(ProjectDir)Temp\</IntDir>
+    <IncludePath>$(ProjectDir)ThirdParty\SDL2\include;$(ProjectDir)ThirdParty\SDL2_image\include;$(ProjectDir)ThirdParty\Box2D-master\Box2D;$(ProjectDir)ThirdParty\Box2D-master;$(ProjectDir)ThirdParty\tinyxml2-master;$(ProjectDir)ThirdParty\SDL2_ttf\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)ThirdParty\SDL2\lib\x64;$(ProjectDir)ThirdParty\SDL2_image\lib\x64;$(ProjectDir)ThirdParty\SDL2_ttf\lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -86,6 +92,18 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
+    <PreBuildEvent>
+      <Command>copy "$(ProjectDir)ThirdParty\SDL2\lib\x64\*.dll" "$(ProjectDir)"
+copy "$(ProjectDir)ThirdParty\SDL2_image\lib\x64\*.dll" "$(ProjectDir)"
+copy "$(ProjectDir)ThirdParty\SDL2_ttf\lib\x64\*.dll" "$(ProjectDir)"</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>move "$(ProjectDir)*.dll" "$(ProjectDir)Engine"
+xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -114,6 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
