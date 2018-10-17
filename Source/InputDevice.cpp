@@ -16,15 +16,15 @@ bool InputDevice::initialize()
 		exit(1);
 	}
 
-	keyStates[ENGINE_NA] = false;
-	keyStates[ENGINE_DOWN] = false;
-	keyStates[ENGINE_UP] = false;
-	keyStates[ENGINE_LEFT] = false;
-	keyStates[ENGINE_RIGHT] = false;
-	keyStates[ENGINE_SPACE] = false;
-	keyStates[ENGINE_QUIT] = false;
-	keyStates[ENGINE_SHIFT] = false;
-	keyStates[ENGINE_B] = false;
+	keyStates[InputEvents::NA] = false;
+	keyStates[InputEvents::DOWN] = false;
+	keyStates[InputEvents::UP] = false;
+	keyStates[InputEvents::LEFT] = false;
+	keyStates[InputEvents::RIGHT] = false;
+	keyStates[InputEvents::SPACE] = false;
+	keyStates[InputEvents::QUIT] = false;
+	keyStates[InputEvents::SHIFT] = false;
+	keyStates[InputEvents::B] = false;
 	update();
 	return true;
 }
@@ -51,15 +51,12 @@ void InputDevice::update()
 			keyStates.find(gEvent) -> second = false;
 			break;
 		case SDL_QUIT:
-			keyStates.find(ENGINE_QUIT) -> second = true;
+			keyStates.find(InputEvents::QUIT) -> second = true;
 			break;
 		default:
 			break;
 		}
 	}
-	
-	
-	
 }
 
 //**************************************
@@ -71,38 +68,28 @@ InputDevice::InputEvents InputDevice::Translate(SDL_Event* event)
 	switch(event->key.keysym.sym)
 		{
 		case SDLK_LEFT:
-			return ENGINE_LEFT;
+			return InputEvents::LEFT;
 			break;
 		case SDLK_RIGHT:
-			return ENGINE_RIGHT;
+			return InputEvents::RIGHT;
 			break;
 		case SDLK_UP:
-			return ENGINE_UP;
+			return InputEvents::UP;
 			break;
 		case SDLK_DOWN:
-			return ENGINE_DOWN;
+			return InputEvents::DOWN;
 			break;	
 		case SDLK_SPACE:
-			return ENGINE_SPACE;
+			return InputEvents::SPACE;
 			break;
 		case SDLK_RSHIFT:
 		case SDLK_LSHIFT:
-			return ENGINE_SHIFT;
+			return InputEvents::SHIFT;
 			break;
 		case SDLK_b:
-			return ENGINE_B;
+			return InputEvents::B;
 			break;
 		}
 
-
-
-	return ENGINE_NA;
-}
-
-//**************************************
-//returns the state of a key
-bool InputDevice::getEvent(InputEvents event)
-//**************************************
-{
-	return (keyStates.find(event) -> second);
+	return InputEvents::NA;
 }

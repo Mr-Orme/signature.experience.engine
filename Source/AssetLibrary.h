@@ -3,22 +3,26 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 #include "Definitions.h"
 #include "ObjectFactory.h"
 #include "PhysicsDevice.h"
+#include "SDL_mixer.h"
+#include "Texture.h"
 
 
 class GraphicsDevice;
 class SoundDevice;
 class Object;
 class Component;
-class Mix_Chunk;
-class Mix_Music;
+
 
 class AssetLibrary
 {
 public:
+	AssetLibrary() {};
+	~AssetLibrary() {};
 	bool initialize(SoundDevice* sDevice, GraphicsDevice* gDevice);
 
 	Texture* getArtAsset(std::string name);
@@ -26,17 +30,17 @@ public:
 
 	struct Notice
 	{
-		DIRECTION direction;
+		Direction direction;
 		std::string text;
 	};
 	//TODO: dealt with in event manager!
-	Notice getNotice(Notice notice);
-	bool setNotice(Notice notice);
-	bool removeNotice(Notice notice);
+	Notice getNotice(std::string name);
+	bool setNotice(std::string name, Notice notice);
+	bool removeNotice(std::string name);
 
 	//TODO: switch from using name, to some sort of unique ID
-	ObjectFactory::EngineObjectStats getObjectStats(std::string name);
-	bool setObjectStats(std::string name, ObjectFactory::EngineObjectStats stats);
+	ObjectFactory::ObjectFactoryPresets getObjectStats(std::string name);
+	bool setObjectStats(std::string name, ObjectFactory::ObjectFactoryPresets stats);
 
 	PhysicsDevice::PhysicsStats getObjectPhysics(std::string name);
 	bool setObjectPhysics(std::string name, PhysicsDevice::PhysicsStats physics);
@@ -67,7 +71,7 @@ public:
 private:
 	std::map<std::string, std::unique_ptr<Texture>> artLibrary;
 	std::map<std::string, Notice> noticeLibrary;
-	std::map<std::string, ObjectFactory::EngineObjectStats> objectCreationLibrary;
+	std::map<std::string, ObjectFactory::ObjectFactoryPresets> objectCreationLibrary;
 	std::map<std::string, PhysicsDevice::PhysicsStats> physicsLibrary;
 	std::map<std::string, std::vector<AssetLibraryComponentList>> componentLibrary;
 	std::map<std::string, Mix_Chunk* > soundEffectLibrary;

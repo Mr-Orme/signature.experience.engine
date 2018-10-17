@@ -4,6 +4,8 @@
 
 #include "InputDevice.h"
 #include "GraphicsDevice.h"
+#include "View.h"
+#include "Texture.h"
 #include "PhysicsDevice.h"
 #include "SoundDevice.h"
 
@@ -16,7 +18,7 @@
 //**************************************
 //prepares all asset libraries based on path passed xml file
 //and creastes and initialzies all devices
-bool ResourceManager::Initialize(EngineInt SCREEN_WIDTH, EngineInt SCREEN_HEIGHT, std::string assetPath)
+bool ResourceManager::initialize(EngineInt SCREEN_WIDTH, EngineInt SCREEN_HEIGHT, std::string assetPath)
 {
 
 	/*TODO: Create Level class and have vector of levels. . . . Level needs:
@@ -62,7 +64,8 @@ bool ResourceManager::Initialize(EngineInt SCREEN_WIDTH, EngineInt SCREEN_HEIGHT
 	//========================================
 	//Construct Physics Device
 	//========================================
-	pDevice = std::make_unique<PhysicsDevice>(0,0);
+	Position gravity{ 0, 0 };
+	pDevice = std::make_unique<PhysicsDevice>(gravity);
 		
 	if(!pDevice -> initialize())
 	{
@@ -90,7 +93,6 @@ bool ResourceManager::Initialize(EngineInt SCREEN_WIDTH, EngineInt SCREEN_HEIGHT
 	
 
 
-	//TODO: Update to tinyXML2!!!
 	//prepare XML file for parsing.
 	tinyxml2::XMLDocument assetFile;
 	
@@ -134,10 +136,8 @@ bool ResourceManager::Initialize(EngineInt SCREEN_WIDTH, EngineInt SCREEN_HEIGHT
 				compElement -> QueryFloatAttribute("angularDamping", &physics.angularDamping);
 				compElement -> QueryFloatAttribute("linearDamping", &physics.linearDamping);
 				compElement -> QueryBoolAttribute("physicsOn", &physics.physicsOn);
-				std::string bodyType;
-				std::string bodyShape;
-				compElement -> QueryStringAttribute("bodyType", &(bodyType.data()));
-				compElement -> QueryStringAttribute("bodyShape", &bodyShape);
+				std::string bodyType = compElement->Attribute("bodyType");
+				std::string bodyShape = compElement->Attribute("bodyShape");
 		
 				//convert strings to enums
 				if(bodyType == "ENGINE_DYNAMIC"){physics.bodyType = PhysicsDevice::BodyType::Dynamic;}
@@ -186,6 +186,7 @@ bool ResourceManager::Initialize(EngineInt SCREEN_WIDTH, EngineInt SCREEN_HEIGHT
 	} while (asset);
 	
 	//*********************Load Notices***************************
+	//TODO: Make generic
 	//move to notice section of file
 	assetType = assetType -> NextSiblingElement();
 	//grab first notice
@@ -194,21 +195,30 @@ bool ResourceManager::Initialize(EngineInt SCREEN_WIDTH, EngineInt SCREEN_HEIGHT
 	{
 		//get information from file
 		AssetLibrary::Notice notice;
-		int x,y;
-		char* direction = new char[1];
-		notices -> QueryIntAttribute("x", &x);
-		notices -> QueryIntAttribute("y", &y);
-		notices -> QueryStringAttribute("direction", &direction);
+	
+		char direction = (char)notices->Attribute("direction");
 		notice.text = notices ->GetText();
 		
 		//store in notice, in proper format.
-		if(direction == "N") notice.direction = N;
-		else if(direction == "E") notice.direction = E;
-		else if(direction == "S") notice.direction = S;
-		else if(direction == "W") notice.direction = W;
-		
+		switch (direction)
+		{
+		case 'N':
+			notice.direction = Direction::N;
+			break;
+		case 'E':
+			notice.direction = Direction::E;
+			break;
+		case 'S':
+			notice.direction = Direction::S;
+			break;
+		case 'W':
+			notice.direction = Direction::W;
+			break;
+
+		}
+				
 		//add it to the library.
-		assetLibrary -> setNotice(notice);
+		//assetLibrary -> setNotice(notice);
 		
 		//get the next notice
 		notices = notices -> NextSiblingElement();
@@ -223,10 +233,9 @@ bool ResourceManager::Initialize(EngineInt SCREEN_WIDTH, EngineInt SCREEN_HEIGHT
 	while (sounds)
 	{
 		//get information from file
-		std::string name;
-		sounds -> QueryStringAttribute("name", &name);
-		std::string path;
-		sounds -> QueryStringAttribute("path", &path);
+		std::string name = sounds->Attribute("name");
+		std::string path = sounds->Attribute("path");
+		
 		bool background;
 		sounds -> QueryBoolAttribute("background", &background);
 
@@ -264,7 +273,7 @@ bool ResourceManager::Initialize(EngineInt SCREEN_WIDTH, EngineInt SCREEN_HEIGHT
 //**************************************
 //Deletes all the devices.
 //need to switch to smart pointers.
-bool ResourceManager::Shutdown()
+bool ResourceManager::shutdown()
 //**************************************
 
 {

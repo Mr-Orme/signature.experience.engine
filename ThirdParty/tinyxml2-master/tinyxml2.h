@@ -1123,7 +1123,8 @@ private:
 
 
 /** An attribute is a name-value pair. Elements have an arbitrary
-	number of attributes, each with a unique name.
+	number of attributes, each with a 
+	name.
 
 	@note The attributes are not XMLNodes. You may only query the
 	Next() attribute in a list.

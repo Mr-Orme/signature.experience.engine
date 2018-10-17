@@ -1,5 +1,6 @@
 #include<iostream>
 #include "SDL2_gfxPrimitives.h"
+#include "SDL_mixer.h"
 #include "GraphicsDevice.h"
 #include "View.h"
 #include "Texture.h"
@@ -13,10 +14,6 @@ GraphicsDevice::GraphicsDevice(Uint32 width, Uint32 height) : SCREEN_WIDTH(width
 
 }
 
-GraphicsDevice::~GraphicsDevice()
-{
-
-}
 
 bool GraphicsDevice::initialize(bool fullScreen)
 {
@@ -25,21 +22,21 @@ bool GraphicsDevice::initialize(bool fullScreen)
 	//initialize all SDL subsystems
 	if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
-		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_getError() );
+		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
 		return(false);
 	}
 
 	//initialize SDL_image subsystems
 	if(!IMG_Init(IMG_INIT_PNG))
 	{
-		printf( "SDL_image could not initialize! SDL_Error: %s\n", IMG_getError() );
+		printf( "SDL_image could not initialize! SDL_Error: %s\n", IMG_GetError() );
 		return(false);
 	}
 
 	//initialize SDL_ttf subsystems
 	if(TTF_Init()==-1)
 	{
-		printf( "SDL_ttf could not initialize! SDL_Error: %s\n", TTF_getError() );
+		printf( "SDL_ttf could not initialize! SDL_Error: %s\n", TTF_GetError() );
 		return(false);
 	}
 
@@ -61,7 +58,7 @@ bool GraphicsDevice::initialize(bool fullScreen)
 	}
 	if(screen==nullptr)
 	{
-		printf( "Window could not be created! SDL_Error: %s\n", SDL_getError() );
+		printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
 		return(false);
 	}
 
@@ -69,18 +66,18 @@ bool GraphicsDevice::initialize(bool fullScreen)
 	renderer = SDL_CreateRenderer(screen,-1,SDL_RENDERER_ACCELERATED);
 	if(renderer==nullptr)
 	{
-		printf( "Renderer could not be created! SDL_Error: %s\n", SDL_getError() );
+		printf( "Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
 		return(false);
 	}
 
 	//set the background color (default)
-	SDL_setRenderdrawColor(renderer,0,0,0,255);
+	SDL_SetRenderDrawColor(renderer,0,0,0,255);
 
 	//========================================
 	//create view
 	//========================================
 	view = std::make_unique<View>();
-	view->initialize(0, 0);
+	view->initialize({ 0, 0 });
 
 	return(true);
 
@@ -173,7 +170,7 @@ void GraphicsDevice::draw()
 //	{
 //		ResourceManager* devices = levelExit -> getComponent<BodyComponent>() -> getDevices().get();
 //		//stop the physics on the trapdoor so we can walk onto that square.
-//		devices -> getPhysicsDevice() -> setStopPhysics(levelExit.get());
+//		devices -> pDevice -> setStopPhysics(levelExit.get());
 //		//get rid of the notice stating we need to find the spheres.
 //		Notice notice = {15, 0, W, ""};
 //		devices -> getNoticesLibrary() -> RemoveAsset(notice);
@@ -182,7 +179,8 @@ void GraphicsDevice::draw()
 
 	}
 	//back to black. . .
-	SDL_setRenderdrawColor(renderer,0,0,0,255);
+	SDL_SetRenderDrawColor(renderer,0,0,0,255);
+	
 }
 
 void GraphicsDevice::Present()
@@ -211,7 +209,7 @@ bool GraphicsDevice::setFont(std::string path, EngineInt size, RGBA color)
 	font = TTF_OpenFont(path.c_str(), size);
 	if( font == nullptr )
 	{
-        printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_getError() );
+        printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
 	}
 
 	this -> color = color;
@@ -257,12 +255,12 @@ void GraphicsDevice::Text2Screen(std::string text, Position position)
 		//bottomRight needs to be the width + 1;
 	if(position.x == -1)
 	{
-		position.x = Center((ENGINE_FLT)SCREEN_WIDTH, (ENGINE_FLT)width);
+		position.x = Center((EngineFloat)SCREEN_WIDTH, (EngineFloat)width);
 			
 	}
 	if(position.y == -1)
 	{
-		position.y = Center((ENGINE_FLT)SCREEN_HEIGHT, (ENGINE_FLT)height);
+		position.y = Center((EngineFloat)SCREEN_HEIGHT, (EngineFloat)height);
 	}
 
 	Position topLeft = {position.x - widthIncrease, position.y -heightIncrease};
@@ -281,7 +279,7 @@ void GraphicsDevice::Text2Screen(std::string text, Position position)
 //**************************************
 //adds text to be displayed to the text vector pased on a string and position
 //this one let's us directly type the position's values
-void GraphicsDevice::Text2Screen(std::string text, ENGINE_FLT x, ENGINE_FLT y)
+void GraphicsDevice::Text2Screen(std::string text, EngineFloat x, EngineFloat y)
 //**************************************
 {
 	Position position ={x,y};
@@ -346,11 +344,11 @@ void GraphicsDevice::drawOverlay(Position topLeft, Position bottomRight, RGBA bo
 	overlays.push_back(newOverlay);
 }
 
-ENGINE_FLT GraphicsDevice::Center(ENGINE_FLT centerOn, ENGINE_FLT width)
+EngineFloat GraphicsDevice::Center(EngineFloat centerOn, EngineFloat width)
 {
 			
 			
-	ENGINE_FLT point = (centerOn - width)/2;
+	EngineFloat point = (centerOn - width)/2;
 			
 	return point;
 }

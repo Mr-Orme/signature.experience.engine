@@ -2,18 +2,12 @@
 #define SOUNDDEVICE_H
 
 #include <string>
-
-#include "SDL_Mixer.h"
-
 #include "Definitions.h"
-
-
 
 class ResourceManager;
 
 class SoundDevice{
 public:
-	~SoundDevice();
 	bool initialize(ResourceManager* devices);
 	void Shutdown();
 

@@ -1,4 +1,3 @@
-#include <memory>
 #include "RendererComponent.h"
 #include "BodyComponent.h"
 #include "Texture.h"
@@ -21,7 +20,7 @@ bool RendererComponent::initialize(ObjectFactory::ObjectFactoryPresets& presets)
 	{
 		devices = presets.devices;
 		//grab the sprite from the library.
-		texture = presets.devices -> getAssetLibrary() -> getArtAsset(presets.objectType);
+		texture = presets.devices -> assetLibrary -> getArtAsset(presets.objectType);
 		initialized = texture != nullptr;
 	}
 	return initialized;
@@ -36,15 +35,15 @@ void RendererComponent::draw()
 	//adjust position.
 	updatedPosition = getViewAdjustedPosition();
 
-	auto angle = devices -> getPhysicsDevice() -> getAngle(owner);
+	auto angle = devices -> pDevice -> getAngle(owner);
 
 	//draw sprite.
 	draw(updatedPosition, angle);
 }
 
-void RendererComponent::draw(Position position, ENGINE_FLT angle)
+void RendererComponent::draw(Position position, EngineFloat angle)
 {
-	texture ->draw(devices -> getGraphicsDevice() -> getRenderer(), position, angle, NULL);
+	texture ->draw(devices -> gDevice -> getRenderer(), position, angle, NULL);
 }
 
 void RendererComponent::start(){}
@@ -57,8 +56,8 @@ Position RendererComponent::getViewAdjustedPosition()
 //**************************************
 {	
 	//adjust position.
-	return (devices->getPhysicsDevice()->getPosition(owner) 
-		+ devices->getGraphicsDevice()->getView()->getPosition());
+	return (devices->pDevice->getPosition(owner) 
+		+ devices->gDevice->getView()->position);
 }
 
 void RendererComponent::finish(){}

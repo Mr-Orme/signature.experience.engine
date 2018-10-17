@@ -28,7 +28,7 @@ void UserInputComponent::start(){}
 Object* UserInputComponent::update()
 //**************************************
 {
-	for (auto key : devices->getInputDevice()->keyStates)
+	for (auto key : devices->iDevice->keyStates)
 	{
 		if (key.second)
 		{

@@ -2,9 +2,9 @@
 #define INPUTDEVICE_H
 
 #include "Definitions.h"
+#include "SDL.h"
 #include <map>
 
-class SDL_Event;
 class InputDevice{
 public:
 	bool initialize();

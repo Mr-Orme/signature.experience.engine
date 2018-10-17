@@ -84,6 +84,12 @@
     <ClCompile Include="ThirdParty\tinyxml2-master\tinyxml2.cpp">
       <Filter>ThirdParty</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ContactListener.h">
@@ -143,9 +149,18 @@
     <ClInclude Include="ThirdParty\tinyxml2-master\tinyxml2.h">
       <Filter>ThirdParty</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Assets\Config\assets.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+    <Xml Include="Assets\Config\mainScreen.xml">
       <Filter>Resource Files</Filter>
     </Xml>
   </ItemGroup>

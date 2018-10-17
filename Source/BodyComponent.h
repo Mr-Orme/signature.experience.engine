@@ -17,13 +17,13 @@ public:
 	Object* update() final;
 	void finish() final;
 
-	ENGINE_FLT getAngle();
+	EngineFloat getAngle();
 	Position getPosition();
 	Position getVelocity();
 	EngineInt getWidth();
 	EngineInt getHeight();
-	void setAngle(ENGINE_FLT angle);
-	void adjustAngle(ENGINE_FLT adjustAmount);
+	void setAngle(EngineFloat angle);
+	void adjustAngle(EngineFloat adjustAmount);
 	void linearStop();
 	
 private:

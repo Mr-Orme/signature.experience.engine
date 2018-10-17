@@ -21,10 +21,10 @@ bool BodyComponent::initialize(ObjectFactory::ObjectFactoryPresets& presets)
 		devices = presets.devices;
 				
 		//get physics based on object type.
-		physics = devices -> getAssetLibrary() -> getObjectPhysics(presets.objectType);
+		physics = devices -> assetLibrary -> getObjectPhysics(presets.objectType);
 				
 		//Create fixture.
-		devices -> getPhysicsDevice() -> createFixture
+		devices -> pDevice -> createFixture
 			(
 			owner,
 			physics,
@@ -50,24 +50,24 @@ void BodyComponent::finish()
 //**************************************
 {
 	//remove the physics body
-	if(!devices -> getPhysicsDevice() -> removeObject(owner))
+	if(!devices -> pDevice -> removeObject(owner))
 	{
 		printf( "Object could not be removed from Physics World");
 		exit(1);					
 	}
 }
-ENGINE_FLT BodyComponent::getAngle()
+EngineFloat BodyComponent::getAngle()
 {
-	return devices->getPhysicsDevice()->getAngle(owner);
+	return devices->pDevice->getAngle(owner);
 }
 
 Position BodyComponent::getPosition()
 {
-	return devices->getPhysicsDevice()->getPosition(owner);
+	return devices->pDevice->getPosition(owner);
 }
 Position BodyComponent::getVelocity()
 {
-	return devices->getPhysicsDevice()->getVelocity(owner);
+	return devices->pDevice->getVelocity(owner);
 }
 EngineInt BodyComponent::getWidth()
 {
@@ -77,17 +77,17 @@ EngineInt BodyComponent::getHeight()
 {
 	return owner->getComponent<RendererComponent>()->texture->getHeight();
 }
-void BodyComponent::setAngle(ENGINE_FLT angle)
+void BodyComponent::setAngle(EngineFloat angle)
 {
-	devices->getPhysicsDevice()->setAngle(owner, angle);
+	devices->pDevice->setAngle(owner, angle);
 }
 
-void BodyComponent::adjustAngle(ENGINE_FLT adjustAmount)
+void BodyComponent::adjustAngle(EngineFloat adjustAmount)
 {
 	setAngle(getAngle() + adjustAmount);
 }
 
 void BodyComponent::linearStop()
 {
-	devices->getPhysicsDevice()->setLinearVelocity(owner, { 0,0 });
+	devices->pDevice->setLinearVelocity(owner, { 0,0 });
 }

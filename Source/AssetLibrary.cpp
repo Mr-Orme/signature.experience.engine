@@ -3,6 +3,14 @@
 #include "AssetLibrary.h"
 #include "Texture.h"
 #include "GraphicsDevice.h"
+#include "SDL_mixer.h"
+#include "Component.h"
+#include "BodyComponent.h"
+#include "HealthComponent.h"
+#include "RendererComponent.h"
+#include "UserInputComponent.h"
+#include "Object.h"
+
 
 bool AssetLibrary::initialize(SoundDevice * sDevice, GraphicsDevice * gDevice)
 {
@@ -45,56 +53,31 @@ bool AssetLibrary::setArtAsset(std::string name, std::string path)
 //and returns that notice.
 //if not found, it sets the text to nothing of the notice passed in and
 //returns that notice.
-AssetLibrary::Notice AssetLibrary::getNotice(Notice square)
+AssetLibrary::Notice AssetLibrary::getNotice(std::string name)
 //**************************************
 {
-	for (auto notice : noticeLibrary)
-	{
-		if (notice.position == square.position && notice.direction == square.direction)
-		{
-			return notice;
-		}
-	}
-	square.text = "";
-	return square;
+	return noticeLibrary.find(name)->second;
 }
 
-bool AssetLibrary::setNotice(Notice notice)
+bool AssetLibrary::setNotice(std::string name, Notice notice)
 {
-	if (notice.text == "")
-	{
-		return false;
-	}
-	else
-	{
-		noticeLibrary.push_back(notice);
-	}
+	noticeLibrary[name] = notice;	
+	return true;
 }
 
-bool AssetLibrary::removeNotice(Notice notice)
+bool AssetLibrary::removeNotice(std::string name)
 {
-	std::vector<Notice>::iterator noticeIter;
-	//iterate through all notices
-	for (noticeIter = noticeLibrary.begin(); noticeIter != noticeLibrary.end(); noticeIter++)
-	{
-		//if position and direction match, delete the notice from the library.
-		if (noticeIter->position == notice.position && noticeIter->direction == notice.direction)
-		{
-			noticeLibrary.erase(noticeIter);
-			noticeIter--;
-			return true;
-		}
-	}
-	//if we did not find a notice, we return false.
+	auto toRemove = noticeLibrary.find(name);
+	if (toRemove != noticeLibrary.end()) noticeLibrary.erase(toRemove);
 	return false;
 }
 
-ObjectFactory::EngineObjectStats AssetLibrary::getObjectStats(std::string name)
+ObjectFactory::ObjectFactoryPresets AssetLibrary::getObjectStats(std::string name)
 {
 	return (objectCreationLibrary.find(name)->second);
 }
 
-bool AssetLibrary::setObjectStats(std::string name, ObjectFactory::EngineObjectStats stats)
+bool AssetLibrary::setObjectStats(std::string name, ObjectFactory::ObjectFactoryPresets stats)
 {
 	if (name == "")	return false;
 	else
@@ -148,15 +131,6 @@ std::vector<Component*> AssetLibrary::getComponents(std::string name, Object * o
 		case AssetLibraryComponentList::UserInputComp:
 			componentListPtrs.push_back(new UserInputComponent(owner));
 			break;
-		case AssetLibraryComponentList::BackpackComp:
-			componentListPtrs.push_back(new BackpackComponent(owner));
-			break;
-		case AssetLibraryComponentList::InventoryComp:
-			componentListPtrs.push_back(new InventoryComponent(owner));
-			break;
-		case AssetLibraryComponentList::GhostComp:
-			componentListPtrs.push_back(new GhostComponent(owner));
-			break;
 		default:
 			break;
 		}
@@ -200,6 +174,7 @@ Mix_Music * AssetLibrary::getMusic(std::string name)
 
 bool AssetLibrary::addSoundEffect(std::string name, std::string path)
 {
+	
 	if (soundEffectLibrary[name] = Mix_LoadWAV(path.c_str())) return true;
 	return false;
 }

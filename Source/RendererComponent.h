@@ -17,7 +17,7 @@ public:
 	void finish() final;
 
 	void draw();
-	void draw(Position position, ENGINE_FLT angle);
+	void draw(Position position, EngineFloat angle);
 	
 	Position getViewAdjustedPosition();
 		

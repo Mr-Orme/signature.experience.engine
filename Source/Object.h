@@ -1,14 +1,13 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-#include<memory>
-#include<iostream>
-#include<vector>
+#include <memory>
+#include <vector>
 
 #include "Definitions.h"
 #include "ObjectFactory.h"
+#include "Component.h"
 
-class Component;
 class GraphicsDevice;
 class PhysicsDevice;
 class BackpackComponent;
@@ -27,6 +26,15 @@ public:
 	
 	bool initialize(ObjectFactory::ObjectFactoryPresets& presets);
 	void AddComponent(Component* component);
+	Object* update();
+	void draw();
+
+	void setJoinedWith(Object* joinedWith) { this->joinedWith = joinedWith; }
+
+	std::string getObjectType() { return objectType; }
+	Object* getJoinedWith() { return joinedWith; }
+
+	bool removeComponents();
 
 	template<class T>
 	T* getComponent()
@@ -43,23 +51,15 @@ public:
 	}
 	
 	
-	Object* update();
-	void draw();
-
-	void setJoinedWith( Object* joinedWith){this -> joinedWith = joinedWith;}
-
-	std::string getObjectType(){return objectType;}
-	 Object* getJoinedWith(){return joinedWith;}
-
-	bool removeComponents();
+	
 
 private:
 	
 	std::vector<std::unique_ptr<Component>> components;
-    bool initialized;
-	std::string objectType;
+	bool initialized{ false };
+	std::string objectType{ " " };
 	//TODO: Needs to move to body component!!!
-	 Object* joinedWith;
+	Object* joinedWith{ nullptr };
 
 };
 

@@ -16,14 +16,14 @@ public:
 	{
 		std::string objectType;
 		Position position;
-		ENGINE_FLT angle;
+		EngineFloat angle;
 		EngineInt walkSpeed;
 		//TODO: need to update userInputComponent with this!
 		EngineInt RUN_MULTIPLIER;
 		EngineInt health;//move to new AssetLibraryGame
 		EngineInt destructTime;//move to new AssetLibraryGame
 		ResourceManager* devices;
-		std::map<ENGINE_DIRECTION, bool> gDirection;
+		std::map<Direction, bool> gDirection;
 		//std::shared_ptr<Object> joinedObject; //only needed for joint
 	};
 

@@ -7,7 +7,6 @@
 #include "Object.h"
 
 HealthComponent::HealthComponent(Object* owner):Component(owner){}
-HealthComponent::~HealthComponent(){}
 
 //**************************************
 //gets health and resource manager from passed presets, the object starts out alive.
@@ -15,7 +14,7 @@ bool HealthComponent::initialize(ObjectFactory::ObjectFactoryPresets& presets)
 //**************************************
 {
 	devices = presets.devices;
-	health = devices -> getAssetLibrary() -> getObjectStats(presets.objectType).health;
+	health = devices -> assetLibrary -> getObjectStats(presets.objectType).health;
 	return true;
 }
 
@@ -26,13 +25,13 @@ bool HealthComponent::killObject(std::string deathSprite)
 //**************************************
 {
 	//Stop the physics of the object
-	devices -> getPhysicsDevice() -> setStopPhysics(owner);
+	devices -> pDevice -> setStopPhysics(owner);
 
 	//grab the renderer
 	RendererComponent* compRenderer = owner -> getComponent<RendererComponent>();
 	//change the sprite
 	//TODO: return false on bad texture!
-	compRenderer -> texture = devices -> getAssetLibrary() -> getArtAsset(deathSprite);	
+	compRenderer -> texture = devices -> assetLibrary -> getArtAsset(deathSprite);	
 	return true;
 }
 //**************************************
@@ -62,9 +61,9 @@ Object* HealthComponent::update()
 		{
 			//Turn off the joined object
 			Object* joined =  owner -> getJoinedWith();
-			devices -> getPhysicsDevice() -> setStopPhysics(joined);
+			devices -> pDevice -> setStopPhysics(joined);
 			//destroy the joints
-			devices -> getPhysicsDevice() -> destroyJoint(owner);
+			devices -> pDevice -> destroyJoint(owner);
 		}
 		//kill it
 		killObject();

@@ -1,27 +1,13 @@
-#include <iostream>
 #include "View.h"
 #include "Object.h"
-//#include "ComponentsList.h"
-//#include "GraphicsDevice.h"
 
-View::View()
-{
-
-}
-
-View::~View()
-{
-	
-}
 
 //**************************************
 //set initial values
-bool View::initialize(ENGINE_FLT x, ENGINE_FLT y)
+bool View::initialize(Position position)
 //**************************************
 {
-	position = { x,y };
-	
-
+	this->position = position;
 	return true;
 }
 
@@ -34,18 +20,10 @@ bool View::update()
 	return true;
 }
 
-//**************************************
-//print view data
-void View::Print()
-//**************************************
-{
-	std::cout << "*****VIEW******" << std::endl <<
-		"View X: " << position.x << std::endl <<
-		"View Y: " << position.y << std:: endl <<
-		std::endl;
-}
 
-void View::addScroller( Object * object)
-{
-	scrollers.push_back(object);
-}
+//void View::addScroller( Object * object)
+//{
+//	//TODO: scrollers component based on time, owner position, or input. Store the amount of scroll in a position variable.
+//	//owner position could have a map of scroll vectors based ond different positions. . .
+//	scrollers.push_back(object);
+//}

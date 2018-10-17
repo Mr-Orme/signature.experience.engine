@@ -73,7 +73,7 @@
     <OutDir>$(ProjectDir)Engine\</OutDir>
     <IntDir>$(ProjectDir)Temp\</IntDir>
     <IncludePath>$(ProjectDir)ThirdParty\SDL2\include;$(ProjectDir)ThirdParty\SDL2_image\include;$(ProjectDir)ThirdParty\Box2D-master\Box2D;$(ProjectDir)ThirdParty\Box2D-master;$(ProjectDir)ThirdParty\tinyxml2-master;$(ProjectDir)ThirdParty\SDL2_ttf\include;$(ProjectDir)ThirdParty\SDL2_mixer\include;$(ProjectDir)ThirdParty\SDL2_gfx;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)ThirdParty\SDL2\lib\x86;$(ProjectDir)ThirdParty\SDL2_image\lib\x86;$(ProjectDir)ThirdParty\SDL2_ttf\lib\x86;$(ProjectDir)ThirdParty\SDL2_mixer\lib\x86;$(ProjectDir)ThirdParty\SDL2_gfx\Win32\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)ThirdParty\SDL2\lib\x86;$(ProjectDir)ThirdParty\SDL2_image\lib\x86;$(ProjectDir)ThirdParty\SDL2_ttf\lib\x86;$(ProjectDir)ThirdParty\SDL2_mixer\lib\x86;$(ProjectDir)ThirdParty\SDL2_gfx\Win32\Debug;$(ProjectDir)ThirdParty\Box2D-master\Build;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)Engine\</OutDir>
@@ -96,7 +96,8 @@ copy "$(ProjectDir)ThirdParty\SDL2_mixer\lib\x86\*.dll" "$(ProjectDir)"
 copy "$(ProjectDir)ThirdParty\SDL2_gfx\Win32\Debug\*.dll" "$(ProjectDir)"</Command>
     </PreBuildEvent>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;SDL2_gfx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;SDL2_gfx.lib;Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -151,6 +152,7 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
     <ClCompile Include="Source\BodyComponent.cpp" />
     <ClCompile Include="Source\Component.cpp" />
     <ClCompile Include="Source\ContactListener.cpp" />
+    <ClCompile Include="Source\Engine.cpp" />
     <ClCompile Include="Source\GraphicsDevice.cpp" />
     <ClCompile Include="Source\HealthComponent.cpp" />
     <ClCompile Include="Source\InputDevice.cpp" />
@@ -162,6 +164,7 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
     <ClCompile Include="Source\SoundDevice.cpp" />
     <ClCompile Include="Source\Source.cpp" />
     <ClCompile Include="Source\Texture.cpp" />
+    <ClCompile Include="Source\Timer.cpp" />
     <ClCompile Include="Source\UserInputComponent.cpp" />
     <ClCompile Include="Source\View.cpp" />
     <ClCompile Include="ThirdParty\tinyxml2-master\tinyxml2.cpp" />
@@ -173,6 +176,7 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
     <ClInclude Include="Source\ComponentsList.h" />
     <ClInclude Include="Source\ContactListener.h" />
     <ClInclude Include="Source\Definitions.h" />
+    <ClInclude Include="Source\Engine.h" />
     <ClInclude Include="Source\GraphicsDevice.h" />
     <ClInclude Include="Source\HealthComponent.h" />
     <ClInclude Include="Source\InputDevice.h" />
@@ -183,12 +187,14 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
     <ClInclude Include="Source\ResourceManager.h" />
     <ClInclude Include="Source\SoundDevice.h" />
     <ClInclude Include="Source\Texture.h" />
+    <ClInclude Include="Source\Timer.h" />
     <ClInclude Include="Source\UserInputComponent.h" />
     <ClInclude Include="Source\View.h" />
     <ClInclude Include="ThirdParty\tinyxml2-master\tinyxml2.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Assets\Config\assets.xml" />
+    <Xml Include="Assets\Config\mainScreen.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

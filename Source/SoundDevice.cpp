@@ -1,11 +1,9 @@
 #include "SoundDevice.h"
-//#include "AssetLibrary.h"
-//#include "ResourceManager.h"
+#include "AssetLibrary.h"
+#include "ResourceManager.h"
+#include "SDL_mixer.h"
 
-SoundDevice::~SoundDevice()
-{
-	Shutdown();
-}
+
 //**************************************
 //set's up initial setting for sound device
 bool SoundDevice::initialize(ResourceManager* devices)
@@ -13,6 +11,7 @@ bool SoundDevice::initialize(ResourceManager* devices)
 {
 	this->devices= devices;
 	//allows for OGG support
+	
 	{
 		auto flags = MIX_INIT_OGG;
 		auto initted = Mix_Init(flags);
@@ -20,7 +19,7 @@ bool SoundDevice::initialize(ResourceManager* devices)
 		if (initted && flags != flags)
 		{
 			printf("Mix_Init: Failed to init required ogg and mod support!\n");
-			printf("Mix_Init: %s\n", Mix_getError());
+			printf("Mix_Init: %s\n", Mix_GetError());
 			return false;
 		}
 	}
@@ -28,7 +27,7 @@ bool SoundDevice::initialize(ResourceManager* devices)
 	//Load the Mixer subsystem
 	if(Mix_OpenAudio(48000, MIX_DEFAULT_FORMAT, 2, 4096 ) <0)
 	{
-		printf( "SDL Mixer could not initialize! SDL_Error: %s\n", Mix_getError() );
+		printf( "SDL Mixer could not initialize! SDL_Error: %s\n", Mix_GetError() );
 		return false;
 	}
 
@@ -51,16 +50,16 @@ bool SoundDevice::PlaySound(std::string sound, int numLoops)
 bool SoundDevice::PlaySound(std::string sound, int numLoops, int channel)
 //**************************************
 {
-		Mix_PlayChannel(channel, devices->getAssetLibrary() ->getSoundEffect(sound), numLoops);
-		return true;
+	Mix_PlayChannel(channel, devices->assetLibrary->getSoundEffect(sound), numLoops);
+	return true;
 }
 //**************************************
 //set's the background music to play.
 void SoundDevice::setBackground(std::string background)
 //**************************************
 {
-	if(Mix_PlayMusic(devices->getAssetLibrary()-> getMusic(background), -1) == -1)
-	{printf("Mix_PlayMusic: %s\n", Mix_getError());}
+	if(Mix_PlayMusic(devices->assetLibrary-> getMusic(background), -1) == -1)
+	{printf("Mix_PlayMusic: %s\n", Mix_GetError());}
 }
 void SoundDevice::Shutdown()
 {

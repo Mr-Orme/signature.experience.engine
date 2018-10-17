@@ -11,15 +11,16 @@ class Object;
 
 class PhysicsDevice{
 public:
-
+	PhysicsDevice() {}
+	~PhysicsDevice() {}
 	PhysicsDevice(Position gravity);
 	bool initialize();
 	bool update(float dt);
 
 	struct RotateBody
 	{
-		ENGINE_FLT torque;
-		ENGINE_FLT maxAngularVelocity;
+		EngineFloat torque;
+		EngineFloat maxAngularVelocity;
 		EngineInt radius;
 		Position center;
 	};
@@ -29,15 +30,15 @@ public:
 
 	struct PhysicsStats
 	{
-		ENGINE_FLT spinSpeed;
+		EngineFloat spinSpeed;
 		BodyType bodyType;
 		BodyShape bodyShape;
-		ENGINE_FLT density;
-		ENGINE_FLT friction;
-		ENGINE_FLT restitution;
-		ENGINE_FLT angularDamping;
-		ENGINE_FLT linearDamping;
-		ENGINE_FLT force;
+		EngineFloat density;
+		EngineFloat friction;
+		EngineFloat restitution;
+		EngineFloat angularDamping;
+		EngineFloat linearDamping;
+		EngineFloat force;
 		bool physicsOn;
 	};
 
@@ -49,18 +50,18 @@ public:
 			ObjectFactory::ObjectFactoryPresets presets
 		);
 
-	bool setTransform( Object* object, Position position, ENGINE_FLT angle);
+	bool setTransform( Object* object, Position position, EngineFloat angle);
 	bool setLinearVelocity( Object* object, Position linearVelociy);
-	bool setAngularVelocity( Object* object, ENGINE_FLT angularVelocity);
-	bool setTorque( Object* object, ENGINE_FLT torque);
+	bool setAngularVelocity( Object* object, EngineFloat angularVelocity);
+	bool setTorque( Object* object, EngineFloat torque);
 	bool setLinearImpulse( Object* object, Position forceVec, Position forceCenter);
 	bool setStatic( Object* object);
 	bool setStopPhysics( Object* object);
-	bool setAngle( Object* object, ENGINE_FLT angle);
+	bool setAngle( Object* object, EngineFloat angle);
 
-	ENGINE_FLT getAngularVelocity( Object* object);
+	EngineFloat getAngularVelocity( Object* object);
 	Position getPosition( Object* object);
-	ENGINE_FLT getAngle( Object* object);
+	EngineFloat getAngle( Object* object);
 	Position getVelocity( Object* object);
 	Position getLinearVelocity( Object* object);
 	b2World* getWorld(){ return world; }
@@ -76,11 +77,11 @@ public:
 		
 	b2World* world;
 	
-	inline float PW2RW(ENGINE_FLT x){return x*fPRV;}
-	inline float RW2PW(ENGINE_FLT x){return x/fPRV;}
+	inline float PW2RW(EngineFloat x){return x*fPRV;}
+	inline float RW2PW(EngineFloat x){return x/fPRV;}
 	inline float RW2PW(EngineInt x){return (float)x/fPRV;}
-	inline float RW2PWAngle(ENGINE_FLT x){return((float)x*(2.0f*3.14159f)/360.0f);} //degrees to radians
-	inline float PW2RWAngle(ENGINE_FLT x){return((float)x*360.0f/(2.0f*3.14159f));} //radians to degrees
+	inline float RW2PWAngle(EngineFloat x){return((float)x*(2.0f*3.14159f)/360.0f);} //degrees to radians
+	inline float PW2RWAngle(EngineFloat x){return((float)x*360.0f/(2.0f*3.14159f));} //radians to degrees
 private:
 	bool destroyJoint(b2Body* body);
 	const b2Vec2 gravity;

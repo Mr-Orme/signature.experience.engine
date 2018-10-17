@@ -12,14 +12,16 @@
 #ifndef GRAPHICSDEVICE_H
 #define GRAPHICSDEVICE_H
 
-
+#include <memory>
 #include <vector>
+#include <map>
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
-
+#include "Definitions.h"
+#include "View.h"
 class Texture;
-class View;
+
 
 class GraphicsDevice
 {
@@ -28,7 +30,6 @@ public:
 
 	//Constructors and Destructors
 	GraphicsDevice(Uint32, Uint32);
-	~GraphicsDevice();
 
 	//startup and Shutdown
 	bool initialize(bool);
@@ -40,7 +41,7 @@ public:
 	void Present();
 
 	void Text2Screen(std::string text, Position position);
-	void Text2Screen(std::string text, ENGINE_FLT x, ENGINE_FLT y);
+	void Text2Screen(std::string text, EngineFloat x, EngineFloat y);
 	void Notice2Screen(std::string text);
 
 	void drawFilledCircle(Position position, EngineInt radius, RGBA RGBA);
@@ -68,7 +69,7 @@ public:
 	bool setFont(std::string path, EngineInt size, RGBA color);
 
 private:
-	ENGINE_FLT Center(ENGINE_FLT centerOn, ENGINE_FLT width);
+	EngineFloat Center(EngineFloat centerOn, EngineFloat width);
 	//Parameters
 	const Uint32 SCREEN_WIDTH{ 0 };
 	const Uint32 SCREEN_HEIGHT{ 0 };

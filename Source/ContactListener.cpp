@@ -6,11 +6,11 @@
 void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
 {
     //Grab the two Physics Bodies involved in the Contact
-	b2Body* bodyA = contact->getFixtureA()->getBody();
-	b2Body* bodyB = contact->getFixtureB()->getBody();
+	b2Body* bodyA = contact->GetFixtureA()->GetBody();
+	b2Body* bodyB = contact->GetFixtureB()->GetBody();
 	//Cast them to object pointers
-	 Object* objectA = static_cast<Object*>(bodyA -> getUserData());
-	 Object* objectB = static_cast<Object*>(bodyB -> getUserData());
+	 Object* objectA = static_cast<Object*>(bodyA -> GetUserData());
+	 Object* objectB = static_cast<Object*>(bodyB -> GetUserData());
 
 	//find their types
 	std::string objectAType = objectA -> getObjectType();

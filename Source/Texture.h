@@ -10,7 +10,7 @@ class Texture{
 
     public:
         //initializes variables
-        Texture();
+		Texture() {};
 
         //Deallocates memory
         ~Texture();
@@ -24,7 +24,7 @@ class Texture{
 
         //Renders texture at given point
 		
-		void draw(SDL_Renderer* renderer, Position position, ENGINE_FLT angle, SDL_Rect* clip = NULL );
+		void draw(SDL_Renderer* renderer, Position position, EngineFloat angle, SDL_Rect* clip = NULL );
 
         //gets image dimensions
         int getWidth();

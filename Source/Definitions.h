@@ -1,15 +1,16 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
+#include <cmath>
 //Basic Types
 typedef unsigned int	Uint32;
-typedef float			ENGINE_FLT;
+typedef float			EngineFloat;
 typedef Uint32			EngineInt;
 
 struct Position
 {
-	ENGINE_FLT x;
-	ENGINE_FLT y;
+	EngineFloat x;
+	EngineFloat y;
 	
 	friend Position operator+ (const Position & src1, const Position & src2)
 	{
@@ -45,12 +46,12 @@ struct Position
 	}
 	friend Position abs(Position & src)
 	{
-		return { abs(src.x),abs(src.y) };
+		return { abs((float)src.x),abs((float)src.y) };
 	}
 };
 
 
-enum class DIRECTION {N =0, E = 90, S = 180, W = 270};
+enum class Direction {N =0, E = 90, S = 180, W = 270};
 
 //TODO:make levels an array of resource managers! or something that has nearby areas. . .
 enum class LEVEL {ENGINE_LEVEL_MAIN, ENGINE_LEVEL_BASEMENT,};
@@ -65,6 +66,6 @@ struct RGBA
 };
 
 //Constants
-const ENGINE_FLT PI = 3.14159f;
+const EngineFloat PI = 3.14159f;
 
 #endif

@@ -3,10 +3,6 @@
 
 using namespace std;
 
-Texture::Texture()
-{
-}
-
 
 Texture::~Texture()
 {
@@ -26,20 +22,21 @@ bool Texture::load(SDL_Renderer* renderer, std::string path )
     //If the image loaded
 	if( surface == nullptr)
 	{
-   		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_getError() );
+   		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
 
 	}
 	else
 	{
+		
 		 //Color key image
-        SDL_setColorKey( surface, SDL_TRUE, SDL_MapRGB( surface->format, 255, 0, 255 ) );
+		SDL_SetColorKey( surface, SDL_TRUE, SDL_MapRGB( surface->format, 255, 0, 255 ) );
 
 		//Create an optimized image
 		texture = SDL_CreateTextureFromSurface(renderer,surface);
      
 		if(texture == nullptr)
 		{
-			printf( "Unable to create texture from image %s! SDL Error: %s\n", path.c_str(), SDL_getError() );
+			printf( "Unable to create texture from image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
 
 		}
 		else
@@ -79,7 +76,7 @@ void Texture::free()
 }
 	   
 
-void Texture::draw(SDL_Renderer* renderer, Position position, ENGINE_FLT angle, SDL_Rect* clip)
+void Texture::draw(SDL_Renderer* renderer, Position position, EngineFloat angle, SDL_Rect* clip)
 {
 
 	//set rendering space and render to screen
