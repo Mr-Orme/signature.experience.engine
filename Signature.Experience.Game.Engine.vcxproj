@@ -73,7 +73,7 @@
     <OutDir>$(ProjectDir)Engine\</OutDir>
     <IntDir>$(ProjectDir)Temp\</IntDir>
     <IncludePath>$(ProjectDir)ThirdParty\SDL2\include;$(ProjectDir)ThirdParty\SDL2_image\include;$(ProjectDir)ThirdParty\Box2D-master\Box2D;$(ProjectDir)ThirdParty\Box2D-master;$(ProjectDir)ThirdParty\tinyxml2-master;$(ProjectDir)ThirdParty\SDL2_ttf\include;$(ProjectDir)ThirdParty\SDL2_mixer\include;$(ProjectDir)ThirdParty\SDL2_gfx;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)ThirdParty\SDL2\lib\x86;$(ProjectDir)ThirdParty\SDL2_image\lib\x86;$(ProjectDir)ThirdParty\SDL2_ttf\lib\x86;$(ProjectDir)ThirdParty\SDL2_mixer\lib\x86;$(ProjectDir)ThirdParty\SDL2_gfx\Win32\Debug;$(ProjectDir)ThirdParty\Box2D-master\Build;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)ThirdParty\SDL2\lib\x86;$(ProjectDir)ThirdParty\SDL2_image\lib\x86;$(ProjectDir)ThirdParty\SDL2_ttf\lib\x86;$(ProjectDir)ThirdParty\SDL2_mixer\lib\x86;$(ProjectDir)ThirdParty\SDL2_gfx\lib\x86;$(ProjectDir)ThirdParty\Box2D-master\Box2D\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)Engine\</OutDir>
@@ -93,7 +93,7 @@
 copy "$(ProjectDir)ThirdParty\SDL2_image\lib\x86\*.dll" "$(ProjectDir)"
 copy "$(ProjectDir)ThirdParty\SDL2_ttf\lib\x86\*.dll" "$(ProjectDir)"
 copy "$(ProjectDir)ThirdParty\SDL2_mixer\lib\x86\*.dll" "$(ProjectDir)"
-copy "$(ProjectDir)ThirdParty\SDL2_gfx\Win32\Debug\*.dll" "$(ProjectDir)"</Command>
+copy "$(ProjectDir)ThirdParty\SDL2_gfx\lib\x86\*.dll" "$(ProjectDir)"</Command>
     </PreBuildEvent>
     <Link>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;SDL2_gfx.lib;Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>

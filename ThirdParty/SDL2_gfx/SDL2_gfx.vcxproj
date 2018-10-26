@@ -79,8 +79,8 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\ormeskirk\Documents\GitHub\signature.experience.engine\ThirdParty\SDL2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\ormeskirk\Documents\GitHub\signature.experience.engine\ThirdParty\SDL2\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Sean Orme\Documents\GitHub\signature.experience.engine\ThirdParty\SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Sean Orme\Documents\GitHub\signature.experience.engine\ThirdParty\SDL2\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Users\ormeskirk\Documents\GitHub\signature.experience.engine\ThirdParty\SDL2\include;$(IncludePath)</IncludePath>
