@@ -194,6 +194,7 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Assets\Config\assets.xml" />
+    <Xml Include="Assets\Config\engine.xml" />
     <Xml Include="Assets\Config\mainScreen.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

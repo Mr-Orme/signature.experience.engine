@@ -1,4 +1,4 @@
 <?xml version="1.0" ?>
 <WorkScreen>
-  <Button justification="Right">Create Object</Button>  
+  <Dimensions width="1024" height="768"></Dimensions>
 </WorkScreen>

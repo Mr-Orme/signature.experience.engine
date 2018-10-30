@@ -3,7 +3,7 @@
   <Structures>
       <!-- Asset description for libraries 	-->
 	
-   	  <GameAsset name="HWall">
+   	<GameAsset name="HWall">
 		  <Component name="Renderer" sprite="./Assets/Images/d_wall_h_t.png"/>
 		  <Component name="Body" density="15.0f" restitution="0.0f" angularDamping="0.0f" linearDamping="0.0f" bodyType="GAME_STATIC" bodyShape="GAME_RECTANGLE" physicsOn = "true"/>
 	  </GameAsset>

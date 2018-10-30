@@ -54,6 +54,7 @@ public:
 		BackpackComp,
 		InventoryComp,
 		GhostComp,
+		ButtonComp
 	};
 	std::vector<Component*> getComponents(std::string name, Object* owner);
 	bool setComponentList(std::string name, std::vector<AssetLibraryComponentList> componentList);

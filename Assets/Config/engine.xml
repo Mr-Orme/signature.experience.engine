@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Level>
+  <FPS>100</FPS>
+  <Devices>
+    <Input create="true" file=""></Input>
+    <Physics create="false" gravityX="0" gravityY="0"></Physics>
+    <AssetLibrary create="false">
+      <Asset name="">
+        <Component name=""></Component>
+      </Asset>
+    </AssetLibrary>
+    <Sound create="false" file="">
+      <SoundEffect name="" path="" background="false"></SoundEffect>
+      <SoundEffect name="" path="" background="true"></SoundEffect>
+    </Sound>
+  </Devices>
+  <!--<Object name="Button">
+    <Component name="Button" justification="2" event="EVENT_NEW_OBJECT">Create Object</Component>
+  </Object>-->
+</Level>

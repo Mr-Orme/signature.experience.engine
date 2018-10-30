@@ -14,10 +14,10 @@
 
 Engine::~Engine()
 {
-	if(devices)
+	if(engineDevices)
 	{
-		devices -> shutdown();
-		devices = nullptr;
+		engineDevices -> shutdown();
+		engineDevices = nullptr;
 	}
 }
 
@@ -25,39 +25,46 @@ Engine::~Engine()
 //Initializes Engine & Art Asset Libraries.
 bool Engine::initialize(std::string engineFile)
 //**************************************
-{
-	//========================================
-	//Base Engine Constants
-	//========================================
-	SCREEN_WIDTH = 1024;
-	SCREEN_HEIGHT = 768;
-	
+{	
 	reset();
-	//========================================
-	//Construct Device Manager
-	//========================================
-	devices = std::make_unique<ResourceManager>();
-	//devices->initialize(SCREEN_WIDTH, SCREEN_HEIGHT, assetConfigFile);
 	
-	///Get a few things ready
-	ObjectFactory::ObjectFactoryPresets presets;
-	presets.devices = devices.get();
-	ObjectFactory* objectFactory = devices->factory.get();
-
 	//========================================
 	//load the files
 	//========================================
-	tinyxml2::XMLDocument currentLevel;	
+	tinyxml2::XMLDocument engineSettings;	
 	
-	//if (!currentLevel.LoadFile(levelConfig.c_str())){ return false; };
+	if (!engineSettings.LoadFile(engineFile.c_str())){ return false; };
 	
-	tinyxml2::XMLElement* levelRoot = currentLevel.FirstChildElement();
-	//TODO: Decide default level XML config
-	
+	tinyxml2::XMLElement* levelRoot = engineSettings.FirstChildElement();
+	int screenWidth{ 0 };
+	int screenHeight{ 0 };
 
-	devices->sDevice->setBackground("main");
+	tinyxml2::XMLElement* currElement = levelRoot->FirstChildElement();
+	currElement->QueryIntAttribute("width", &screenWidth);
+	currElement->QueryIntAttribute("height", &screenHeight);
 
-	//Successfully loaded level
+	//========================================
+	//Construct Device Manager
+	//========================================
+	//TODO::Need a resource manager for the game
+	mainScreen = std::make_unique<GraphicsDevice>(screenWidth, screenHeight);
+	if (!mainScreen->initialize(true))
+	{
+		printf("Graphics Device could not Initialize!");
+		exit(1);
+	}
+	RGBA fontColor{ 0,0,0,255 };
+	mainScreen->setFont("./Assets/Fonts/impact.ttf", 16, fontColor);
+
+	engineDevices = std::make_unique<ResourceManager>();
+	engineDevices->initialize("./Assets/Config/engine.xml", mainScreen.get());
+
+	///Get a few things ready
+	ObjectFactory::ObjectFactoryPresets presets;
+	presets.devices = engineDevices.get();
+	ObjectFactory* objectFactory = engineDevices->factory.get();
+
+	
 	return true;
 }
 
@@ -69,16 +76,16 @@ bool Engine::run()
 {
 
 	//check to see if we have quit;
-	if (devices->iDevice->keyStates[InputDevice::InputEvents::QUIT] == true)
+	if (engineDevices->iDevice->keyStates[InputDevice::InputEvents::QUIT] == true)
 	{
 		return false;
 	}
 
-	devices->iDevice->update();
+	engineDevices->iDevice->update();
 
 	//Construct Frame Timer
 	std::unique_ptr<Timer> frameRate{new Timer()};
-	if (!frameRate->Initialize(devices->FPS))
+	if (!frameRate->Initialize(engineDevices->FPS))
 	{
 		printf("Frame Timer could not intialize! SDL_Error: %s\n", SDL_GetError());
 		exit(1);
@@ -101,65 +108,68 @@ void Engine::update()
 //**************************************
 {
 
-	devices->pDevice->update(1.0f / devices->FPS);	 
+	engineDevices->pDevice->update(1.0f / engineDevices->FPS);	 
 
 	//clean out dead objects
-	for (auto objectIter = objects.begin(); objectIter != objects.end(); objectIter++)
-	{
-		//check for health component
-		HealthComponent* compHealth = (*objectIter)->getComponent<HealthComponent>();
-		
-		if (compHealth != nullptr && compHealth->isDead)
-		{
-			//**************Bring out your dead********************
-			(*objectIter)->removeComponents();
-			objects.erase(objectIter);
-			objectIter--;
-			//*******************************************************
-		}
-	}
+
+	//TODO::Move to game part
+	//for (auto objectIter = objects.begin(); objectIter != objects.end(); objectIter++)
+	//{
+	//	//check for health component
+	//	HealthComponent* compHealth = (*objectIter)->getComponent<HealthComponent>();
+	//	
+	//	if (compHealth != nullptr && compHealth->isDead)
+	//	{
+	//		//**************Bring out your dead********************
+	//		(*objectIter)->removeComponents();
+	//		objects.erase(objectIter);
+	//		objectIter--;
+	//		//*******************************************************
+	//	}
+	//}
 
 
 	//add any objects created in the previous iteration
-	if (!newObjects.empty())
+	//TODO:: this needs to be in the game part.
+	/*if (!newGameObjects.empty())
 	{
-		objects.insert(objects.end(), std::make_move_iterator(newObjects.begin()), std::make_move_iterator(newObjects.end()));
+		engineObjects.insert(engineObjects.end(), std::make_move_iterator(newObjects.begin()), std::make_move_iterator(newObjects.end()));
 		newObjects.clear();
-	}
+	}*/
 
 	//Update objects.
-	for (auto& object : objects)
+	for (auto& object : engineObjects)
 	{
 		Object* temp = object->update();
-		
-		if (temp != nullptr)
+		//TODO:: this needs to be in the game part.
+	/*	if (temp != nullptr)
 		{
-			newObjects.push_back(std::unique_ptr<Object>(temp));
-		}
+			newGameObjects.push_back(std::unique_ptr<Object>(temp));
+		}*/
 	}
 	//update view
-	devices->gDevice->getView()->update();
+	engineDevices->gDevice->getView()->update();
 }
 
 //**************************************
 //Starts the graphic deivce, 
-//Graphic Device draws the sprites
+//calls all draw methods
 //Then calls the graphic device's present method to show the frame.
 void Engine::draw()
 //**************************************
 {
-	devices -> gDevice -> Begin();
+	engineDevices -> gDevice -> Begin();
 
-	for (auto& object : objects)
+	for (auto& object : engineObjects)
 	{
 		object->draw();
 	}
 
-	devices -> gDevice -> draw();
+	engineDevices -> gDevice -> draw();
 	
-	//if(debug) devices -> pDevice -> getWorld() -> DrawDebugData();
+	//if(debug) engineDevices -> pDevice -> getWorld() -> DrawDebugData();
 	
-	devices -> gDevice -> Present();
+	engineDevices -> gDevice -> Present();
 }
 
 //**************************************
@@ -170,21 +180,14 @@ void Engine::reset()
 
 {
 	//if objects is not empty
-	if (!objects.empty())
+	if (!engineObjects.empty())
 	{
-		//for every object in objects
-		for (const auto& object : objects)
-		{
-			//remove it from the physics world
-			//FIXME::this should not be necessary, should happen when the body component dies. . ..
-			devices->pDevice->removeObject(object.get());
-		}
 		//clear the vector
-		objects.clear();
+		engineObjects.clear();
 	}
 	//kill old Resource Manager;
-	if (devices) devices->shutdown();
-	devices = nullptr;
+	if (engineDevices) engineDevices->shutdown();
+	engineDevices = nullptr;
 
 
 }
