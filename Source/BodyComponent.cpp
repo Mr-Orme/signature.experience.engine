@@ -1,5 +1,5 @@
 #include "BodyComponent.h"
-#include "RendererComponent.h"
+#include "SpriteComponent.h"
 #include "ResourceManager.h"
 #include "AssetLibrary.h"
 #include "Object.h"
@@ -13,7 +13,7 @@ BodyComponent::BodyComponent(Object* owner):Component(owner){}
 bool BodyComponent::initialize(ObjectFactory::ObjectFactoryPresets& presets)
 //**************************************
 {	
-	RendererComponent* compRenderer = owner -> getComponent<RendererComponent>();
+	SpriteComponent* compRenderer = owner -> getComponent<SpriteComponent>();
 	PhysicsDevice::PhysicsStats physics;
 	if(compRenderer != nullptr)
 	{
@@ -71,11 +71,11 @@ Position BodyComponent::getVelocity()
 }
 EngineInt BodyComponent::getWidth()
 {
-	return owner->getComponent<RendererComponent>()->texture->getWidth();
+	return owner->getComponent<SpriteComponent>()->texture->getWidth();
 }
 EngineInt BodyComponent::getHeight()
 {
-	return owner->getComponent<RendererComponent>()->texture->getHeight();
+	return owner->getComponent<SpriteComponent>()->texture->getHeight();
 }
 void BodyComponent::setAngle(EngineFloat angle)
 {

@@ -6,20 +6,23 @@
   <FPS>100</FPS>
   <Devices>
     <Input create="true">
-      <InputEvent inputeEvent ="" gameEvent=""></InputEvent>
+      <InputEvent inputEvent ="" gameEvent=""></InputEvent>
     </Input>
     <Physics create="false" gravityX="0" gravityY="0"></Physics>
-    <AssetLibrary create="false">
-      <Asset name="">
-        <Component name=""></Component>
-      </Asset>
+    <AssetLibrary create="true">
+      <Asset name="Button" spritePath="./Assets/Images/button.png"></Asset>
     </AssetLibrary>
-    <Sound create="false" file="">
-      <SoundEffect name="" path="" background="false"></SoundEffect>
+    <Sound create="false">
+      <SoundEffect name="" path="" background="false" event=""></SoundEffect>
       <SoundEffect name="" path="" background="true"></SoundEffect>
     </Sound>
   </Devices>
-  <!--<Object name="Button">
-    <Component name="Button" justification="2" event="EVENT_NEW_OBJECT">Create Object</Component>
-  </Object>-->
+  <Object type="Button">
+    <Component name="Sprite" ></Component>
+    <Component name="Body" x="900" y="0"></Component>
+    <Component name="UserInput">
+      <MouseClick event="CREATE_OBJECT"/>
+    </Component>
+    <Component name="Text" text="Create Object" vAlign="Center" hAlign="Center"></Component>
+  </Object>
 </Level>

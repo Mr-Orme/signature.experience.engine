@@ -15,7 +15,7 @@ class BodyComponent;
 class GhostComponent;
 class HealthComponent;
 class InventoryComponent;
-class RendererComponent;
+class SpriteComponent;
 class UserInputComponent;
 
 class Object

@@ -4,11 +4,7 @@
 #include "Texture.h"
 #include "GraphicsDevice.h"
 #include "SDL_mixer.h"
-#include "Component.h"
-#include "BodyComponent.h"
-#include "HealthComponent.h"
-#include "RendererComponent.h"
-#include "UserInputComponent.h"
+#include "ComponentsList.h"
 #include "Object.h"
 
 
@@ -126,10 +122,13 @@ std::vector<Component*> AssetLibrary::getComponents(std::string name, Object * o
 			componentListPtrs.push_back(new HealthComponent(owner));
 			break;
 		case AssetLibraryComponentList::RendererComp:
-			componentListPtrs.push_back(new RendererComponent(owner));
+			componentListPtrs.push_back(new SpriteComponent(owner));
 			break;
 		case AssetLibraryComponentList::UserInputComp:
 			componentListPtrs.push_back(new UserInputComponent(owner));
+			break;
+		case AssetLibraryComponentList::TextComp:
+			componentListPtrs.push_back(new TextComponent(owner));
 			break;
 		default:
 			break;

@@ -1,6 +1,6 @@
 //#include "ComponentsList.h"
 #include "Object.h"
-#include "RendererComponent.h"
+#include "SpriteComponent.h"
 
  Object:: Object()
 {
@@ -23,7 +23,7 @@ bool  Object::initialize(ObjectFactory::ObjectFactoryPresets& presets)
 	//the renderer component needs to be initialized first because the body component depends on it
 	//It's initialization method has a check to see if it is already initialized 
 	//so that when we go through all the components and initialize them in the next step, it won't do it again.
-	auto component = getComponent<RendererComponent>();
+	auto component = getComponent<SpriteComponent>();
 	if(component) component -> initialize(presets);
 
 	//initialize all components
@@ -72,7 +72,7 @@ void  Object::AddComponent(Component* component)
 }
 void  Object::draw()
 {
-	if (RendererComponent* sprite = getComponent<RendererComponent>(); sprite != nullptr)
+	if (SpriteComponent* sprite = getComponent<SpriteComponent>(); sprite != nullptr)
 	{
 		sprite->draw();
 	}

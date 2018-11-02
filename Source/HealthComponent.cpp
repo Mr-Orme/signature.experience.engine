@@ -1,5 +1,5 @@
 #include "HealthComponent.h"
-#include "RendererComponent.h"
+#include "SpriteComponent.h"
 #include "BodyComponent.h"
 #include "ResourceManager.h"
 #include "PhysicsDevice.h"
@@ -28,7 +28,7 @@ bool HealthComponent::killObject(std::string deathSprite)
 	devices -> pDevice -> setStopPhysics(owner);
 
 	//grab the renderer
-	RendererComponent* compRenderer = owner -> getComponent<RendererComponent>();
+	SpriteComponent* compRenderer = owner -> getComponent<SpriteComponent>();
 	//change the sprite
 	//TODO: return false on bad texture!
 	compRenderer -> texture = devices -> assetLibrary -> getArtAsset(deathSprite);	

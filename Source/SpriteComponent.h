@@ -1,15 +1,15 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef SPRITE_H
+#define SPRITE_H
 
 #include "Component.h"
 #include "Definitions.h"
 
 class Texture;
 class ObjectFactory;
-class RendererComponent : public Component
+class SpriteComponent : public Component
 {
 public:
-	RendererComponent(Object* owner);
+	SpriteComponent(Object* owner);
 	
 	bool initialize(ObjectFactory::ObjectFactoryPresets& presets) final;
 	void start() final;

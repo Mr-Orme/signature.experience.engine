@@ -1,4 +1,4 @@
-#include "RendererComponent.h"
+#include "SpriteComponent.h"
 #include "BodyComponent.h"
 #include "Texture.h"
 #include "AssetLibrary.h"
@@ -7,12 +7,12 @@
 #include "PhysicsDevice.h"
 #include "GraphicsDevice.h"
 
-RendererComponent::RendererComponent(Object* owner):Component(owner){}
+SpriteComponent::SpriteComponent(Object* owner):Component(owner){}
 
 
 //**************************************
 //on the first pass, we set up the texture for the object
-bool RendererComponent::initialize(ObjectFactory::ObjectFactoryPresets& presets)
+bool SpriteComponent::initialize(ObjectFactory::ObjectFactoryPresets& presets)
 //**************************************
 {
 	//this will get hit twice, so we only want it done once.
@@ -27,7 +27,7 @@ bool RendererComponent::initialize(ObjectFactory::ObjectFactoryPresets& presets)
 }
 //**************************************
 // updates the position based on the view and draws the sprite
-void RendererComponent::draw()
+void SpriteComponent::draw()
 //**************************************
 {
 	Position updatedPosition;	
@@ -41,18 +41,18 @@ void RendererComponent::draw()
 	draw(updatedPosition, angle);
 }
 
-void RendererComponent::draw(Position position, EngineFloat angle)
+void SpriteComponent::draw(Position position, EngineFloat angle)
 {
 	texture ->draw(devices -> gDevice -> getRenderer(), position, angle, NULL);
 }
 
-void RendererComponent::start(){}
+void SpriteComponent::start(){}
 
-Object* RendererComponent::update(){return nullptr;}
+Object* SpriteComponent::update(){return nullptr;}
 
 //**************************************
 //adjusts the position based on the view.
-Position RendererComponent::getViewAdjustedPosition()
+Position SpriteComponent::getViewAdjustedPosition()
 //**************************************
 {	
 	//adjust position.
@@ -60,4 +60,4 @@ Position RendererComponent::getViewAdjustedPosition()
 		+ devices->gDevice->getView()->position);
 }
 
-void RendererComponent::finish(){}
+void SpriteComponent::finish(){}

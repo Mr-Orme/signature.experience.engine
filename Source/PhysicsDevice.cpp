@@ -1,13 +1,13 @@
 #include <cmath>
 
 #include "PhysicsDevice.h"
-//#include "RendererComponent.h"
+//#include "SpriteComponent.h"
 #include "ContactListener.h"
 #include "Object.h"
 #include "Texture.h"
 #include "ObjectFactory.h"
 
-#include "RendererComponent.h"
+#include "SpriteComponent.h"
 
 
 const float PhysicsDevice::fPRV{ 10.0f };
@@ -176,7 +176,7 @@ bool PhysicsDevice::createFixture
 	)
 //**************************************
 {
-	RendererComponent* compRenderer = object -> getComponent<RendererComponent>();
+	SpriteComponent* compRenderer = object -> getComponent<SpriteComponent>();
 	//new body definition
 	b2BodyDef* bd = new b2BodyDef;
 	//made need one or the other, depending on what was passed.
@@ -205,7 +205,7 @@ bool PhysicsDevice::createFixture
 	}
 
 	//********Adjust postion because SDL is top left, while box2d is center*************
-	Texture* texture = object -> getComponent<RendererComponent>() -> texture;
+	Texture* texture = object -> getComponent<SpriteComponent>() -> texture;
 	//subtract off half the width.
 	presets.position.x += (texture -> getWidth()/2);
 	//subtract off half the height
@@ -384,7 +384,7 @@ Position PhysicsDevice::alignCenters( Object* object)
 	b2Body* body = FindBody(object);
 	b2Vec2 physPosition = body -> GetPosition();
 	Position position;
-	Texture* texture = object -> getComponent<RendererComponent>() -> texture;
+	Texture* texture = object -> getComponent<SpriteComponent>() -> texture;
 
 		//subtract off half the width.
 		position.x = PW2RW(physPosition.x) - (texture -> getWidth()/2);

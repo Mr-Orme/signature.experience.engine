@@ -119,41 +119,29 @@ bool ResourceManager::initialize(std::string assetPath)
 	if (createThisDevice(deviceConfig))
 	{
 		assetLibrary = std::make_unique<AssetLibrary>();
-		//TODO::needs to be an xml file just likes physics.
 		if (!assetLibrary->initialize(sDevice.get(), gDevice.get())) { exit(1); }
 
 		tinyxml2::XMLElement* asset = deviceConfig->FirstChildElement("Asset");
 
-		//add each asset into each library.
-		do
+		while (asset)
 		{
-			//get the name of the asset
 			std::string assetName = asset->Attribute("name");
 
-			//where we will store the components.
 			std::vector<AssetLibrary::AssetLibraryComponentList> componentList;
 
-			//move to the components of the xml
 			tinyxml2::XMLElement* compElement = asset->FirstChildElement("Component");
-
-			//Add each component to the vector
 			while (compElement)
 			{
-				//get the component's name
 				std::string currentComponent = compElement->Attribute("name");
-				//find the component we just grabbed
+
 				if (currentComponent == "Renderer")
 				{
-					//add the coresponding asset to the library.
 					assetLibrary->setArtAsset(assetName, compElement->Attribute("sprite"));
-					//add the component to the list
 					componentList.push_back(AssetLibrary::AssetLibraryComponentList::RendererComp);
 				}
 				else if (currentComponent == "Body")
 				{
-					//TODO: Consolidate all initial values into one struct
 					PhysicsDevice::PhysicsStats physics;
-					//get physics properties
 					compElement->QueryFloatAttribute("density", &physics.density);
 					compElement->QueryFloatAttribute("restitution", &physics.restitution);
 					compElement->QueryFloatAttribute("angularDamping", &physics.angularDamping);
@@ -162,59 +150,48 @@ bool ResourceManager::initialize(std::string assetPath)
 					std::string bodyType = compElement->Attribute("bodyType");
 					std::string bodyShape = compElement->Attribute("bodyShape");
 
-					//convert strings to enums
 					if (bodyType == "ENGINE_DYNAMIC") { physics.bodyType = PhysicsDevice::BodyType::Dynamic; }
 					else if (bodyType == "ENGINE_STATIC") { physics.bodyType = PhysicsDevice::BodyType::Static; }
 
 					if (bodyShape == "ENGINE_RECTANGLE") { physics.bodyShape = PhysicsDevice::BodyShape::Rectangle; }
 					else if (bodyShape == "ENGINE_CIRCLE") { physics.bodyShape = PhysicsDevice::BodyShape::Circle; }
-					//add to library
-					assetLibrary->setObjectPhysics(aName, physics);
 
-					//add component to list
+					assetLibrary->setObjectPhysics(assetName, physics);
 					componentList.push_back(AssetLibrary::AssetLibraryComponentList::BodyComp);
 				}
 				else if (currentComponent == "Health")
 				{
-					// get the health
 					ObjectFactory::ObjectFactoryPresets stats;
 					compElement->QueryIntAttribute("health", (int*)&stats.health);
-					//add to library
 					assetLibrary->setObjectStats(assetName, stats);
-					//add component
 					componentList.push_back(AssetLibrary::AssetLibraryComponentList::HealthComp);
 				}
 				else if (currentComponent == "UserInput")
 				{
 					componentList.push_back(AssetLibrary::AssetLibraryComponentList::UserInputComp);
 				}
-				// if we have a misspeleed or non-existant component name in the file
 				else
 				{
-					std::cout << "INVALID component in assets.xml: " << currentComponent << std::endl;
+					std::cout << "INVALID component in xml: " << currentComponent << std::endl;
 					return false;
 				}
 
-				compElement = compElement->NextSiblingElement();
+				compElement = compElement->NextSiblingElement("Component");
 			}
 
-			//Each asset should have at least one component!
 			if (componentList.empty()) return false;
 
-			//add to library
 			assetLibrary->setComponentList(assetName, componentList);
 
-			//get the next Asset
-			asset = asset->NextSiblingElement();
-		} while (asset);
+			asset = asset->NextSiblingElement("Asset");
+		} 
 	}
 	//========================================
 	//Construct Sound Device
 	//========================================
-	deviceConfig = deviceConfig->NextSiblingElement();
+	deviceConfig = deviceConfig->NextSiblingElement("Sound");
 	if (createThisDevice(deviceConfig))
 	{
-		//TODO:: grab file name from XML to load sounds into asset Library.
 		sDevice = std::make_unique<SoundDevice>();
 		if (!sDevice->initialize(this))
 		{
@@ -222,10 +199,10 @@ bool ResourceManager::initialize(std::string assetPath)
 			exit(1);
 		}
 
-		//TODO::move to sound device!
+		//TODO::move all sounds to sound device!
 		//*********************Load Sounds***************************
 		//grab first sound
-		tinyxml2::XMLElement* sounds = deviceConfig->FirstChildElement();
+		tinyxml2::XMLElement* sounds = deviceConfig->FirstChildElement("SoundEffect");
 		while (sounds)
 		{
 			//get information from file
@@ -235,7 +212,6 @@ bool ResourceManager::initialize(std::string assetPath)
 			bool background;
 			sounds->QueryBoolAttribute("background", &background);
 
-			//add to library based on whether it is background music or not.
 			if (background)
 			{
 				assetLibrary->addBackgroundMusic(name, path);
@@ -244,7 +220,7 @@ bool ResourceManager::initialize(std::string assetPath)
 			{
 				assetLibrary->addSoundEffect(name, path);
 			}
-			sounds = sounds->NextSiblingElement();
+			sounds = sounds->NextSiblingElement("SoundEffect");
 		}
 
 	}
