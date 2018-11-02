@@ -12,21 +12,13 @@
 class Engine{
 public:	
 	~Engine();
-	bool initialize(std::string engineFile);
+	bool initialize();
 	void reset();
-	bool loadGame(std::string levelConfigFile, std::string assetConfigFile);
 	bool run();
-	void update();
-	void draw();
 
 private:	
-
 	std::unique_ptr<ResourceManager> engineDevices{ nullptr };
-	std::unique_ptr<ResourceManager> gameDevices{ nullptr };
-	std::unique_ptr<GraphicsDevice> mainScreen{ nullptr };
-	//bool debug{ false };
-
-	
+	std::unique_ptr<ResourceManager> gameDevices{ nullptr };	
 };
 
 

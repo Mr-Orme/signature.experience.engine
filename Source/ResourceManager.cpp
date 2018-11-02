@@ -1,6 +1,9 @@
 
 #include <iostream>
+
 #include "ResourceManager.h"
+#include "ComponentsList.h"
+#include "Object.h"
 
 #include "InputDevice.h"
 #include "GraphicsDevice.h"
@@ -15,7 +18,8 @@
 #include "Definitions.h"
 #include "tinyxml2.h"
 
-bool createThisDevice(tinyxml2::XMLElement* createMe)
+using namespace std;
+inline bool createThisDevice(tinyxml2::XMLElement* createMe)
 {
 	bool create;
 	createMe->QueryBoolAttribute("create", &create);
@@ -24,29 +28,62 @@ bool createThisDevice(tinyxml2::XMLElement* createMe)
 //**************************************
 //prepares all asset libraries based on path passed xml file
 //and creastes and initialzies all devices
-bool ResourceManager::initialize(std::string assetPath, GraphicsDevice* gDevice)
+bool ResourceManager::initialize(std::string assetPath)
 {
 	tinyxml2::XMLDocument levelConfig;
 	if (!levelConfig.LoadFile(assetPath.c_str())) { return false; };
+		
+	tinyxml2::XMLElement* levelRoot = levelConfig.FirstChildElement();//Level
+	tinyxml2::XMLElement* currElement = levelRoot->FirstChildElement();//Screen
 	
-	tinyxml2::XMLElement* asset = levelConfig.FirstChildElement();
-	FPS = std::stoi(asset->GetText());
+	int screenWidth{ 0 };
+	int screenHeight{ 0 };
+	currElement->QueryIntAttribute("width", &screenWidth);
+	currElement->QueryIntAttribute("height", &screenHeight);
+
+	//========================================
+	//Construct Device Manager
+	//========================================
+	gDevice = std::make_unique<GraphicsDevice>(screenWidth, screenHeight);
+	if (!gDevice->initialize(true))
+	{
+		printf("Graphics Device could not Initialize!");
+		exit(1);
+	}
 	
-	asset = asset->NextSiblingElement();
-	tinyxml2::XMLElement* deviceCreationElement = asset->FirstChildElement();
-
-	this->gDevice = gDevice;
-
+	if (tinyxml2::XMLElement* fontConfig = currElement->FirstChildElement(); fontConfig)
+	{
+		std::unique_ptr<RGBA> fontColor = std::make_unique<RGBA>();
+			
+		fontConfig->QueryIntAttribute("R", (int*)&fontColor.get()->R);
+		fontConfig->QueryIntAttribute("G", (int*)&fontColor.get()->G);
+		fontConfig->QueryIntAttribute("B", (int*)&fontColor.get()->B);
+		fontConfig->QueryIntAttribute("A", (int*)&fontColor.get()->A);
+		
+		int fontSize;
+		fontConfig->QueryIntAttribute("size", &fontSize);
+		
+		string fontPath = fontConfig->Attribute("path");
+		
+		gDevice->setFont(fontPath, fontSize, *fontColor);		
+	}
+	
+	currElement = currElement->NextSiblingElement();//FPS
+	FPS = std::stoi(currElement->GetText());
+	
 	//========================================
 	//Construct Object Factory
 	//========================================
 	factory = std::make_unique<ObjectFactory>();
-
+	
+	currElement = currElement->NextSiblingElement();//Devices
+	
+	
 	//========================================
 	//Construct Input Device
 	//========================================
-	
-	if (createThisDevice(deviceCreationElement))
+	tinyxml2::XMLElement* deviceConfig = currElement->FirstChildElement("Input");
+	if (createThisDevice(deviceConfig))
 	{
 		//TODO:: load inputs from file.
 		iDevice = std::make_unique<InputDevice>();
@@ -60,12 +97,12 @@ bool ResourceManager::initialize(std::string assetPath, GraphicsDevice* gDevice)
 	//========================================
 	//Construct Physics Device
 	//========================================
-	deviceCreationElement = deviceCreationElement->NextSiblingElement();
-	if (createThisDevice(deviceCreationElement))
+	deviceConfig = deviceConfig->NextSiblingElement("Physics");
+	if (createThisDevice(deviceConfig))
 	{
 		Position gravity{ 0, 0 };
-		deviceCreationElement->QueryFloatAttribute("gravityX", &gravity.x);
-		deviceCreationElement->QueryFloatAttribute("gravityY", &gravity.y);
+		deviceConfig->QueryFloatAttribute("gravityX", &gravity.x);
+		deviceConfig->QueryFloatAttribute("gravityY", &gravity.y);
 		pDevice = std::make_unique<PhysicsDevice>(gravity);
 
 		if (!pDevice->initialize())
@@ -73,32 +110,31 @@ bool ResourceManager::initialize(std::string assetPath, GraphicsDevice* gDevice)
 			printf("Physics Device could not intialize!");
 			exit(1);
 		}
-	}
-	
+	}	
 
 	//========================================
 	//Construct Asset Library
 	//========================================
-	deviceCreationElement = deviceCreationElement->NextSiblingElement();
-	if (createThisDevice(deviceCreationElement))
+	deviceConfig = deviceConfig->NextSiblingElement("AssetLibrary");
+	if (createThisDevice(deviceConfig))
 	{
 		assetLibrary = std::make_unique<AssetLibrary>();
 		//TODO::needs to be an xml file just likes physics.
-		if (!assetLibrary->initialize(sDevice.get(), gDevice)) { exit(1); }
+		if (!assetLibrary->initialize(sDevice.get(), gDevice.get())) { exit(1); }
 
-		asset = asset->NextSiblingElement();
+		tinyxml2::XMLElement* asset = deviceConfig->FirstChildElement("Asset");
 
 		//add each asset into each library.
 		do
 		{
 			//get the name of the asset
-			std::string aName = asset->Attribute("name");
+			std::string assetName = asset->Attribute("name");
 
 			//where we will store the components.
 			std::vector<AssetLibrary::AssetLibraryComponentList> componentList;
 
 			//move to the components of the xml
-			tinyxml2::XMLElement* compElement = asset->FirstChildElement();
+			tinyxml2::XMLElement* compElement = asset->FirstChildElement("Component");
 
 			//Add each component to the vector
 			while (compElement)
@@ -109,7 +145,7 @@ bool ResourceManager::initialize(std::string assetPath, GraphicsDevice* gDevice)
 				if (currentComponent == "Renderer")
 				{
 					//add the coresponding asset to the library.
-					assetLibrary->setArtAsset(aName, compElement->Attribute("sprite"));
+					assetLibrary->setArtAsset(assetName, compElement->Attribute("sprite"));
 					//add the component to the list
 					componentList.push_back(AssetLibrary::AssetLibraryComponentList::RendererComp);
 				}
@@ -144,7 +180,7 @@ bool ResourceManager::initialize(std::string assetPath, GraphicsDevice* gDevice)
 					ObjectFactory::ObjectFactoryPresets stats;
 					compElement->QueryIntAttribute("health", (int*)&stats.health);
 					//add to library
-					assetLibrary->setObjectStats(aName, stats);
+					assetLibrary->setObjectStats(assetName, stats);
 					//add component
 					componentList.push_back(AssetLibrary::AssetLibraryComponentList::HealthComp);
 				}
@@ -166,7 +202,7 @@ bool ResourceManager::initialize(std::string assetPath, GraphicsDevice* gDevice)
 			if (componentList.empty()) return false;
 
 			//add to library
-			assetLibrary->setComponentList(aName, componentList);
+			assetLibrary->setComponentList(assetName, componentList);
 
 			//get the next Asset
 			asset = asset->NextSiblingElement();
@@ -175,8 +211,8 @@ bool ResourceManager::initialize(std::string assetPath, GraphicsDevice* gDevice)
 	//========================================
 	//Construct Sound Device
 	//========================================
-	deviceCreationElement = deviceCreationElement->NextSiblingElement();
-	if (createThisDevice(deviceCreationElement))
+	deviceConfig = deviceConfig->NextSiblingElement();
+	if (createThisDevice(deviceConfig))
 	{
 		//TODO:: grab file name from XML to load sounds into asset Library.
 		sDevice = std::make_unique<SoundDevice>();
@@ -189,7 +225,7 @@ bool ResourceManager::initialize(std::string assetPath, GraphicsDevice* gDevice)
 		//TODO::move to sound device!
 		//*********************Load Sounds***************************
 		//grab first sound
-		tinyxml2::XMLElement* sounds = deviceCreationElement->FirstChildElement();
+		tinyxml2::XMLElement* sounds = deviceConfig->FirstChildElement();
 		while (sounds)
 		{
 			//get information from file
@@ -237,7 +273,10 @@ bool ResourceManager::shutdown()
 //**************************************
 
 {
-
+	if (!objects.empty())
+	{
+		objects.clear();
+	}
 	iDevice = nullptr;
 
 	//gDevice->ShutDown();
@@ -256,6 +295,59 @@ bool ResourceManager::shutdown()
 
 
 	return true;
+}
+
+void ResourceManager::update()
+{
+	iDevice->update();
+	pDevice->update(1.0f / FPS);
+
+	for (auto objectIter = objects.begin(); objectIter != objects.end(); )
+	{
+		if (
+			HealthComponent* compHealth = (*objectIter)->getComponent<HealthComponent>(); 
+			compHealth != nullptr && compHealth->isDead)
+		{
+			//**************Bring out your dead********************
+			(*objectIter)->removeComponents();
+			objects.erase(objectIter);
+			//*******************************************************
+		}
+		else
+		{
+			objectIter++;
+		}
+	}
+	for (auto& object : objects)
+	{
+		Object* temp = object->update();
+		if (temp != nullptr)
+		{
+			newObjects.push_back(std::unique_ptr<Object>(temp));
+		}
+	}
+
+	if (!newObjects.empty())
+	{
+		objects.insert(objects.end(), std::make_move_iterator(newObjects.begin()), std::make_move_iterator(newObjects.end()));
+		newObjects.clear();
+	}
+
+	gDevice->getView()->update();
+}
+
+void ResourceManager::draw()
+{
+	gDevice->Begin();
+
+	for (auto& object : objects)
+	{
+		object->draw();
+	}
+
+	gDevice->draw();
+
+	gDevice->Present();
 }
 
 

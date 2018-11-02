@@ -9,7 +9,7 @@ int main(int argc, char *args[])
 {
 	unique_ptr<Engine> engine = std::make_unique<Engine>();
 
-	if (!engine->initialize("./Assets/Config/mainScreen.xml"))
+	if (!engine->initialize())
 	{
 		cout << "Engine could not initialize!";
 		exit(1);

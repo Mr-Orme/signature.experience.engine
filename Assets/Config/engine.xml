@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Level>
+  <Screen width="1024" height="768">
+    <Font R="0" G="0" B="0" A="255" path="./Assets/Fonts/impact.ttf" size="16"></Font>
+  </Screen>
   <FPS>100</FPS>
   <Devices>
-    <Input create="true" file=""></Input>
+    <Input create="true">
+      <InputEvent inputeEvent ="" gameEvent=""></InputEvent>
+    </Input>
     <Physics create="false" gravityX="0" gravityY="0"></Physics>
     <AssetLibrary create="false">
       <Asset name="">

@@ -13,11 +13,14 @@
 class ResourceManager
 {
 public:
-	bool initialize(std::string assetPath, GraphicsDevice* gDevice);
+	bool initialize(std::string assetPath);
 	bool shutdown();
 
+	void update();
+	void draw();
+
 	//Devices
-	GraphicsDevice* gDevice{ nullptr };
+	std::unique_ptr<GraphicsDevice> gDevice{ nullptr };
 	std::unique_ptr<InputDevice> iDevice{ nullptr };
 	std::unique_ptr<PhysicsDevice> pDevice{ nullptr };
 	std::unique_ptr<SoundDevice> sDevice{ nullptr };
