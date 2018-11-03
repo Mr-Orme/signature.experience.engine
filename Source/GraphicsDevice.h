@@ -22,10 +22,8 @@
 #include "View.h"
 class Texture;
 
-
 class GraphicsDevice
-{
-		
+{		
 public:
 
 	//Constructors and Destructors
@@ -39,10 +37,6 @@ public:
 	void Begin();
 	void draw();
 	void Present();
-
-	void Text2Screen(std::string text, Position position);
-	void Text2Screen(std::string text, EngineFloat x, EngineFloat y);
-	void Notice2Screen(std::string text);
 
 	void drawFilledCircle(Position position, EngineInt radius, RGBA RGBA);
 	bool drawBox(Position topLeft, Position bottomRight, RGBA RGBA);
@@ -67,6 +61,9 @@ public:
 	//setters
 	void setView(View* view);
 	bool setFont(std::string path, EngineInt size, RGBA color);
+	
+	TTF_Font* font{ nullptr };
+	SDL_Color color{ 0,0,0,255 };
 
 private:
 	EngineFloat Center(EngineFloat centerOn, EngineFloat width);
@@ -91,8 +88,7 @@ private:
 
 	std::vector<overlay> overlays;
 
-	TTF_Font* font;
-	RGBA color;
+	
 
 };
 

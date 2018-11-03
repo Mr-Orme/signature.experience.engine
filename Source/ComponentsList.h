@@ -14,7 +14,6 @@
 #include "SpriteComponent.h"
 
 #include "UserInputComponent.h"
-#include "TextComponent.h"
 //#include "BackpackComponent.h"
 //#include "InventoryComponent.h"
 //#include "GhostComponent.h"

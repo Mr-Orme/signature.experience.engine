@@ -212,89 +212,19 @@ bool GraphicsDevice::setFont(std::string path, EngineInt size, RGBA color)
         printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
 	}
 
-	this -> color = color;
-
-	return(true);
-
-}
-
-//**************************************
-//adds text to be displayed to the text vector pased on a string and position
-void GraphicsDevice::Text2Screen(std::string text, Position position)
-//**************************************
-{
-	int widthIncrease = 10; //left and right padding
-	int heightIncrease = 2; //top and bottom padding
-
-	
-	//set color of text
-	SDL_Color textColor = 
-	{ 
-		(Uint8)(color.R), 
+	color =
+	{
+		(Uint8)(color.R),
 		(Uint8)(color.G),
 		(Uint8)(color.B),
 		(Uint8)(color.A)
 	};
 
-	//create texture
-	SDL_Texture* textSheetTexture = SDL_CreateTextureFromSurface( 
-															renderer,  
-															TTF_RenderText_Solid(
-																	font, 
-																	text.c_str(), 
-																	textColor));
-
-	//create a texture for the game.
-	Texture* textTexture = new Texture();
-	textTexture -> load(textSheetTexture);
-
-	int width=0, height=0;
-	//grab textures' with and ehight.
-	SDL_QueryTexture(textSheetTexture, NULL, NULL, &width, &height);
-		//If we set a position of the box to -1, we center it.
-		//bottomRight needs to be the width + 1;
-	if(position.x == -1)
-	{
-		position.x = Center((EngineFloat)SCREEN_WIDTH, (EngineFloat)width);
-			
-	}
-	if(position.y == -1)
-	{
-		position.y = Center((EngineFloat)SCREEN_HEIGHT, (EngineFloat)height);
-	}
-
-	Position topLeft = {position.x - widthIncrease, position.y -heightIncrease};
-	Position bottomRight = {position.x + width + widthIncrease, position.y + height + heightIncrease};
-
-	RGBA background = {255, 255, 255, 255};
-	RGBA border = {0, 0, 0, 255};
-
-	
-	std::map<Texture*, Position> objects;
-	objects[textTexture] = position;
-
-	drawOverlay(topLeft, bottomRight, background, border, objects);
+	return(true);
 
 }
-//**************************************
-//adds text to be displayed to the text vector pased on a string and position
-//this one let's us directly type the position's values
-void GraphicsDevice::Text2Screen(std::string text, EngineFloat x, EngineFloat y)
-//**************************************
-{
-	Position position ={x,y};
-	Text2Screen(text, position);
-}
 
-//**************************************
-//a notice appears in the inventory bar at the bottom of the screen.
-void GraphicsDevice::Notice2Screen(std::string text)
-//**************************************
-{
-	Position textVec = {-1,550};
-	Text2Screen(text, textVec);
 
-}
 
 ////**************************************
 ////reverses the order of sprites so that the player is on top.

@@ -31,17 +31,16 @@ Texture * AssetLibrary::getArtAsset(std::string searchString)
 
 bool AssetLibrary::setArtAsset(std::string name, std::string path)
 {
-	artLibrary[name] = std::make_unique<Texture>();
-	if (!artLibrary[name]->load(gDevice->getRenderer(), path)) 
+	artLibrary[name] = std::make_unique<Texture>(gDevice, path);
+
+	if (!artLibrary[name]->initialzied) 
 	{ 
 		auto artIter = artLibrary.find(name);
 		artLibrary.erase(artIter);
 		return false; 
 	}
-	else
-	{
-		return true;
-	}
+
+	return true;
 }
 //**************************************
 //Based on your position in the game space and direction you are facing
@@ -126,9 +125,6 @@ std::vector<Component*> AssetLibrary::getComponents(std::string name, Object * o
 			break;
 		case AssetLibraryComponentList::UserInputComp:
 			componentListPtrs.push_back(new UserInputComponent(owner));
-			break;
-		case AssetLibraryComponentList::TextComp:
-			componentListPtrs.push_back(new TextComponent(owner));
 			break;
 		default:
 			break;

@@ -5,18 +5,18 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "Definitions.h"
-
+class GraphicsDevice;
 class Texture{
 
     public:
-        //initializes variables
-		Texture() {};
+		enum class Align { Left, Right, Center, Top, Bottom, None };
+		//Loads image at specified path
+		Texture(GraphicsDevice* gDevice, std::string path, std::string text = " ");
 
-        //Deallocates memory
+		//Deallocates memory
         ~Texture();
 
-        //Loads image at specified path
-        bool load(SDL_Renderer* renderer, std::string path );
+        
 		bool load(SDL_Texture* texture);
 
         //Deallocates texture
@@ -25,19 +25,20 @@ class Texture{
         //Renders texture at given point
 		
 		void draw(SDL_Renderer* renderer, Position position, EngineFloat angle, SDL_Rect* clip = NULL );
-
-        //gets image dimensions
-        int getWidth();
-        int getHeight();
-
+		int getWidth() { return width; }
+		int getHeight() { return height; }
+		//Image dimensions
+		
+		bool initialzied{ false };
     private:
-
-        //The actual hardware texture
-		SDL_Texture * texture{ nullptr };
-
-        //Image dimensions
 		int width{ 0 };
 		int height{ 0 };
+		Align vertical{ Align::None };
+		Align horizontal{ Align::None };
+        //The actual hardware texture
+		SDL_Texture * sprite{ nullptr };
+		SDL_Texture * text{ nullptr };
+
 
 };
 
