@@ -95,8 +95,6 @@ bool GraphicsDevice::ShutDown()
 	
 
 	//Quit SDL Subsystems
-	Mix_CloseAudio();
-	Mix_Quit();
 	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();

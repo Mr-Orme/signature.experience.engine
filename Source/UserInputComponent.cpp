@@ -9,7 +9,7 @@ UserInputComponent::~UserInputComponent(){}
 
 //**************************************
 //set up some defaults
-bool UserInputComponent::initialize(ObjectFactory::ObjectFactoryPresets& presets)
+bool UserInputComponent::initialize(const ObjectFactory::ObjectFactoryPresets& presets)
 {
 	
 	devices = presets.devices;

@@ -9,9 +9,9 @@ class GraphicsDevice;
 class Texture{
 
     public:
-		enum class Align { Left, Right, Center, Top, Bottom, None };
+		
 		//Loads image at specified path
-		Texture(GraphicsDevice* gDevice, std::string path, std::string text = " ");
+		Texture(GraphicsDevice* gDevice, std::string pathOrText, bool isSprite = true);
 
 		//Deallocates memory
         ~Texture();
@@ -33,11 +33,8 @@ class Texture{
     private:
 		int width{ 0 };
 		int height{ 0 };
-		Align vertical{ Align::None };
-		Align horizontal{ Align::None };
         //The actual hardware texture
 		SDL_Texture * sprite{ nullptr };
-		SDL_Texture * text{ nullptr };
 
 
 };

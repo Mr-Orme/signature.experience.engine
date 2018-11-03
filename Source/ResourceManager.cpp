@@ -1,5 +1,7 @@
 
 #include <iostream>
+#include <memory>
+#include "tinyxml2.h"
 
 #include "ResourceManager.h"
 #include "ComponentsList.h"
@@ -16,7 +18,7 @@
 #include "ObjectFactory.h"
 
 #include "Definitions.h"
-#include "tinyxml2.h"
+
 
 using namespace std;
 inline bool createThisDevice(tinyxml2::XMLElement* createMe)
@@ -31,15 +33,18 @@ inline bool createThisDevice(tinyxml2::XMLElement* createMe)
 bool ResourceManager::initialize(std::string assetPath)
 {
 	tinyxml2::XMLDocument levelConfig;
-	if (!levelConfig.LoadFile(assetPath.c_str())) { return false; };
+	if (!levelConfig.LoadFile(assetPath.c_str())==tinyxml2::XML_SUCCESS) 
+	{ 
+		return false; 
+	};
 		
 	tinyxml2::XMLElement* levelRoot = levelConfig.FirstChildElement();//Level
-	tinyxml2::XMLElement* currElement = levelRoot->FirstChildElement();//Screen
+	tinyxml2::XMLElement* levelElement = levelRoot->FirstChildElement();//Screen
 	
 	int screenWidth{ 0 };
 	int screenHeight{ 0 };
-	currElement->QueryIntAttribute("width", &screenWidth);
-	currElement->QueryIntAttribute("height", &screenHeight);
+	levelElement->QueryIntAttribute("width", &screenWidth);
+	levelElement->QueryIntAttribute("height", &screenHeight);
 
 	//========================================
 	//Construct Device Manager
@@ -51,7 +56,7 @@ bool ResourceManager::initialize(std::string assetPath)
 		exit(1);
 	}
 	
-	if (tinyxml2::XMLElement* fontConfig = currElement->FirstChildElement(); fontConfig)
+	if (tinyxml2::XMLElement* fontConfig = levelElement->FirstChildElement(); fontConfig)
 	{
 		std::unique_ptr<RGBA> fontColor = std::make_unique<RGBA>();
 			
@@ -68,21 +73,21 @@ bool ResourceManager::initialize(std::string assetPath)
 		gDevice->setFont(fontPath, fontSize, *fontColor);		
 	}
 	
-	currElement = currElement->NextSiblingElement();//FPS
-	FPS = std::stoi(currElement->GetText());
+	levelElement = levelElement->NextSiblingElement();//FPS
+	FPS = std::stoi(levelElement->GetText());
 	
 	//========================================
 	//Construct Object Factory
 	//========================================
 	factory = std::make_unique<ObjectFactory>();
 	
-	currElement = currElement->NextSiblingElement();//Devices
+	levelElement = levelElement->NextSiblingElement();//Devices
 	
 	
 	//========================================
 	//Construct Input Device
 	//========================================
-	tinyxml2::XMLElement* deviceConfig = currElement->FirstChildElement("Input");
+	tinyxml2::XMLElement* deviceConfig = levelElement->FirstChildElement("Input");
 	if (createThisDevice(deviceConfig))
 	{
 		//TODO:: load inputs from file.
@@ -118,74 +123,19 @@ bool ResourceManager::initialize(std::string assetPath)
 	deviceConfig = deviceConfig->NextSiblingElement("AssetLibrary");
 	if (createThisDevice(deviceConfig))
 	{
+		//TODO::initialize in constructor for all devices. Have initialized member that we check!
 		assetLibrary = std::make_unique<AssetLibrary>();
-		if (!assetLibrary->initialize(sDevice.get(), gDevice.get())) { exit(1); }
+		if (!assetLibrary->initialize(gDevice.get())) { exit(1); }
 
 		tinyxml2::XMLElement* asset = deviceConfig->FirstChildElement("Asset");
 
 		while (asset)
 		{
-			std::string assetName = asset->Attribute("name");
-
-			std::vector<AssetLibrary::AssetLibraryComponentList> componentList;
-
-			tinyxml2::XMLElement* compElement = asset->FirstChildElement("Component");
-			while (compElement)
-			{
-				std::string currentComponent = compElement->Attribute("name");
-
-				if (currentComponent == "Renderer")
-				{
-					assetLibrary->setArtAsset(assetName, compElement->Attribute("sprite"));
-					componentList.push_back(AssetLibrary::AssetLibraryComponentList::RendererComp);
-				}
-				else if (currentComponent == "Body")
-				{
-					PhysicsDevice::PhysicsStats physics;
-					compElement->QueryFloatAttribute("density", &physics.density);
-					compElement->QueryFloatAttribute("restitution", &physics.restitution);
-					compElement->QueryFloatAttribute("angularDamping", &physics.angularDamping);
-					compElement->QueryFloatAttribute("linearDamping", &physics.linearDamping);
-					compElement->QueryBoolAttribute("physicsOn", &physics.physicsOn);
-					std::string bodyType = compElement->Attribute("bodyType");
-					std::string bodyShape = compElement->Attribute("bodyShape");
-
-					if (bodyType == "ENGINE_DYNAMIC") { physics.bodyType = PhysicsDevice::BodyType::Dynamic; }
-					else if (bodyType == "ENGINE_STATIC") { physics.bodyType = PhysicsDevice::BodyType::Static; }
-
-					if (bodyShape == "ENGINE_RECTANGLE") { physics.bodyShape = PhysicsDevice::BodyShape::Rectangle; }
-					else if (bodyShape == "ENGINE_CIRCLE") { physics.bodyShape = PhysicsDevice::BodyShape::Circle; }
-
-					assetLibrary->setObjectPhysics(assetName, physics);
-					componentList.push_back(AssetLibrary::AssetLibraryComponentList::BodyComp);
-				}
-				else if (currentComponent == "Health")
-				{
-					ObjectFactory::ObjectFactoryPresets stats;
-					compElement->QueryIntAttribute("health", (int*)&stats.health);
-					assetLibrary->setObjectStats(assetName, stats);
-					componentList.push_back(AssetLibrary::AssetLibraryComponentList::HealthComp);
-				}
-				else if (currentComponent == "UserInput")
-				{
-					componentList.push_back(AssetLibrary::AssetLibraryComponentList::UserInputComp);
-				}
-				else
-				{
-					std::cout << "INVALID component in xml: " << currentComponent << std::endl;
-					return false;
-				}
-
-				compElement = compElement->NextSiblingElement("Component");
-			}
-
-			if (componentList.empty()) return false;
-
-			assetLibrary->setComponentList(assetName, componentList);
-
+			assetLibrary->setArtAsset(asset->Attribute("name"), asset->Attribute("spritePath"));
 			asset = asset->NextSiblingElement("Asset");
 		} 
 	}
+
 	//========================================
 	//Construct Sound Device
 	//========================================
@@ -193,36 +143,41 @@ bool ResourceManager::initialize(std::string assetPath)
 	if (createThisDevice(deviceConfig))
 	{
 		sDevice = std::make_unique<SoundDevice>();
-		if (!sDevice->initialize(this))
+		if (!sDevice->getInitialized())
 		{
 			printf("Sound Device could not intialize!");
 			exit(1);
 		}
-
-		//TODO::move all sounds to sound device!
+		
 		//*********************Load Sounds***************************
 		//grab first sound
 		tinyxml2::XMLElement* sounds = deviceConfig->FirstChildElement("SoundEffect");
 		while (sounds)
 		{
-			//get information from file
-			std::string name = sounds->Attribute("name");
-			std::string path = sounds->Attribute("path");
-
 			bool background;
 			sounds->QueryBoolAttribute("background", &background);
 
 			if (background)
 			{
-				assetLibrary->addBackgroundMusic(name, path);
+				sDevice->addBackgroundMusic(sounds->Attribute("name"), sounds->Attribute("path"));
 			}
 			else
 			{
-				assetLibrary->addSoundEffect(name, path);
+				sDevice->addSoundEffect(sounds->Attribute("name"), sounds->Attribute("path"));
 			}
 			sounds = sounds->NextSiblingElement("SoundEffect");
 		}
 
+	}
+	
+	
+	for (
+			levelElement = levelElement->NextSiblingElement("Object"); 
+			levelElement; 
+			levelElement = levelElement->NextSiblingElement("Object")
+		)
+	{
+		objects.push_back(std::unique_ptr<Object>(factory->Create(levelElement)));
 	}
 
 	//***********************************************************
@@ -254,18 +209,10 @@ bool ResourceManager::shutdown()
 		objects.clear();
 	}
 	iDevice = nullptr;
-
-	//gDevice->ShutDown();
-	gDevice = nullptr;
-
-	sDevice->Shutdown();
 	sDevice = nullptr;
-
+	gDevice = nullptr;
 	pDevice = nullptr;
-
-
 	assetLibrary = nullptr;
-
 	factory = nullptr;
 
 

@@ -2,22 +2,34 @@
 #define SOUNDDEVICE_H
 
 #include <string>
+#include <map>
 #include "Definitions.h"
+#include "SDL_mixer.h"
 
 class ResourceManager;
 
-class SoundDevice{
+class SoundDevice {
 public:
-	bool initialize(ResourceManager* devices);
-	void Shutdown();
+	~SoundDevice();
+	SoundDevice();
+
 
 	bool PlaySound(std::string sound, int numLoops);
 	bool PlaySound(std::string sound, int numLoops, int channel);
-	
+
 	void setBackground(std::string background);
-	
+	//TODO: need to get the SDL_mixer references out of  here!
+	Mix_Chunk* getSoundEffect(std::string name);
+	Mix_Music* getMusic(std::string name);
+	bool addSoundEffect(std::string name, std::string path);
+	bool addBackgroundMusic(std::string name, std::string path);
+	bool removeSound(std::string name);
+	bool getInitialized() { return initialized; }
 private:
-	ResourceManager* devices;
+
+	std::map<std::string, Mix_Chunk* > soundEffectLibrary;
+	std::map<std::string, Mix_Music* > musicLibrary;
+	bool initialized{ false };
 };
 
 

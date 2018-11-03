@@ -11,15 +11,15 @@ public:
 	Component(Object* owner);
 	~Component();
 	void OwnerDestroyed();
-	Object* getOwner();
+	Object* getOwner() const;
 
-	virtual bool initialize(ObjectFactory::ObjectFactoryPresets& presets)=0;
+	virtual bool initialize(const ObjectFactory::ObjectFactoryPresets& presets)=0;
 	virtual void start()=0;
 	virtual Object* update()=0;
 	virtual void finish()=0;
 
 protected:
-	Object* owner;
+	Object * owner{ nullptr };
 };
 
 

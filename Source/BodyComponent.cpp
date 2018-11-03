@@ -10,7 +10,7 @@ BodyComponent::BodyComponent(Object* owner):Component(owner){}
 
 //**************************************
 //Based on the presets struct passed in, a fixture is created
-bool BodyComponent::initialize(ObjectFactory::ObjectFactoryPresets& presets)
+bool BodyComponent::initialize(const ObjectFactory::ObjectFactoryPresets& presets)
 //**************************************
 {	
 	SpriteComponent* compRenderer = owner -> getComponent<SpriteComponent>();

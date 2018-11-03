@@ -27,6 +27,8 @@ public:
 
 	//Library
 	std::unique_ptr<AssetLibrary> assetLibrary{ nullptr };
+	
+	//factory
 	std::unique_ptr<ObjectFactory> factory{ nullptr };
 
 	std::vector<std::unique_ptr<Object>> objects;

@@ -24,12 +24,12 @@ public:
 	 Object();
 	~Object();
 	
-	bool initialize(ObjectFactory::ObjectFactoryPresets& presets);
+	bool initialize(const ObjectFactory::ObjectFactoryPresets& presets);
 	void AddComponent(Component* component);
 	Object* update();
 	void draw();
 
-	void setJoinedWith(Object* joinedWith) { this->joinedWith = joinedWith; }
+	//void setJoinedWith(Object* joinedWith) { this->joinedWith = joinedWith; }
 
 	std::string getObjectType() { return objectType; }
 	Object* getJoinedWith() { return joinedWith; }
@@ -37,7 +37,7 @@ public:
 	bool removeComponents();
 
 	template<class T>
-	T* getComponent()
+	T* getComponent() const
 	{
 		for (auto& component : components)
 		{
@@ -49,9 +49,6 @@ public:
 		}
 		return(nullptr);
 	}
-	
-	
-	
 
 private:
 	

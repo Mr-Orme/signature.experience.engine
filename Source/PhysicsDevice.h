@@ -50,42 +50,42 @@ public:
 			ObjectFactory::ObjectFactoryPresets presets
 		);
 
-	bool setTransform( Object* object, Position position, EngineFloat angle);
-	bool setLinearVelocity( Object* object, Position linearVelociy);
-	bool setAngularVelocity( Object* object, EngineFloat angularVelocity);
-	bool setTorque( Object* object, EngineFloat torque);
-	bool setLinearImpulse( Object* object, Position forceVec, Position forceCenter);
-	bool setStatic( Object* object);
-	bool setStopPhysics( Object* object);
-	bool setAngle( Object* object, EngineFloat angle);
+	bool setTransform( const Object* object, Position position, EngineFloat angle);
+	bool setLinearVelocity( const Object* object, Position linearVelociy);
+	bool setAngularVelocity( const Object* object, EngineFloat angularVelocity);
+	bool setTorque(const Object* object, EngineFloat torque);
+	bool setLinearImpulse(const Object* object, Position forceVec, Position forceCenter);
+	bool setStatic(const Object* object);
+	bool setStopPhysics(const Object* object);
+	bool setAngle(const Object* object, EngineFloat angle);
 
-	EngineFloat getAngularVelocity( Object* object);
-	Position getPosition( Object* object);
-	EngineFloat getAngle( Object* object);
-	Position getVelocity( Object* object);
-	Position getLinearVelocity( Object* object);
-	b2World* getWorld(){ return world; }
+	EngineFloat getAngularVelocity( const Object* object) const;
+	Position getPosition( const Object* object) const;
+	EngineFloat getAngle( const Object* object) const;
+	Position getVelocity( const Object* object) const;
+	Position getLinearVelocity( const Object* object) const;
+	b2World* getWorld() const { return world; }
 	
 	bool createRevolvingJoint( Object* object1,  Object* object2, Position anchor1, Position anchor2);
 
 	
-	b2Body* FindBody( Object* Object);
-	b2Vec2 GV2PV(Position gameVec);
-	Position PV2GV(b2Vec2 physicsVec);
+	b2Body* FindBody( const Object* Object) const;
+	b2Vec2 GV2PV(Position gameVec)const;
+	Position PV2GV(b2Vec2 physicsVec)const;
 	bool removeObject( Object* object);
 	bool destroyJoint( Object* object);
 		
 	b2World* world;
 	
-	inline float PW2RW(EngineFloat x){return x*fPRV;}
-	inline float RW2PW(EngineFloat x){return x/fPRV;}
-	inline float RW2PW(EngineInt x){return (float)x/fPRV;}
-	inline float RW2PWAngle(EngineFloat x){return((float)x*(2.0f*3.14159f)/360.0f);} //degrees to radians
-	inline float PW2RWAngle(EngineFloat x){return((float)x*360.0f/(2.0f*3.14159f));} //radians to degrees
+	inline float PW2RW(EngineFloat x)const {return x*fPRV;}
+	inline float RW2PW(EngineFloat x)const {return x/fPRV;}
+	inline float RW2PW(EngineInt x)const {return (float)x/fPRV;}
+	inline float RW2PWAngle(EngineFloat x)const {return((float)x*(2.0f*3.14159f)/360.0f);} //degrees to radians
+	inline float PW2RWAngle(EngineFloat x)const {return((float)x*360.0f/(2.0f*3.14159f));} //radians to degrees
 private:
 	bool destroyJoint(b2Body* body);
 	const b2Vec2 gravity;
-	Position alignCenters( Object* object);
+	Position alignCenters(const  Object* object)const;
 	static const float fPRV;
 
 	

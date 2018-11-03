@@ -9,12 +9,12 @@
 
 SpriteComponent::SpriteComponent(Object* owner):Component(owner){}
 
-
 //**************************************
 //on the first pass, we set up the texture for the object
-bool SpriteComponent::initialize(ObjectFactory::ObjectFactoryPresets& presets)
+bool SpriteComponent::initialize(const ObjectFactory::ObjectFactoryPresets& presets)
 //**************************************
 {
+	//MrOrme:: need to add joint functionality
 	//this will get hit twice, so we only want it done once.
 	if(!initialized)
 	{
@@ -39,6 +39,10 @@ void SpriteComponent::draw()
 
 	//draw sprite.
 	draw(updatedPosition, angle);
+	if (sprite)
+	{
+		sprite->draw();
+	}
 }
 
 void SpriteComponent::draw(Position position, EngineFloat angle)
@@ -46,7 +50,13 @@ void SpriteComponent::draw(Position position, EngineFloat angle)
 	texture ->draw(devices -> gDevice -> getRenderer(), position, angle, NULL);
 }
 
-void SpriteComponent::start(){}
+void SpriteComponent::start()
+{
+	if (sprite)
+	{
+		sprite->start();
+	}
+}
 
 Object* SpriteComponent::update(){return nullptr;}
 
@@ -60,4 +70,10 @@ Position SpriteComponent::getViewAdjustedPosition()
 		+ devices->gDevice->getView()->position);
 }
 
-void SpriteComponent::finish(){}
+void SpriteComponent::finish()
+{
+	if (sprite)
+	{
+		sprite->finish();
+	}
+}

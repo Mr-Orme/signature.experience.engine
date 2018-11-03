@@ -1,17 +1,19 @@
 #include "SoundDevice.h"
-#include "AssetLibrary.h"
-#include "ResourceManager.h"
 #include "SDL_mixer.h"
 
 
+SoundDevice::~SoundDevice()
+{
+	Mix_CloseAudio();
+	Mix_Quit();
+}
+
 //**************************************
 //set's up initial setting for sound device
-bool SoundDevice::initialize(ResourceManager* devices)
+SoundDevice::SoundDevice()
 //**************************************
 {
-	this->devices= devices;
 	//allows for OGG support
-	
 	{
 		auto flags = MIX_INIT_OGG;
 		auto initted = Mix_Init(flags);
@@ -20,7 +22,7 @@ bool SoundDevice::initialize(ResourceManager* devices)
 		{
 			printf("Mix_Init: Failed to init required ogg and mod support!\n");
 			printf("Mix_Init: %s\n", Mix_GetError());
-			return false;
+			initialized = false;
 		}
 	}
 
@@ -28,12 +30,12 @@ bool SoundDevice::initialize(ResourceManager* devices)
 	if(Mix_OpenAudio(48000, MIX_DEFAULT_FORMAT, 2, 4096 ) <0)
 	{
 		printf( "SDL Mixer could not initialize! SDL_Error: %s\n", Mix_GetError() );
-		return false;
+		initialized = false;
 	}
 
 	//Allocate sufficient channels
     Mix_AllocateChannels(100);
-	return true;
+	initialized = true;
 }
 
 //**************************************
@@ -50,7 +52,7 @@ bool SoundDevice::PlaySound(std::string sound, int numLoops)
 bool SoundDevice::PlaySound(std::string sound, int numLoops, int channel)
 //**************************************
 {
-	Mix_PlayChannel(channel, devices->assetLibrary->getSoundEffect(sound), numLoops);
+	Mix_PlayChannel(channel, getSoundEffect(sound), numLoops);
 	return true;
 }
 //**************************************
@@ -58,10 +60,49 @@ bool SoundDevice::PlaySound(std::string sound, int numLoops, int channel)
 void SoundDevice::setBackground(std::string background)
 //**************************************
 {
-	if(Mix_PlayMusic(devices->assetLibrary-> getMusic(background), -1) == -1)
+	if(Mix_PlayMusic(getMusic(background), -1) == -1)
 	{printf("Mix_PlayMusic: %s\n", Mix_GetError());}
 }
-void SoundDevice::Shutdown()
+Mix_Chunk * SoundDevice::getSoundEffect(std::string name)
 {
-	
+	auto soundIter = soundEffectLibrary.find(name);
+	if (soundIter == soundEffectLibrary.end())
+	{
+		{printf("Sound Effect File not found!"); }
+		return nullptr;
+	}
+	return soundIter->second;
+}
+
+Mix_Music * SoundDevice::getMusic(std::string name)
+{
+	std::map<std::string, Mix_Music*>::iterator musicIter = musicLibrary.find(name);
+	//make sure we found one.
+	if (musicIter == musicLibrary.end())
+	{
+		{printf("Background File not found!"); }
+		return nullptr;
+	}
+	else return musicIter->second;;
+}
+
+bool SoundDevice::addSoundEffect(std::string name, std::string path)
+{
+
+	if (soundEffectLibrary[name] = Mix_LoadWAV(path.c_str())) return true;
+	return false;
+}
+
+bool SoundDevice::addBackgroundMusic(std::string name, std::string path)
+{
+	//Mix_Load
+	if (musicLibrary[name] = Mix_LoadMUS(path.c_str())) return true;
+	return false;
+}
+//**************************************
+//Have not set this up yet, as there has bee no need for it.
+bool SoundDevice::removeSound(std::string name)
+//**************************************
+{
+	return false;
 }

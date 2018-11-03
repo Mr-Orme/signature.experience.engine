@@ -4,8 +4,8 @@
 
 #include <map>
 #include "Definitions.h"
+#include "tinyxml2.h"
 
-class TiXmlElement;
 class ResourceManager;
 class Object;
 
@@ -32,6 +32,7 @@ public:
 	};
 
 	Object* Create(ObjectFactoryPresets& presets);
+	Object* Create(tinyxml2::XMLElement* objectElement);
 	private:
 	
 };

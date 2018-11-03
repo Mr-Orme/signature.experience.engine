@@ -16,7 +16,7 @@ void Component::OwnerDestroyed()
 	owner = nullptr;
 }
 
-Object* Component::getOwner()
+Object* Component::getOwner() const
 {
 	return(owner);
 }

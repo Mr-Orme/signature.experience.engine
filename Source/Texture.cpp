@@ -11,21 +11,21 @@ Texture::~Texture()
 }
 
 
-Texture::Texture(GraphicsDevice* gDevice, std::string path, std::string text)
+Texture::Texture(GraphicsDevice* gDevice, std::string pathOrText, bool isSprite)
 {
 
 	//Destroy existing texture information
 	free();
 
-	if (path != " ")
+	if (isSprite)
 	{
 		//Load the image
-		SDL_Surface* surface = IMG_Load(path.c_str());
+		SDL_Surface* surface = IMG_Load(pathOrText.c_str());
 
 		//If the image loaded
 		if (surface == nullptr)
 		{
-			printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
+			printf("Unable to load image %s! SDL_image Error: %s\n", pathOrText.c_str(), IMG_GetError());
 
 		}
 		else
@@ -41,15 +41,15 @@ Texture::Texture(GraphicsDevice* gDevice, std::string path, std::string text)
 			SDL_FreeSurface(surface);
 		}
 	}
-	else if (text != " ")
+	else 
 	{
-		this->text = SDL_CreateTextureFromSurface(
+		this->sprite = SDL_CreateTextureFromSurface(
 			gDevice->getRenderer(),
 			TTF_RenderText_Solid(
 				gDevice->font,
-				path.c_str(),
+				pathOrText.c_str(),
 				gDevice->color));
-		initialzied = this->text != nullptr;
+		initialzied = this->sprite != nullptr;
 	}
 
 		//set the height and width from the texture
@@ -75,13 +75,7 @@ void Texture::free()
 		width = 0;
 		height = 0;
 	}
-	if (text != nullptr)
-	{
-		SDL_DestroyTexture(text);
-		text = nullptr;
-		vertical = Align::None;
-		horizontal = Align::None;
-	}
+
 }
 	   
 
@@ -101,7 +95,8 @@ void Texture::draw(SDL_Renderer* renderer, Position position, EngineFloat angle,
 		//Render to screen
 		SDL_RenderCopyEx(renderer, sprite, clip, &renderQuad, angle, NULL, SDL_FLIP_NONE);
 	}
-	if (text)
+	//MrOrme:: Delete me later!
+	/*if (text)
 	{
 		int textWidth, textHeight;
 		Position textPosition{ position.x, position.y };
@@ -130,9 +125,9 @@ void Texture::draw(SDL_Renderer* renderer, Position position, EngineFloat angle,
 		}
 		SDL_Rect renderQuad = { (int)textPosition.x, (int)textPosition.y, textWidth, textHeight };
 
-		//Render to screen
+		Render to screen
 		SDL_RenderCopyEx(renderer, text, NULL, &renderQuad, angle, NULL, SDL_FLIP_NONE);
 
-	}
+	}*/
 
 }

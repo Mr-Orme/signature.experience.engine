@@ -15,7 +15,7 @@ public:
 	UserInputComponent(Object* owner);
 	~UserInputComponent();
 	
-	bool initialize(ObjectFactory::ObjectFactoryPresets& presets) final;
+	bool initialize(const ObjectFactory::ObjectFactoryPresets& presets) final;
 	void start() final;
 	Object* update() final;
 	void finish() final;
