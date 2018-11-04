@@ -10,7 +10,7 @@ class HealthComponent : public Component
 public:
 	HealthComponent(Object* owner);
 
-	bool initialize(const ObjectFactory::ObjectFactoryPresets& presets) final;
+	bool initialize(const ObjectFactoryPresets& presets) final;
 	void start() final;
 	Object* update() final;
 	void finish() final;

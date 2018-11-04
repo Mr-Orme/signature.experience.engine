@@ -7,7 +7,6 @@
 #include "InputDevice.h"
 
 class ResourceManager;
-class ObjectFactory;
 
 class UserInputComponent : public Component
 {
@@ -15,7 +14,7 @@ public:
 	UserInputComponent(Object* owner);
 	~UserInputComponent();
 	
-	bool initialize(const ObjectFactory::ObjectFactoryPresets& presets) final;
+	bool initialize(const ObjectFactoryPresets& presets) final;
 	void start() final;
 	Object* update() final;
 	void finish() final;

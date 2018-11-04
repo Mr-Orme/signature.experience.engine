@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "Definitions.h"
-#include "ObjectFactory.h"
 #include "Component.h"
 
 class GraphicsDevice;
@@ -24,7 +23,7 @@ public:
 	 Object();
 	~Object();
 	
-	bool initialize(const ObjectFactory::ObjectFactoryPresets& presets);
+	bool initialize(const ObjectFactoryPresets& presets);
 	void AddComponent(Component* component);
 	Object* update();
 	void draw();

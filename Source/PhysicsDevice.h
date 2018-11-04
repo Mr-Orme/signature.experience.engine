@@ -2,12 +2,13 @@
 #define PHYSICSDEVICE_H
 
 #include "Definitions.h"
+#include "Initializers.h"
 #include "Box2D.h"
 
 #include "ObjectFactory.h"
 
 class Texture;
-class Object;
+class BodyComponent;
 
 class PhysicsDevice{
 public:
@@ -17,63 +18,35 @@ public:
 	bool initialize();
 	bool update(float dt);
 
-	struct RotateBody
-	{
-		EngineFloat torque;
-		EngineFloat maxAngularVelocity;
-		EngineInt radius;
-		Position center;
-	};
-
-	enum class BodyShape { Rectangle, Circle };
-	enum class BodyType { Static, Kinematic, Dynamic };
-
-	struct PhysicsStats
-	{
-		EngineFloat spinSpeed;
-		BodyType bodyType;
-		BodyShape bodyShape;
-		EngineFloat density;
-		EngineFloat friction;
-		EngineFloat restitution;
-		EngineFloat angularDamping;
-		EngineFloat linearDamping;
-		EngineFloat force;
-		bool physicsOn;
-	};
+	
 
 
-	bool createFixture
-		(
-			Object* object,
-			PhysicsStats physics,
-			ObjectFactory::ObjectFactoryPresets presets
-		);
+	bool createFixture(BodyComponent* object, ObjectFactoryPresets presets);
 
-	bool setTransform( const Object* object, Position position, EngineFloat angle);
-	bool setLinearVelocity( const Object* object, Position linearVelociy);
-	bool setAngularVelocity( const Object* object, EngineFloat angularVelocity);
-	bool setTorque(const Object* object, EngineFloat torque);
-	bool setLinearImpulse(const Object* object, Position forceVec, Position forceCenter);
-	bool setStatic(const Object* object);
-	bool setStopPhysics(const Object* object);
-	bool setAngle(const Object* object, EngineFloat angle);
+	bool setTransform( const BodyComponent* object, Position position, EngineFloat angle);
+	bool setLinearVelocity( const BodyComponent* object, Position linearVelociy);
+	bool setAngularVelocity( const BodyComponent* object, EngineFloat angularVelocity);
+	bool setTorque(const BodyComponent* object, EngineFloat torque);
+	bool setLinearImpulse(const BodyComponent* object, Position forceVec, Position forceCenter);
+	bool setStatic(const BodyComponent* object);
+	bool setStopPhysics(const BodyComponent* object);
+	bool setAngle(const BodyComponent* object, EngineFloat angle);
 
-	EngineFloat getAngularVelocity( const Object* object) const;
-	Position getPosition( const Object* object) const;
-	EngineFloat getAngle( const Object* object) const;
-	Position getVelocity( const Object* object) const;
-	Position getLinearVelocity( const Object* object) const;
+	EngineFloat getAngularVelocity( const BodyComponent* object) const;
+	Position getPosition( const BodyComponent* object) const;
+	EngineFloat getAngle( const BodyComponent* object) const;
+	Position getVelocity( const BodyComponent* object) const;
+	Position getLinearVelocity( const BodyComponent* object) const;
 	b2World* getWorld() const { return world; }
 	
-	bool createRevolvingJoint( Object* object1,  Object* object2, Position anchor1, Position anchor2);
+	bool createJoint(Joints joint);
 
 	
-	b2Body* FindBody( const Object* Object) const;
+	b2Body* FindBody( const BodyComponent* bodyComponent) const;
 	b2Vec2 GV2PV(Position gameVec)const;
 	Position PV2GV(b2Vec2 physicsVec)const;
-	bool removeObject( Object* object);
-	bool destroyJoint( Object* object);
+	bool removeObject( BodyComponent* object);
+	bool destroyJoint( BodyComponent* object);
 		
 	b2World* world;
 	
@@ -85,7 +58,7 @@ public:
 private:
 	bool destroyJoint(b2Body* body);
 	const b2Vec2 gravity;
-	Position alignCenters(const  Object* object)const;
+	Position alignCenters(const  BodyComponent* object)const;
 	static const float fPRV;
 
 	

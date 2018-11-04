@@ -2,7 +2,7 @@
 #define COMPONENT_H
 
 #include "Definitions.h"
-#include "ObjectFactory.h"
+#include "Initializers.h"
 
 class Object;
 class Component
@@ -13,7 +13,7 @@ public:
 	void OwnerDestroyed();
 	Object* getOwner() const;
 
-	virtual bool initialize(const ObjectFactory::ObjectFactoryPresets& presets)=0;
+	virtual bool initialize(const ObjectFactoryPresets& presets)=0;
 	virtual void start()=0;
 	virtual Object* update()=0;
 	virtual void finish()=0;

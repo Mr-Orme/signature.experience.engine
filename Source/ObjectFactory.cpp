@@ -8,12 +8,13 @@
 #include "Texture.h"
 #include "Object.h"
 #include "AssetLibrary.h"
+#include "Initializers.h"
 
 using namespace std;
 
 Object* objectFromComponentList(
 	const std::vector<AssetLibrary::AssetLibraryComponentList> enumComponents, 
-	const ObjectFactory::ObjectFactoryPresets& presets)
+	const ObjectFactoryPresets& presets)
 {
 
 	
@@ -66,18 +67,18 @@ Object* objectFromComponentList(
 //based on the object type, it grabs components.
 // and adds them to a newly created object.
 //it initializes the object which also initializes all the components
-Object* ObjectFactory::Create(ObjectFactory::ObjectFactoryPresets& presets)
-//**************************************
-{
-	//get list of components for the new object
-	return objectFromComponentList(presets.devices -> assetLibrary ->getComponents(presets.objectType), presets);
-	//Add each to the object	
-}
+//Object* ObjectFactory::Create(ObjectFactoryPresets& presets)
+////**************************************
+//{
+//	//get list of components for the new object
+//	return objectFromComponentList(presets.devices -> assetLibrary ->getComponents(presets.objectType), presets);
+//	//Add each to the object	
+//}
 
 Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 {
 	std::vector<AssetLibrary::AssetLibraryComponentList> enumComponents;
-	ObjectFactory::ObjectFactoryPresets presets;
+	ObjectFactoryPresets presets;
 	presets.objectType = objectElement->Attribute("type");
 	//MrOrme:: Need to finish initializing components!
 	for (
@@ -108,6 +109,6 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 		
 	}
 
-	return objectFromComponentList(presets.devices->assetLibrary->getComponents(presets.objectType), presets);
+	return objectFromComponentList(enumComponents, presets);
 }
 

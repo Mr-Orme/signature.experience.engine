@@ -1,13 +1,13 @@
 #include <cmath>
 
 #include "PhysicsDevice.h"
-//#include "SpriteComponent.h"
-#include "ContactListener.h"
-#include "Object.h"
-#include "Texture.h"
-#include "ObjectFactory.h"
-
 #include "SpriteComponent.h"
+#include "ContactListener.h"
+#include "BodyComponent.h"
+#include "Texture.h"
+
+#include "Object.h"
+#include "Initializers.h"
 
 
 const float PhysicsDevice::fPRV{ 10.0f };
@@ -39,7 +39,7 @@ bool PhysicsDevice::update(float dt)
 
 //**************************************
 //Moves body to a set location & angle
-bool PhysicsDevice::setTransform(const Object* object, Position position, EngineFloat angle)
+bool PhysicsDevice::setTransform(const BodyComponent* object, Position position, EngineFloat angle)
 //**************************************
 {
 	//finds which body this object is attached to.
@@ -55,7 +55,7 @@ bool PhysicsDevice::setTransform(const Object* object, Position position, Engine
 	return true;
 	
 }
-bool PhysicsDevice::setAngle(const Object* object, EngineFloat angle)
+bool PhysicsDevice::setAngle(const BodyComponent* object, EngineFloat angle)
 {
 	b2Body* body = FindBody(object);
 	body -> SetTransform(body -> GetPosition(), RW2PWAngle(angle));
@@ -64,7 +64,7 @@ bool PhysicsDevice::setAngle(const Object* object, EngineFloat angle)
 
 //**************************************
 //sets angular velocity
-bool PhysicsDevice::setAngularVelocity(const Object* object, EngineFloat angularVelocity)
+bool PhysicsDevice::setAngularVelocity(const BodyComponent* object, EngineFloat angularVelocity)
 //**************************************
 {
 	b2Body* body = FindBody(object);
@@ -75,7 +75,7 @@ bool PhysicsDevice::setAngularVelocity(const Object* object, EngineFloat angular
 
 //**************************************
 //sets angular velocity
-bool PhysicsDevice::setLinearVelocity(const Object* object, Position linearVelociy)
+bool PhysicsDevice::setLinearVelocity(const BodyComponent* object, Position linearVelociy)
 //**************************************
 {
 	b2Body* body = FindBody(object);
@@ -88,7 +88,7 @@ bool PhysicsDevice::setLinearVelocity(const Object* object, Position linearVeloc
 
 //**************************************
 //sets a linear impulse based on passed force vector and center vector
-bool PhysicsDevice::setLinearImpulse(const Object* object, Position forceVec, Position forceCenter)
+bool PhysicsDevice::setLinearImpulse(const BodyComponent* object, Position forceVec, Position forceCenter)
 //**************************************
 {
 	b2Body* body = FindBody(object);
@@ -103,7 +103,7 @@ bool PhysicsDevice::setLinearImpulse(const Object* object, Position forceVec, Po
 
 //**************************************
 //sets torque on body based on passed values
-bool PhysicsDevice::setTorque(const Object* object, EngineFloat torque)
+bool PhysicsDevice::setTorque(const BodyComponent* object, EngineFloat torque)
 //**************************************
 {
 	b2Body* body = FindBody(object);
@@ -111,14 +111,14 @@ bool PhysicsDevice::setTorque(const Object* object, EngineFloat torque)
 	return true;
 }
 
-bool PhysicsDevice::setStatic(const Object* object)
+bool PhysicsDevice::setStatic(const BodyComponent* object)
 {
 	b2Body* body = FindBody(object);
 	body -> SetType(b2_staticBody);
 	return true;
 }
 
-bool PhysicsDevice::setStopPhysics(const Object* object)
+bool PhysicsDevice::setStopPhysics(const BodyComponent* object)
 {
 	b2Body* body = FindBody(object);
 	body -> SetActive(false);
@@ -127,13 +127,13 @@ bool PhysicsDevice::setStopPhysics(const Object* object)
 
 //**************************************
 //gets Angular velocity of body
-EngineFloat PhysicsDevice::getAngularVelocity(const Object* object) const
+EngineFloat PhysicsDevice::getAngularVelocity(const BodyComponent* object) const
 //**************************************
 {
 	b2Body* body = FindBody(object);
 	return (PW2RWAngle(body -> GetAngularVelocity()));
 }
-Position PhysicsDevice::getLinearVelocity(const Object* object) const
+Position PhysicsDevice::getLinearVelocity(const BodyComponent* object) const
 {
 	b2Body* body = FindBody(object);
 	return(PV2GV(body -> GetLinearVelocity()));
@@ -141,7 +141,7 @@ Position PhysicsDevice::getLinearVelocity(const Object* object) const
 
 //**************************************
 //gets bodies' position
-Position PhysicsDevice::getPosition(const  Object* object) const
+Position PhysicsDevice::getPosition(const  BodyComponent* object) const
 //**************************************
 {
 	//b2Body* body = FindBody(object);
@@ -152,14 +152,14 @@ Position PhysicsDevice::getPosition(const  Object* object) const
 
 //**************************************
 //gets bodies' angle
-EngineFloat PhysicsDevice::getAngle( const Object* object) const
+EngineFloat PhysicsDevice::getAngle( const BodyComponent* object) const
 //**************************************
 {
 	b2Body* body = FindBody(object);
 	return (PW2RWAngle(body -> GetAngle()));
 }
 
-Position PhysicsDevice::getVelocity(const Object* object) const
+Position PhysicsDevice::getVelocity(const BodyComponent* object) const
 {
 	b2Body* body = FindBody(object);
 	return (PV2GV(body -> GetLinearVelocity()));
@@ -168,15 +168,10 @@ Position PhysicsDevice::getVelocity(const Object* object) const
 //**************************************
 //Creates a body and fixture for a passed in object
 //based on passed in values
-bool PhysicsDevice::createFixture
-	(
-		 Object* object,
-		PhysicsStats physics,
-		ObjectFactory::ObjectFactoryPresets presets
-	)
+bool PhysicsDevice::createFixture( BodyComponent* object, ObjectFactoryPresets presets)
 //**************************************
 {
-	SpriteComponent* compRenderer = object -> getComponent<SpriteComponent>();
+	Texture* texture = object->getOwner()->getComponent<SpriteComponent>()->texture;
 	//new body definition
 	b2BodyDef* bd = new b2BodyDef;
 	//made need one or the other, depending on what was passed.
@@ -191,7 +186,7 @@ bool PhysicsDevice::createFixture
 	
 
 	//set body type
-	switch (physics.bodyType)
+	switch (presets.bodyInitializers.physics.bodyType)
 	{
 	case BodyType::Static:
 		bd -> type = b2_staticBody;
@@ -205,36 +200,35 @@ bool PhysicsDevice::createFixture
 	}
 
 	//********Adjust postion because SDL is top left, while box2d is center*************
-	Texture* texture = object -> getComponent<SpriteComponent>() -> texture;
 	//subtract off half the width.
-	presets.position.x += (texture -> getWidth()/2);
+	presets.bodyInitializers.position.x += (texture -> getWidth()/2);
 	//subtract off half the height
-	presets.position.y += (texture -> getHeight()/2);
+	presets.bodyInitializers.position.y += (texture -> getHeight()/2);
 	//**********************************************************************************
 
 	// set starting position & angle
-	bd -> position.Set(RW2PW(presets.position.x), RW2PW(presets.position.y));
-	bd -> angle = RW2PWAngle(presets.angle);
+	bd -> position.Set(RW2PW(presets.bodyInitializers.position.x), RW2PW(presets.bodyInitializers.position.y));
+	bd -> angle = RW2PWAngle(presets.bodyInitializers.angle);
 
 	//add the body to the world
 	b2Body* body = world -> CreateBody(bd);
 
 	//set damping values on the body
-	body -> SetAngularDamping(physics.angularDamping);
-	body -> SetLinearDamping(physics.linearDamping);
+	body -> SetAngularDamping(presets.bodyInitializers.physics.angularDamping);
+	body -> SetLinearDamping(presets.bodyInitializers.physics.linearDamping);
 
 	//set fixture's shape
-	switch (physics.bodyShape)
+	switch (presets.bodyInitializers.physics.bodyShape)
 	{
 	case BodyShape::Rectangle:
 		//rectangle's dimensions
-		pShape.SetAsBox(RW2PW(compRenderer -> texture -> getWidth()/2.0f), RW2PW(compRenderer -> texture -> getHeight()/2.0f));
+		pShape.SetAsBox(RW2PW(texture-> getWidth()/2.0f), RW2PW(texture-> getHeight()/2.0f));
 		shapefd.shape = &pShape;
 		break;
 	case BodyShape::Circle:
 		//circle radius based on object's width.
-		EngineFloat width = compRenderer -> texture -> getWidth()/2.0f;
-		EngineFloat height = compRenderer -> texture -> getHeight()/2.0f;
+		EngineFloat width = texture-> getWidth()/2.0f;
+		EngineFloat height = texture-> getHeight()/2.0f;
 
 		if (width > height)	cShape.m_radius = (RW2PW(width));
 		else cShape.m_radius = (RW2PW(height));
@@ -243,13 +237,13 @@ bool PhysicsDevice::createFixture
 	}
 
 	//set fixture values based on passed in values.
-	shapefd.density = physics.density;
-	shapefd.friction = physics.friction;
-	shapefd.restitution = physics.restitution;
+	shapefd.density = presets.bodyInitializers.physics.density;
+	shapefd.friction = presets.bodyInitializers.physics.friction;
+	shapefd.restitution = presets.bodyInitializers.physics.restitution;
 
 	//create the fixture on the body.
 	body -> CreateFixture(&shapefd);
-	body -> SetActive(physics.physicsOn);
+	body -> SetActive(presets.bodyInitializers.physics.physicsOn);
 	
 	return true;
 	
@@ -257,7 +251,7 @@ bool PhysicsDevice::createFixture
 
 //**************************************
 //Removes an object from the World
-bool PhysicsDevice::removeObject( Object* object)
+bool PhysicsDevice::removeObject( BodyComponent* object)
 //**************************************
 {
 	//Find the body based on the passed object
@@ -278,7 +272,7 @@ bool PhysicsDevice::removeObject( Object* object)
 
 //**************************************
 //Destroys a  physics joint from outside the physics device
-bool PhysicsDevice::destroyJoint( Object* object)
+bool PhysicsDevice::destroyJoint( BodyComponent* object)
 //**************************************
 {
 	b2Body* body = FindBody(object);
@@ -306,7 +300,7 @@ bool PhysicsDevice::destroyJoint(b2Body* body)
 //Uses the user data field in the body and compares the memory location
 //to the memory location of the passed object pointer.
 //Returns the body that has the same memory location in the user data field
-b2Body* PhysicsDevice::FindBody( const Object* object) const
+b2Body* PhysicsDevice::FindBody( const BodyComponent* object) const
 //**************************************
 {
 	//loop through the bodies
@@ -343,48 +337,66 @@ Position PhysicsDevice::PV2GV(b2Vec2 physicsVec)const
 
 //**************************************
 //Creates a revolute joint using the passed objects and anchor points
-bool PhysicsDevice::createRevolvingJoint( Object* object1,  Object* object2, Position anchor1, Position anchor2)
+bool PhysicsDevice::createJoint( Joints joint)
 //**************************************
 {
 	//find corresponding bodies for objects
-	b2Body* bodyA = FindBody(object1);
-	b2Body* bodyB = FindBody(object2);
+	b2Body* bodyA = FindBody(joint.BodyA);
+	b2Body* bodyB = FindBody(joint.BodyB);
 	if(bodyA == NULL || bodyB == NULL)
 	{
 		return false;
 	}
-
-	//joint definition
-	b2RevoluteJointDef revoluteJointDef;
-
-	//assign bodies to definition
-	revoluteJointDef.bodyA = bodyA;
-	revoluteJointDef.bodyB = bodyB;
-
-	//They cannot collide
-	revoluteJointDef.collideConnected = false;
-
-	//set anchor points
-	revoluteJointDef.localAnchorA.Set(RW2PW(anchor1.x), RW2PW(anchor1.y));
-	revoluteJointDef.localAnchorB.Set(RW2PW(anchor2.x), RW2PW(anchor2.y));
-
-	//Joint starts at angle zero
-	revoluteJointDef.referenceAngle = 0;
-
-	//Add the joint to the world. If successful will return True, othewise false.
-	return (b2RevoluteJoint*)world -> CreateJoint(&revoluteJointDef);
+	//TODO::Flush out other joint types!
+	switch (joint.type)
+	{
+	case JointType::Revolute:
+		break;
+	case JointType::Distance:
+		break;
+	case JointType::Prismatic:
+		break;
+	case JointType::Wheel:
+		break;
+	case JointType::Weld:
+	{
+		b2WeldJointDef weldJointDef;
+		weldJointDef.bodyA = bodyA;
+		weldJointDef.bodyB = bodyB;
+		weldJointDef.collideConnected = joint.CollideConnected;
+		weldJointDef.localAnchorA.Set(RW2PW(joint.AnchorA.x), RW2PW(joint.AnchorA.y));
+		weldJointDef.localAnchorB.Set(RW2PW(joint.AnchorB.x), RW2PW(joint.AnchorB.y));
+		weldJointDef.referenceAngle = RW2PWAngle(joint.referenceAngle);
+		return world->CreateJoint(&weldJointDef);
+		break;
+		
+	}
+	case JointType::Pulley:
+		break;
+	case JointType::Friction:
+		break;
+	case JointType::Gear:
+		break;
+	case JointType::Mouse:
+		break;
+	case JointType::Rope:
+		break;
+	default:
+		break;
+	}
+	return false;
 	
 }
 
 //**************************************
 //adjusts postion based on the fact that SDL is top left and Box2d uses the center of an object for position.
-Position PhysicsDevice::alignCenters(const Object* object) const
+Position PhysicsDevice::alignCenters(const BodyComponent* object) const
 //**************************************
 {
 	b2Body* body = FindBody(object);
 	b2Vec2 physPosition = body -> GetPosition();
 	Position position;
-	Texture* texture = object -> getComponent<SpriteComponent>() -> texture;
+	Texture* texture = object->getOwner()->getComponent<SpriteComponent>()->texture;
 
 		//subtract off half the width.
 		position.x = PW2RW(physPosition.x) - (texture -> getWidth()/2);

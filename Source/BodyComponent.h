@@ -1,9 +1,9 @@
 #ifndef BODY_COMPONENT_H
 #define BODY_COMPONENT_H
 
+#include <memory>
 #include "Component.h"
 #include "Definitions.h"
-#include "ObjectFactory.h"
 
 class ResourceManager;
 class Object;
@@ -12,7 +12,7 @@ class BodyComponent : public Component
 public:
 	BodyComponent(Object* owner);
 		
-	bool initialize(const ObjectFactory::ObjectFactoryPresets& presets) final;
+	bool initialize(const ObjectFactoryPresets& presets) final;
 	void start() final;
 	Object* update() final;
 	void finish() final;
@@ -26,8 +26,10 @@ public:
 	void adjustAngle(EngineFloat adjustAmount);
 	void linearStop();
 	
+	std::unique_ptr<BodyComponent> joinedWith{ nullptr };
 private:
 	ResourceManager * devices{ nullptr };
+	
 };
 
 #endif

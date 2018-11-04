@@ -14,7 +14,7 @@
 
 //**************************************
 //get's the components up and running based on passed presests
-bool  Object::initialize(const ObjectFactory::ObjectFactoryPresets& presets)
+bool  Object::initialize(const ObjectFactoryPresets& presets)
 //**************************************
 {
 	objectType = presets.objectType;

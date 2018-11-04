@@ -7,14 +7,13 @@
 #include "Definitions.h"
 
 class Texture;
-class ObjectFactory;
 class SpriteComponent : public Component
 {
 public:
 	enum class Align { Left, Right, Center, Top, Bottom, None };
 	SpriteComponent(Object* owner);
 	
-	bool initialize(const ObjectFactory::ObjectFactoryPresets& presets) final;
+	bool initialize(const ObjectFactoryPresets& presets) final;
 	void start() final;
 	Object* update() final;
 	void finish() final;

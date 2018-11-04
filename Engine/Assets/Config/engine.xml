@@ -18,8 +18,16 @@
     </Sound>
   </Devices>
   <Object type="Button">
-    <Component name="Sprite" text="Create Object" vAlign="Center" hAlign="Center"></Component>
-    <Component name="Body" x="900" y="0"></Component>
+    <Joint type="Weld" collide="false">
+      <JointParams jointBody="0">
+        <Component name="Sprite" asset="Button" sprite="true"></Component>
+        <Component name="Body" x="900" y="0" density="15.0f" restitution="0.0f" angularDamping="0.0f" linearDamping="0.0f" bodyType="GAME_STATIC" bodyShape="GAME_RECTANGLE" physicsOn = "false"/>
+      </JointParams>
+      <JointParams jointBody="1" anchorX="0.5f" anchorY="0.5" joinTo="0" joinToAnchorX="0.5f" joinToAnchorY="0.5f">
+        <Component name="Sprite" text="Create Object" sprite="false"></Component>
+        <Component name="Body" x="900" y="0" density="15.0f" restitution="0.0f" angularDamping="0.0f" linearDamping="0.0f" bodyType="GAME_STATIC" bodyShape="GAME_RECTANGLE" physicsOn = "false"/>
+      </JointParams>      
+    </Joint>
     <Component name="UserInput">
       <MouseClick event="CREATE_OBJECT"/>
     </Component>

@@ -10,11 +10,11 @@ HealthComponent::HealthComponent(Object* owner):Component(owner){}
 
 //**************************************
 //gets health and resource manager from passed presets, the object starts out alive.
-bool HealthComponent::initialize(const ObjectFactory::ObjectFactoryPresets& presets)
+bool HealthComponent::initialize(const ObjectFactoryPresets& presets)
 //**************************************
 {
 	devices = presets.devices;
-	health = devices -> assetLibrary -> getObjectStats(presets.objectType).health;
+	health = presets.health;
 	return true;
 }
 
@@ -25,13 +25,13 @@ bool HealthComponent::killObject(std::string deathSprite)
 //**************************************
 {
 	//Stop the physics of the object
-	devices -> pDevice -> setStopPhysics(owner);
+	devices -> pDevice -> setStopPhysics(owner->getComponent<BodyComponent>());
 
 	//grab the renderer
-	SpriteComponent* compRenderer = owner -> getComponent<SpriteComponent>();
+	SpriteComponent* sprite = owner -> getComponent<SpriteComponent>();
 	//change the sprite
 	//TODO: return false on bad texture!
-	compRenderer -> texture = devices -> assetLibrary -> getArtAsset(deathSprite);	
+	sprite -> texture = devices -> assetLibrary -> getArtAsset(deathSprite);	
 	return true;
 }
 //**************************************
@@ -56,15 +56,16 @@ Object* HealthComponent::update()
 	//if dead
 	if(health <= 0)
 	{
+		//TODO:: update joint deletion for dying things.
 		//if this is a joined object
-		if(owner -> getJoinedWith() != nullptr)
-		{
-			//Turn off the joined object
-			Object* joined =  owner -> getJoinedWith();
-			devices -> pDevice -> setStopPhysics(joined);
-			//destroy the joints
-			devices -> pDevice -> destroyJoint(owner);
-		}
+		//if(owner -> getJoinedWith() != nullptr)
+		//{
+		//	//Turn off the joined object
+		//	Object* joined =  owner -> getJoinedWith();
+		//	devices -> pDevice -> setStopPhysics(joined);
+		//	//destroy the joints
+		//	devices -> pDevice -> destroyJoint(owner);
+		//}
 		//kill it
 		killObject();
 	}

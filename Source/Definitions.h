@@ -2,6 +2,10 @@
 #define DEFINITIONS_H
 
 #include <cmath>
+//TODO:: const correctness. Check to see if consts can be put on pointer parameters and class methods.
+//TODO:: clear out #includes. Make sure every #include is needed in ever file!
+//TODO:: Move initialization to the constructor and stopping/finishing to the destructor.
+//TODO:: Move default initialization of member variables to .h file using {} for ALL classes!
 //Basic Types
 typedef unsigned int	Uint32;
 typedef float			EngineFloat;
@@ -49,12 +53,6 @@ struct Position
 		return { abs((float)src.x),abs((float)src.y) };
 	}
 };
-
-
-enum class Direction {N =0, E = 90, S = 180, W = 270};
-
-//TODO:make levels an array of resource managers! or something that has nearby areas. . .
-enum class LEVEL {ENGINE_LEVEL_MAIN, ENGINE_LEVEL_BASEMENT,};
 
 
 struct RGBA

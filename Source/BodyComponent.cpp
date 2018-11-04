@@ -10,37 +10,43 @@ BodyComponent::BodyComponent(Object* owner):Component(owner){}
 
 //**************************************
 //Based on the presets struct passed in, a fixture is created
-bool BodyComponent::initialize(const ObjectFactory::ObjectFactoryPresets& presets)
+bool BodyComponent::initialize(const ObjectFactoryPresets& presets)
 //**************************************
 {	
-	SpriteComponent* compRenderer = owner -> getComponent<SpriteComponent>();
-	PhysicsDevice::PhysicsStats physics;
-	if(compRenderer != nullptr)
+	
+	if(SpriteComponent* sprite = owner->getComponent<SpriteComponent>(); sprite)
 	{
 		//store the resource manager.
 		devices = presets.devices;
 				
 		//get physics based on object type.
-		physics = devices -> assetLibrary -> getObjectPhysics(presets.objectType);
 				
 		//Create fixture.
-		devices -> pDevice -> createFixture
-			(
-			owner,
-			physics,
-			presets
-			);
+		devices -> pDevice -> createFixture	(this, presets);
 	}	
 	return true;
 }
 
-void BodyComponent::start(){}
+void BodyComponent::start()
+{
+	if (joinedWith)
+	{
+		joinedWith->start();
+	}
+}
 
 //**************************************
 //
 Object* BodyComponent::update()
 //**************************************
 {
+	if (joinedWith)
+	{
+		if (Object* returnedObject = joinedWith->update(); returnedObject)
+		{
+			return returnedObject;
+		}
+	}
 	return nullptr;
 }
 //**************************************
@@ -49,8 +55,9 @@ Object* BodyComponent::update()
 void BodyComponent::finish()
 //**************************************
 {
+	if(joinedWith) joinedWith->finish();
 	//remove the physics body
-	if(!devices -> pDevice -> removeObject(owner))
+	if(!devices -> pDevice -> removeObject(this))
 	{
 		printf( "Object could not be removed from Physics World");
 		exit(1);					
@@ -58,16 +65,16 @@ void BodyComponent::finish()
 }
 EngineFloat BodyComponent::getAngle()
 {
-	return devices->pDevice->getAngle(owner);
+	return devices->pDevice->getAngle(this);
 }
 
 Position BodyComponent::getPosition()
 {
-	return devices->pDevice->getPosition(owner);
+	return devices->pDevice->getPosition(this);
 }
 Position BodyComponent::getVelocity()
 {
-	return devices->pDevice->getVelocity(owner);
+	return devices->pDevice->getVelocity(this);
 }
 EngineInt BodyComponent::getWidth()
 {
@@ -79,7 +86,7 @@ EngineInt BodyComponent::getHeight()
 }
 void BodyComponent::setAngle(EngineFloat angle)
 {
-	devices->pDevice->setAngle(owner, angle);
+	devices->pDevice->setAngle(this, angle);
 }
 
 void BodyComponent::adjustAngle(EngineFloat adjustAmount)
@@ -89,5 +96,5 @@ void BodyComponent::adjustAngle(EngineFloat adjustAmount)
 
 void BodyComponent::linearStop()
 {
-	devices->pDevice->setLinearVelocity(owner, { 0,0 });
+	devices->pDevice->setLinearVelocity(this, { 0,0 });
 }

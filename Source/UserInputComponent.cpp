@@ -1,6 +1,5 @@
 #include "ComponentsList.h"
 #include "ResourceManager.h"
-#include "ObjectFactory.h"
 #include "Object.h"
 #include "AssetLibrary.h"
 
@@ -9,7 +8,7 @@ UserInputComponent::~UserInputComponent(){}
 
 //**************************************
 //set up some defaults
-bool UserInputComponent::initialize(const ObjectFactory::ObjectFactoryPresets& presets)
+bool UserInputComponent::initialize(const ObjectFactoryPresets& presets)
 {
 	
 	devices = presets.devices;

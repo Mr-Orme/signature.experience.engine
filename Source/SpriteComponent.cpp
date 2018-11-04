@@ -6,12 +6,13 @@
 #include "ResourceManager.h"
 #include "PhysicsDevice.h"
 #include "GraphicsDevice.h"
+#include "Object.h"
 
 SpriteComponent::SpriteComponent(Object* owner):Component(owner){}
 
 //**************************************
 //on the first pass, we set up the texture for the object
-bool SpriteComponent::initialize(const ObjectFactory::ObjectFactoryPresets& presets)
+bool SpriteComponent::initialize(const ObjectFactoryPresets& presets)
 //**************************************
 {
 	//MrOrme:: need to add joint functionality
@@ -35,7 +36,7 @@ void SpriteComponent::draw()
 	//adjust position.
 	updatedPosition = getViewAdjustedPosition();
 
-	auto angle = devices -> pDevice -> getAngle(owner);
+	auto angle = devices -> pDevice -> getAngle(owner->getComponent<BodyComponent>());
 
 	//draw sprite.
 	draw(updatedPosition, angle);
@@ -66,7 +67,7 @@ Position SpriteComponent::getViewAdjustedPosition()
 //**************************************
 {	
 	//adjust position.
-	return (devices->pDevice->getPosition(owner) 
+	return (devices->pDevice->getPosition(owner->getComponent<BodyComponent>()) 
 		+ devices->gDevice->getView()->position);
 }
 
