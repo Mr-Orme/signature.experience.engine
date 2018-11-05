@@ -30,9 +30,9 @@ bool HealthComponent::killObject(std::string deathSprite)
 	//grab the renderer
 	SpriteComponent* sprite = owner -> getComponent<SpriteComponent>();
 	//change the sprite
-	//TODO: return false on bad texture!
-	sprite -> texture = devices -> assetLibrary -> getArtAsset(deathSprite);	
-	return true;
+	
+	if(sprite -> texture = devices -> assetLibrary -> getArtAsset(deathSprite))	return true;
+	else return false;
 }
 //**************************************
 //For objects that disappear from the game.

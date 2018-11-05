@@ -77,7 +77,7 @@ Object* objectFromComponentList(
 
 Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 {
-	std::vector<AssetLibrary::AssetLibraryComponentList> enumComponents;
+	Object* newObject = new Object();
 	ObjectFactoryPresets presets;
 	presets.objectType = objectElement->Attribute("type");
 	//MrOrme:: Need to finish initializing components!
@@ -90,25 +90,30 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 		string componentName = componentElement->Attribute("name");
 		if (componentName == "Sprite")
 		{
-			enumComponents.push_back(AssetLibrary::AssetLibraryComponentList::SpriteComp);
+			newObject->AddComponent(new SpriteComponent(newObject));
 		}
 		else if (componentName == "Body")
 		{
-			enumComponents.push_back(AssetLibrary::AssetLibraryComponentList::BodyComp);
+			newObject->AddComponent(new BodyComponent(newObject));
 		}
 		else if (componentName == "Health")
 		{
-			enumComponents.push_back(AssetLibrary::AssetLibraryComponentList::HealthComp);
+			newObject->AddComponent(new HealthComponent(newObject));
 
 		}
 		else if (componentName == "Input")
 		{
-			enumComponents.push_back(AssetLibrary::AssetLibraryComponentList::UserInputComp);
+			newObject->AddComponent(new UserInputComponent(newObject));
 
+		}
+		else if (componentName == "Joint")
+		{
+			//TODO:: joint code
 		}
 		
 	}
+	newObject->initialize(presets);
 
-	return objectFromComponentList(enumComponents, presets);
+	return newObject;
 }
 
