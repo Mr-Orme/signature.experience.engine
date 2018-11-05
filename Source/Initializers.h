@@ -5,12 +5,16 @@
 #include "Definitions.h"
 class ResourceManager;
 class BodyComponent;
+class Texture;
 
 struct SpritePresets
 {
 	std::string textString{ "" };
 	std::string vAlign{ "" };
 	std::string hAlign{ "" };
+	Texture* spriteTexture{ nullptr };
+	ResourceManager* Devices{ nullptr };
+
 };
 struct RotateBody
 {
@@ -22,7 +26,7 @@ struct RotateBody
 
 enum class BodyShape { Rectangle, Circle };
 enum class BodyType { Static, Kinematic, Dynamic };
-enum class JointType{Revolute, Distance, Prismatic, Wheel, Weld, Pulley, Friction, Gear, Mouse, Rope};
+enum class JointType{Revolute, Distance, Prismatic, Wheel, Weld, Pulley, Friction, Gear, Mouse, Rope, None};
 struct Joints
 {
 	JointType type;

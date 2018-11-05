@@ -11,10 +11,9 @@ class ResourceManager;
 class UserInputComponent : public Component
 {
 public:
-	UserInputComponent(Object* owner);
+	UserInputComponent(Object* owner, ResourceManager* devices);
 	~UserInputComponent();
 	
-	bool initialize(const ObjectFactoryPresets& presets) final;
 	void start() final;
 	Object* update() final;
 	void finish() final;

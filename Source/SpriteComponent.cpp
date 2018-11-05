@@ -7,25 +7,15 @@
 #include "PhysicsDevice.h"
 #include "GraphicsDevice.h"
 #include "Object.h"
+#include "Initializers.h"
 
-SpriteComponent::SpriteComponent(Object* owner):Component(owner){}
-
-//**************************************
-//on the first pass, we set up the texture for the object
-bool SpriteComponent::initialize(const ObjectFactoryPresets& presets)
-//**************************************
+SpriteComponent::SpriteComponent(Object* owner, const SpritePresets& presets):Component(owner)
 {
-	//MrOrme:: need to add joint functionality
-	//this will get hit twice, so we only want it done once.
-	if(!initialized)
-	{
-		devices = presets.devices;
-		//grab the sprite from the library.
-		texture = presets.devices -> assetLibrary -> getArtAsset(presets.objectType);
-		initialized = texture != nullptr;
-	}
-	return initialized;
+	this->devices = devices;
+	this->texture = presets.spriteTexture;
+	initialized = (devices && texture);
 }
+
 //**************************************
 // updates the position based on the view and draws the sprite
 void SpriteComponent::draw()

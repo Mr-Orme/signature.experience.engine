@@ -6,25 +6,18 @@
 #include "PhysicsDevice.h"
 #include "Texture.h"
 
-BodyComponent::BodyComponent(Object* owner):Component(owner){}
-
-//**************************************
-//Based on the presets struct passed in, a fixture is created
-bool BodyComponent::initialize(const ObjectFactoryPresets& presets)
-//**************************************
-{	
-	
-	if(SpriteComponent* sprite = owner->getComponent<SpriteComponent>(); sprite)
+BodyComponent::BodyComponent(Object* owner, ResourceManager* devices, BodyPresets presets):Component(owner), devices(devices)
+{
+	if (SpriteComponent* sprite = owner->getComponent<SpriteComponent>(); sprite)
 	{
-		//store the resource manager.
-		devices = presets.devices;
-				
-		//get physics based on object type.
-				
+
 		//Create fixture.
-		devices -> pDevice -> createFixture	(this, presets);
-	}	
-	return true;
+		initialized = devices->pDevice->createFixture(this, presets);
+	}
+	else
+	{
+		initialized = false;
+	}
 }
 
 void BodyComponent::start()

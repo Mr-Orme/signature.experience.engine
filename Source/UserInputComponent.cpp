@@ -3,23 +3,17 @@
 #include "Object.h"
 #include "AssetLibrary.h"
 
-UserInputComponent::UserInputComponent(Object* owner):Component(owner){}
-UserInputComponent::~UserInputComponent(){}
-
-//**************************************
-//set up some defaults
-bool UserInputComponent::initialize(const ObjectFactoryPresets& presets)
+UserInputComponent::UserInputComponent(Object* owner, ResourceManager* devices):Component(owner)
 {
-	
-	devices = presets.devices;
+	this->devices = devices;
 
 	for (int i = 0; i < (int)InputDevice::InputEvents::NUM_EVENTS; i++)
 	{
 		pressControl[(InputDevice::InputEvents)i] = true;
 	}
-	return true;
 }
-	
+UserInputComponent::~UserInputComponent(){}
+
 void UserInputComponent::start(){}
 
 //**************************************

@@ -6,17 +6,13 @@
 #include "AssetLibrary.h"
 #include "Object.h"
 
-HealthComponent::HealthComponent(Object* owner):Component(owner){}
-
-//**************************************
-//gets health and resource manager from passed presets, the object starts out alive.
-bool HealthComponent::initialize(const ObjectFactoryPresets& presets)
-//**************************************
+HealthComponent::HealthComponent(Object* owner, ResourceManager* devices, EngineInt health):Component(owner)
 {
-	devices = presets.devices;
-	health = presets.health;
-	return true;
+	this->devices = devices;
+	this->health = health;
+	initialized = devices && health;
 }
+
 
 //**************************************
 //This "killObject" is for items that leave a sprite that is dead 

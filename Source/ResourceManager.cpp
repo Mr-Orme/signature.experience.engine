@@ -79,7 +79,7 @@ bool ResourceManager::initialize(std::string assetPath)
 	//========================================
 	//Construct Object Factory
 	//========================================
-	factory = std::make_unique<ObjectFactory>();
+	factory = std::make_unique<ObjectFactory>(this);
 	
 	levelElement = levelElement->NextSiblingElement();//Devices
 	

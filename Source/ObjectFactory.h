@@ -13,12 +13,11 @@ class Object;
 class ObjectFactory
 {
 public:
-	
-
-	Object* Create(ObjectFactoryPresets& presets);
+	ObjectFactory() = delete;
+	ObjectFactory(ResourceManager* devices);
 	Object* Create(tinyxml2::XMLElement* objectElement);
-	private:
-	
+private:
+	ResourceManager* devices{ nullptr };
 };
 
 #endif

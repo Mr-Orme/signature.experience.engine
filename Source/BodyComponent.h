@@ -10,9 +10,8 @@ class Object;
 class BodyComponent : public Component
 {
 public:
-	BodyComponent(Object* owner);
+	BodyComponent(Object* owner, ResourceManager* devices, BodyPresets);
 		
-	bool initialize(const ObjectFactoryPresets& presets) final;
 	void start() final;
 	Object* update() final;
 	void finish() final;

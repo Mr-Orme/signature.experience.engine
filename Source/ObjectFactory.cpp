@@ -12,68 +12,72 @@
 
 using namespace std;
 
-Object* objectFromComponentList(
-	const std::vector<AssetLibrary::AssetLibraryComponentList> enumComponents, 
-	const ObjectFactoryPresets& presets)
+SpriteComponent* createSpriteComponent(Object* newObject, ResourceManager* devices, tinyxml2::XMLElement * componentElement)
 {
+	bool isSprite{ false };
+	componentElement->QueryBoolAttribute("sprite", &isSprite);
 
-	
-	//Create pointer to new objects
-	Object* newObject = new Object();
-
-	std::vector<Component*> componentList;
-	//Iterate through the list of components
-	//add the proper component to the list of components to return.
-	for (auto comp : enumComponents)
+	SpritePresets initializers;
+	initializers.Devices = devices;
+	if (isSprite)
 	{
-		switch (comp)
-		{
-		case AssetLibrary::AssetLibraryComponentList::BodyComp:
-			componentList.push_back(new BodyComponent(newObject));
-			break;
-		case AssetLibrary::AssetLibraryComponentList::HealthComp:
-			componentList.push_back(new HealthComponent(newObject));
-			break;
-		case AssetLibrary::AssetLibraryComponentList::SpriteComp:
-			componentList.push_back(new SpriteComponent(newObject));
-			break;
-		case AssetLibrary::AssetLibraryComponentList::UserInputComp:
-			componentList.push_back(new UserInputComponent(newObject));
-			break;
-		default:
-			break;
-		}
-	}
-	for (auto comp : componentList)
-	{
-		newObject->AddComponent(comp);
-	}
-
-	//initialize the new object (this will also initialize components)
-	if (newObject->initialize(presets))
-	{
-		//return the created and initialized object.
-		return newObject;
+		initializers.spriteTexture = devices->assetLibrary->getArtAsset(componentElement->Attribute("asset"));
 	}
 	else
 	{
-		delete newObject;
-		std::cout << "Object did not initialize!" << std::endl;
-		return nullptr;
+		initializers.spriteTexture = new Texture(devices->gDevice.get(), componentElement->Attribute("text"), false);
 	}
+	return new SpriteComponent(newObject, initializers);
 }
-//************************************************
-//ALL ITEMS IN "presets" need to be set.
-//based on the object type, it grabs components.
-// and adds them to a newly created object.
-//it initializes the object which also initializes all the components
-//Object* ObjectFactory::Create(ObjectFactoryPresets& presets)
-////**************************************
-//{
-//	//get list of components for the new object
-//	return objectFromComponentList(presets.devices -> assetLibrary ->getComponents(presets.objectType), presets);
-//	//Add each to the object	
-//}
+BodyComponent* createBodyComponent(Object* newObject, ResourceManager* devices, tinyxml2::XMLElement * componentElement)
+{
+	BodyPresets initializers;
+	componentElement->QueryFloatAttribute("x", (float*)(&initializers.position.x));
+	componentElement->QueryFloatAttribute("y", (float*)(&initializers.position.y));
+	componentElement->QueryFloatAttribute("density", (float*)(&initializers.physics.density));
+	componentElement->QueryFloatAttribute("restitution", (float*)(&initializers.physics.restitution));
+	componentElement->QueryFloatAttribute("angularDamping", (float*)(&initializers.physics.angularDamping));
+	componentElement->QueryFloatAttribute("linearDamping", (float*)(&initializers.physics.linearDamping));
+		
+	if (componentElement->Attribute("bodyType") == "DYNAMIC") 
+	{ 
+		initializers.physics.bodyType = BodyType::Dynamic; 
+	}
+	else if (componentElement->Attribute("bodyType") == "STATIC") 
+	{ 
+		initializers.physics.bodyType = BodyType::Static; 
+	}
+
+	if (componentElement->Attribute("bodyShape") == "RECTANGLE") 
+	{ 
+		initializers.physics.bodyShape = BodyShape::Rectangle; 
+	}
+	else if (componentElement->Attribute("bodyShape") == "CIRCLE") 
+	{ 
+		initializers.physics.bodyShape = BodyShape::Circle; 
+	}
+	
+	componentElement->QueryBoolAttribute("physicsOn", &initializers.physics.physicsOn);
+	
+	return new BodyComponent(newObject, devices, initializers);
+}
+JointType setJointType(string type)
+{
+	if (type == "Revolute") {return JointType::Revolute;}
+	else if (type == "Distance") { return JointType::Distance; }
+	else if (type == "Prismatic") { return JointType::Prismatic; }
+	else if (type == "Wheel") { return JointType::Wheel; }
+	else if (type == "Weld") { return JointType::Weld; }
+	else if (type == "Pulley") { return JointType::Pulley; }
+	else if (type == "Friction") { return JointType::Friction; }
+	else if (type == "Gear") { return JointType::Gear; }
+	else if (type == "Mouse") { return JointType::Mouse; }
+	else if (type == "Rope") { return JointType::Rope; }
+	return JointType::None;
+}
+ObjectFactory::ObjectFactory(ResourceManager * devices):devices(devices)
+{
+}
 
 Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 {
@@ -90,30 +94,99 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 		string componentName = componentElement->Attribute("name");
 		if (componentName == "Sprite")
 		{
-			newObject->AddComponent(new SpriteComponent(newObject));
+			newObject->AddComponent(createSpriteComponent(newObject, devices, componentElement));
+			
 		}
 		else if (componentName == "Body")
 		{
-			newObject->AddComponent(new BodyComponent(newObject));
+			newObject->AddComponent(createBodyComponent(newObject,devices, componentElement));
 		}
 		else if (componentName == "Health")
 		{
-			newObject->AddComponent(new HealthComponent(newObject));
+
+			newObject->AddComponent(new HealthComponent(newObject, devices, stoi(componentElement->Attribute("health"))));
 
 		}
 		else if (componentName == "Input")
 		{
-			newObject->AddComponent(new UserInputComponent(newObject));
+			newObject->AddComponent(new UserInputComponent(newObject,devices));
 
 		}
 		else if (componentName == "Joint")
 		{
 			//TODO:: joint code
+			for (
+				tinyxml2::XMLElement* JointParams = componentElement->FirstChildElement();
+				JointParams;
+				JointParams = JointParams->NextSiblingElement()
+				)
+			{
+				int jointNumber;
+				JointParams->QueryIntAttribute("jointNumber", &jointNumber);
+				
+				tinyxml2::XMLElement* jointComponent = JointParams->FirstChildElement();
+				SpriteComponent* sprite{ createSpriteComponent(newObject, devices, jointComponent) };
+				
+				jointComponent = jointComponent->NextSiblingElement();
+				BodyComponent* body{ createBodyComponent(newObject, devices, jointComponent) };
+				
+				//First one just gets added. Future ones must follow the chain to the end!
+				if (jointNumber == 0)
+				{
+					newObject->AddComponent(sprite);
+					newObject->AddComponent(body);
+				}
+				else
+				{
+					//********Create the joint***************
+					Joints presets;
+					SpriteComponent* currSprite = newObject->getComponent<SpriteComponent>();
+					BodyComponent* currBody = newObject->getComponent<BodyComponent>();
+					int joinTo;
+					JointParams->QueryIntAttribute("joinTo", &joinTo);
+					while (currSprite->sprite)
+					{
+						if (joinTo == 0) presets.BodyB = currBody;
+						currSprite = currSprite->sprite.get();
+						currBody = currBody->joinedWith.get();
+						joinTo--;
+					}
+
+					if (!presets.BodyB)
+					{
+						return nullptr;
+					}
+
+					currSprite->sprite = unique_ptr<SpriteComponent>(sprite);
+					currBody->joinedWith = unique_ptr<BodyComponent>(body);
+										
+					presets.BodyA = body;
+					presets.type = setJointType(jointComponent->Attribute("type"));
+					jointComponent->QueryBoolAttribute("collide", &presets.CollideConnected);
+					jointComponent->QueryIntAttribute("anchorXFromCenter", (int*)&presets.AnchorA.x);
+					jointComponent->QueryIntAttribute("anchorYFromCenter", (int*)&presets.AnchorA.y);
+					jointComponent->QueryIntAttribute("joinToAnchorXFromCenter", (int*)&presets.AnchorB.x);
+					jointComponent->QueryIntAttribute("joinToAnchorYFromCenter", (int*)&presets.AnchorB.y);
+					jointComponent->QueryIntAttribute("referenceAngle", (int*)&presets.referenceAngle);
+					
+					//TODO::flush out for other types of joints that need other information!
+					switch (presets.type)
+					{
+					case JointType::Weld:
+					default:
+						break;
+					}
+
+					devices->pDevice->createJoint(presets);
+					//***************************************
+				}
+
+				
+				
+			}
 		}
 		
 	}
-	newObject->initialize(presets);
-
 	return newObject;
 }
 

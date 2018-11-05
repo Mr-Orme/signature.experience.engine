@@ -13,37 +13,6 @@
 }
 
 //**************************************
-//get's the components up and running based on passed presests
-bool  Object::initialize(const ObjectFactoryPresets& presets)
-//**************************************
-{
-	objectType = presets.objectType;
-	joinedWith = nullptr;
-	
-	//the renderer component needs to be initialized first because the body component depends on it
-	//It's initialization method has a check to see if it is already initialized 
-	//so that when we go through all the components and initialize them in the next step, it won't do it again.
-	auto component = getComponent<SpriteComponent>();
-	if(component) component -> initialize(presets);
-
-	//initialize all components
-	for ( auto& component : components)
-	{		
-		component-> initialize(presets);
-	}
-	//start all components
-	if(!initialized)
-	{
-		for (auto& component : components)
-		{
-			component -> start();
-		}
-		initialized = true;
-	}
-	return true;
-}
-
-//**************************************
 //Adds the passed component to the object.
 void  Object::AddComponent(Component* component)
 //**************************************

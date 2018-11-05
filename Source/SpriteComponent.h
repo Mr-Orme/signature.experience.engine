@@ -11,9 +11,8 @@ class SpriteComponent : public Component
 {
 public:
 	enum class Align { Left, Right, Center, Top, Bottom, None };
-	SpriteComponent(Object* owner);
-	
-	bool initialize(const ObjectFactoryPresets& presets) final;
+	SpriteComponent(Object* owner, const SpritePresets& presets);
+
 	void start() final;
 	Object* update() final;
 	void finish() final;
@@ -24,7 +23,6 @@ public:
 	Position getViewAdjustedPosition();
 		
 	Texture* texture{ nullptr };
-	bool initialized{ false };
 	std::unique_ptr<SpriteComponent> sprite{ nullptr };
 
 private:

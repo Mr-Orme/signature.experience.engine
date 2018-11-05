@@ -8,9 +8,8 @@ class ResourceManager;
 class HealthComponent : public Component
 {
 public:
-	HealthComponent(Object* owner);
+	HealthComponent(Object* owner, ResourceManager* devices, EngineInt health);
 
-	bool initialize(const ObjectFactoryPresets& presets) final;
 	void start() final;
 	Object* update() final;
 	void finish() final;

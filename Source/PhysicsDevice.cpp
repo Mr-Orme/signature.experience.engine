@@ -168,7 +168,7 @@ Position PhysicsDevice::getVelocity(const BodyComponent* object) const
 //**************************************
 //Creates a body and fixture for a passed in object
 //based on passed in values
-bool PhysicsDevice::createFixture( BodyComponent* object, ObjectFactoryPresets presets)
+bool PhysicsDevice::createFixture( BodyComponent* object, BodyPresets presets)
 //**************************************
 {
 	Texture* texture = object->getOwner()->getComponent<SpriteComponent>()->texture;
@@ -186,7 +186,7 @@ bool PhysicsDevice::createFixture( BodyComponent* object, ObjectFactoryPresets p
 	
 
 	//set body type
-	switch (presets.bodyInitializers.physics.bodyType)
+	switch (presets.physics.bodyType)
 	{
 	case BodyType::Static:
 		bd -> type = b2_staticBody;
@@ -201,24 +201,24 @@ bool PhysicsDevice::createFixture( BodyComponent* object, ObjectFactoryPresets p
 
 	//********Adjust postion because SDL is top left, while box2d is center*************
 	//subtract off half the width.
-	presets.bodyInitializers.position.x += (texture -> getWidth()/2);
+	presets.position.x += (texture -> getWidth()/2);
 	//subtract off half the height
-	presets.bodyInitializers.position.y += (texture -> getHeight()/2);
+	presets.position.y += (texture -> getHeight()/2);
 	//**********************************************************************************
 
 	// set starting position & angle
-	bd -> position.Set(RW2PW(presets.bodyInitializers.position.x), RW2PW(presets.bodyInitializers.position.y));
-	bd -> angle = RW2PWAngle(presets.bodyInitializers.angle);
+	bd -> position.Set(RW2PW(presets.position.x), RW2PW(presets.position.y));
+	bd -> angle = RW2PWAngle(presets.angle);
 
 	//add the body to the world
 	b2Body* body = world -> CreateBody(bd);
 
 	//set damping values on the body
-	body -> SetAngularDamping(presets.bodyInitializers.physics.angularDamping);
-	body -> SetLinearDamping(presets.bodyInitializers.physics.linearDamping);
+	body -> SetAngularDamping(presets.physics.angularDamping);
+	body -> SetLinearDamping(presets.physics.linearDamping);
 
 	//set fixture's shape
-	switch (presets.bodyInitializers.physics.bodyShape)
+	switch (presets.physics.bodyShape)
 	{
 	case BodyShape::Rectangle:
 		//rectangle's dimensions
@@ -237,13 +237,13 @@ bool PhysicsDevice::createFixture( BodyComponent* object, ObjectFactoryPresets p
 	}
 
 	//set fixture values based on passed in values.
-	shapefd.density = presets.bodyInitializers.physics.density;
-	shapefd.friction = presets.bodyInitializers.physics.friction;
-	shapefd.restitution = presets.bodyInitializers.physics.restitution;
+	shapefd.density = presets.physics.density;
+	shapefd.friction = presets.physics.friction;
+	shapefd.restitution = presets.physics.restitution;
 
 	//create the fixture on the body.
 	body -> CreateFixture(&shapefd);
-	body -> SetActive(presets.bodyInitializers.physics.physicsOn);
+	body -> SetActive(presets.physics.physicsOn);
 	
 	return true;
 	

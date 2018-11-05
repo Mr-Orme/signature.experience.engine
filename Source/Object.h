@@ -23,7 +23,6 @@ public:
 	 Object();
 	~Object();
 	
-	bool initialize(const ObjectFactoryPresets& presets);
 	void AddComponent(Component* component);
 	Object* update();
 	void draw();

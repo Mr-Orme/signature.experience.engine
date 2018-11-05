@@ -18,10 +18,7 @@ public:
 	bool initialize();
 	bool update(float dt);
 
-	
-
-
-	bool createFixture(BodyComponent* object, ObjectFactoryPresets presets);
+	bool createFixture(BodyComponent* object, BodyPresets presets);
 
 	bool setTransform( const BodyComponent* object, Position position, EngineFloat angle);
 	bool setLinearVelocity( const BodyComponent* object, Position linearVelociy);

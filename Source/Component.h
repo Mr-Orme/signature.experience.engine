@@ -13,13 +13,14 @@ public:
 	void OwnerDestroyed();
 	Object* getOwner() const;
 
-	virtual bool initialize(const ObjectFactoryPresets& presets)=0;
 	virtual void start()=0;
 	virtual Object* update()=0;
 	virtual void finish()=0;
-
+	
+	bool initialized{ false };
 protected:
 	Object * owner{ nullptr };
+	
 };
 
 
