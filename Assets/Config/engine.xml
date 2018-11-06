@@ -32,4 +32,53 @@
       <MouseClick event="CREATE_OBJECT"/>
     </Component>
   </Object>
+  <Object type="Button">
+    <Joint name="Joint" type="Weld" collide="false">
+      <JointParams jointNumber="0">
+        <Component name="Sprite" asset="Button" sprite="true"></Component>
+        <Component name="Body" x="874.0f" y="49.0f" density="15.0f" restitution="0.0f" angularDamping="0.0f" linearDamping="0.0f" bodyType="STATIC" bodyShape="RECTANGLE" physicsOn = "false"/>
+      </JointParams>
+      <JointParams jointNumber="1" anchorXFromCenter="0" anchorYFromCenter="0" joinTo="0" joinToAnchorXFromCenter="0" joinToAnchorYFromCenter="0" referenceAngle="0">
+        <Component name="Sprite" text="Game Settings" sprite="false"></Component>
+        <Component name="Body" x="930.0f" y="79.0f" density="15.0f" restitution="0.0f" angularDamping="0.0f" linearDamping="0.0f" bodyType="STATIC" bodyShape="RECTANGLE" physicsOn = "false"/>
+      </JointParams>
+    </Joint>
+    <Component name="UserInput">
+      <MouseClick event="CREATE_OBJECT"/>
+    </Component>
+  </Object>
+  <Object type="Button">
+    <Joint name="Joint" type="Weld" collide="false">
+      <JointParams jointNumber="0">
+        <Component name="Sprite" asset="Button" sprite="true"></Component>
+        <Component name="Body" x="874.0f" y="98.0f" density="15.0f" restitution="0.0f" angularDamping="0.0f" linearDamping="0.0f" bodyType="STATIC" bodyShape="RECTANGLE" physicsOn = "false"/>
+      </JointParams>
+      <JointParams jointNumber="1" anchorXFromCenter="0" anchorYFromCenter="0" joinTo="0" joinToAnchorXFromCenter="0" joinToAnchorYFromCenter="0" referenceAngle="0">
+        <Component name="Sprite" text="   Save Game" sprite="false"></Component>
+        <Component name="Body" x="930.0f" y="128.0f" density="15.0f" restitution="0.0f" angularDamping="0.0f" linearDamping="0.0f" bodyType="STATIC" bodyShape="RECTANGLE" physicsOn = "false"/>
+      </JointParams>
+    </Joint>
+    <Component name="UserInput">
+      <MouseClick event="CREATE_OBJECT"/>
+    </Component>
+  </Object>
+  <Object type="Button">
+    <Joint name="Joint" type="Weld" collide="false">
+      <JointParams jointNumber="0">
+        <Component name="Sprite" asset="Button" sprite="true"></Component>
+        <Component name="Body" x="874.0f" y="147.0f" density="15.0f" restitution="0.0f" angularDamping="0.0f" linearDamping="0.0f" bodyType="STATIC" bodyShape="RECTANGLE" physicsOn = "false"/>
+      </JointParams>
+      <JointParams jointNumber="1" anchorXFromCenter="0" anchorYFromCenter="0" joinTo="0" joinToAnchorXFromCenter="0" joinToAnchorYFromCenter="0" referenceAngle="0">
+        <Component name="Sprite" text="   Load Game" sprite="false"></Component>
+        <Component name="Body" x="930.0f" y="177.0f" density="15.0f" restitution="0.0f" angularDamping="0.0f" linearDamping="0.0f" bodyType="STATIC" bodyShape="RECTANGLE" physicsOn = "false"/>
+      </JointParams>
+    </Joint>
+    <Component name="UserInput">
+      <MouseClick event="CREATE_OBJECT"/>
+    </Component>
+  </Object>
+  <Object type="Text">
+    <Component name="Sprite" text="Double Click on an object to change its settings" sprite="false"></Component>
+    <Component name="Body" x="20.0f" y="10.0f" density="15.0f" restitution="0.0f" angularDamping="0.0f" linearDamping="0.0f" bodyType="STATIC" bodyShape="RECTANGLE" physicsOn = "false"/>
+  </Object>
 </Level>

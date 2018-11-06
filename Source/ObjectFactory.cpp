@@ -78,7 +78,6 @@ JointType setJointType(string type)
 }
 ObjectFactory::ObjectFactory(ResourceManager * devices):devices(devices)
 {
-	cout << "here" << endl;
 }
 
 Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
@@ -101,7 +100,7 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 		}
 		else if (componentName == "Body")
 		{
-			newObject->AddComponent(createBodyComponent(newObject,devices, componentElement));
+			newObject->AddComponent(createBodyComponent(newObject,devices, componentElement, newObject->getComponent<SpriteComponent>()));
 			if (SpriteComponent* sprite = newObject->getComponent<SpriteComponent>(); sprite)
 			{
 				sprite->spriteBody = newObject->getComponent<BodyComponent>();
