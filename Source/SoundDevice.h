@@ -18,7 +18,7 @@ public:
 	bool PlaySound(std::string sound, int numLoops, int channel);
 
 	void setBackground(std::string background);
-	//TODO: need to get the SDL_mixer references out of  here!
+	//TODO:: Make Sound class similar to Texture class, but for sounds!
 	Mix_Chunk* getSoundEffect(std::string name);
 	Mix_Music* getMusic(std::string name);
 	bool addSoundEffect(std::string name, std::string path);

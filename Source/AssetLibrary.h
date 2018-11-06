@@ -22,16 +22,7 @@ public:
 	bool initialize(GraphicsDevice* gDevice);
 
 	Texture* getArtAsset(std::string name);
-	bool setArtAsset(std::string name, std::string path);
-	
-	enum class AssetLibraryComponentList
-	{
-		BodyComp,
-		HealthComp,
-		SpriteComp,
-		UserInputComp
-	};
-	
+	bool setArtAsset(std::string name, std::string path);	
 
 private:
 	std::map<std::string, std::unique_ptr<Texture>> artLibrary;	

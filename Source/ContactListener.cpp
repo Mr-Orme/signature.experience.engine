@@ -11,10 +11,6 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
 	//Cast them to object pointers
 	 Object* objectA = static_cast<Object*>(bodyA -> GetUserData());
 	 Object* objectB = static_cast<Object*>(bodyB -> GetUserData());
-
-	//find their types
-	std::string objectAType = objectA -> getObjectType();
-	std::string objectBType = objectB -> getObjectType();
 			
 
 }

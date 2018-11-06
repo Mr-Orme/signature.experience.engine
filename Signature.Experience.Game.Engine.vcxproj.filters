@@ -160,9 +160,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="Assets\Config\assets.xml">
-      <Filter>Resource Files</Filter>
-    </Xml>
     <Xml Include="Assets\Config\engine.xml">
       <Filter>Resource Files</Filter>
     </Xml>

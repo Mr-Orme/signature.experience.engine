@@ -13,6 +13,7 @@
 class ResourceManager
 {
 public:
+	//TODO:: move initialize to constructor and shutdown to destructor
 	bool initialize(std::string assetPath);
 	bool shutdown();
 

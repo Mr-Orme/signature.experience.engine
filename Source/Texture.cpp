@@ -95,39 +95,6 @@ void Texture::draw(SDL_Renderer* renderer, Position position, EngineFloat angle,
 		//Render to screen
 		SDL_RenderCopyEx(renderer, sprite, clip, &renderQuad, angle, NULL, SDL_FLIP_NONE);
 	}
-	//MrOrme:: Delete me later!
-	/*if (text)
-	{
-		int textWidth, textHeight;
-		Position textPosition{ position.x, position.y };
-		SDL_QueryTexture(text, NULL, NULL, &textWidth, &textHeight);
-		switch (vertical)
-		{
-		case Align::Top:
-			break;
-		case Align::Bottom:
-			textPosition.y = position.y + height - textHeight;
-			break;
-		case Align::Center:
-			textPosition.y = position.y + (height - textHeight)/2;
-			break;
-		}
-		switch (vertical)
-		{
-		case Align::Left:
-			break;
-		case Align::Right:
-			textPosition.x = position.x + width - textWidth;
-			break;
-		case Align::Center:
-			textPosition.x = position.x + (width - textWidth)/2;
-			break;
-		}
-		SDL_Rect renderQuad = { (int)textPosition.x, (int)textPosition.y, textWidth, textHeight };
-
-		Render to screen
-		SDL_RenderCopyEx(renderer, text, NULL, &renderQuad, angle, NULL, SDL_FLIP_NONE);
-
-	}*/
+	
 
 }

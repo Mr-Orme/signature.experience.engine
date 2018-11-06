@@ -16,6 +16,7 @@ public:
 	Object* update() final;
 	void finish() final;
 
+	//TODO:: add more functionality for other things Box2D can do.
 	EngineFloat getAngle();
 	Position getPosition();
 	Position getVelocity();

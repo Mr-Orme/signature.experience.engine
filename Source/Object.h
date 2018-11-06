@@ -26,12 +26,7 @@ public:
 	void AddComponent(Component* component);
 	Object* update();
 	void draw();
-
-	//void setJoinedWith(Object* joinedWith) { this->joinedWith = joinedWith; }
-
-	std::string getObjectType() { return objectType; }
-	Object* getJoinedWith() { return joinedWith; }
-
+	
 	bool removeComponents();
 
 	template<class T>
@@ -52,9 +47,6 @@ private:
 	
 	std::vector<std::unique_ptr<Component>> components;
 	bool initialized{ false };
-	std::string objectType{ " " };
-	//TODO: Needs to move to body component!!!
-	Object* joinedWith{ nullptr };
 
 };
 

@@ -5,8 +5,8 @@
 #include <map>
 #include "Definitions.h"
 #include "tinyxml2.h"
-struct ObjectFactoryPresets;
 
+struct ObjectFactoryPresets;
 class ResourceManager;
 class Object;
 
