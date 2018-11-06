@@ -5,6 +5,7 @@
 #include "Definitions.h"
 class ResourceManager;
 class BodyComponent;
+class SpriteComponent;
 class Texture;
 
 struct SpritePresets
@@ -59,6 +60,7 @@ struct BodyPresets
 	Position position{ 0,0 };
 	EngineFloat angle{ 0.0f };
 	PhysicsStats physics;
+	SpriteComponent* sprite{ nullptr };
 };
 struct ObjectFactoryPresets
 {

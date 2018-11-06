@@ -11,7 +11,7 @@
 
 SpriteComponent::SpriteComponent(Object* owner, const SpritePresets& presets):Component(owner)
 {
-	this->devices = devices;
+	this->devices = presets.Devices;
 	this->texture = presets.spriteTexture;
 	initialized = (devices && texture);
 }
@@ -57,7 +57,7 @@ Position SpriteComponent::getViewAdjustedPosition()
 //**************************************
 {	
 	//adjust position.
-	return (devices->pDevice->getPosition(owner->getComponent<BodyComponent>()) 
+	return (devices->pDevice->getPosition(spriteBody) 
 		+ devices->gDevice->getView()->position);
 }
 

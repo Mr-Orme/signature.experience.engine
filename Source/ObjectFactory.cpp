@@ -29,36 +29,37 @@ SpriteComponent* createSpriteComponent(Object* newObject, ResourceManager* devic
 	}
 	return new SpriteComponent(newObject, initializers);
 }
-BodyComponent* createBodyComponent(Object* newObject, ResourceManager* devices, tinyxml2::XMLElement * componentElement)
+BodyComponent* createBodyComponent(Object* newObject, ResourceManager* devices, tinyxml2::XMLElement * componentElement, SpriteComponent* sprite = nullptr)
 {
 	BodyPresets initializers;
+	initializers.sprite = sprite;
 	componentElement->QueryFloatAttribute("x", (float*)(&initializers.position.x));
 	componentElement->QueryFloatAttribute("y", (float*)(&initializers.position.y));
 	componentElement->QueryFloatAttribute("density", (float*)(&initializers.physics.density));
 	componentElement->QueryFloatAttribute("restitution", (float*)(&initializers.physics.restitution));
 	componentElement->QueryFloatAttribute("angularDamping", (float*)(&initializers.physics.angularDamping));
 	componentElement->QueryFloatAttribute("linearDamping", (float*)(&initializers.physics.linearDamping));
-		
-	if (componentElement->Attribute("bodyType") == "DYNAMIC") 
-	{ 
-		initializers.physics.bodyType = BodyType::Dynamic; 
+
+	if ((string)componentElement->Attribute("bodyType") == "DYNAMIC")
+	{
+		initializers.physics.bodyType = BodyType::Dynamic;
 	}
-	else if (componentElement->Attribute("bodyType") == "STATIC") 
-	{ 
-		initializers.physics.bodyType = BodyType::Static; 
+	else if ((string)componentElement->Attribute("bodyType") == "STATIC")
+	{
+		initializers.physics.bodyType = BodyType::Static;
 	}
 
-	if (componentElement->Attribute("bodyShape") == "RECTANGLE") 
-	{ 
-		initializers.physics.bodyShape = BodyShape::Rectangle; 
+	if ((string)componentElement->Attribute("bodyShape") == "RECTANGLE")
+	{
+		initializers.physics.bodyShape = BodyShape::Rectangle;
 	}
-	else if (componentElement->Attribute("bodyShape") == "CIRCLE") 
-	{ 
-		initializers.physics.bodyShape = BodyShape::Circle; 
+	else if ((string)componentElement->Attribute("bodyShape") == "CIRCLE")
+	{
+		initializers.physics.bodyShape = BodyShape::Circle;
 	}
-	
+
 	componentElement->QueryBoolAttribute("physicsOn", &initializers.physics.physicsOn);
-	
+
 	return new BodyComponent(newObject, devices, initializers);
 }
 JointType setJointType(string type)
@@ -77,6 +78,7 @@ JointType setJointType(string type)
 }
 ObjectFactory::ObjectFactory(ResourceManager * devices):devices(devices)
 {
+	cout << "here" << endl;
 }
 
 Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
@@ -86,9 +88,9 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 	presets.objectType = objectElement->Attribute("type");
 	//MrOrme:: Need to finish initializing components!
 	for (
-		tinyxml2::XMLElement* componentElement = objectElement->FirstChildElement("Component");
+		tinyxml2::XMLElement* componentElement = objectElement->FirstChildElement();
 		componentElement;
-		componentElement = componentElement->NextSiblingElement("Component")
+		componentElement = componentElement->NextSiblingElement()
 		)
 	{
 		string componentName = componentElement->Attribute("name");
@@ -100,6 +102,10 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 		else if (componentName == "Body")
 		{
 			newObject->AddComponent(createBodyComponent(newObject,devices, componentElement));
+			if (SpriteComponent* sprite = newObject->getComponent<SpriteComponent>(); sprite)
+			{
+				sprite->spriteBody = newObject->getComponent<BodyComponent>();
+			}
 		}
 		else if (componentName == "Health")
 		{
@@ -128,8 +134,10 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 				SpriteComponent* sprite{ createSpriteComponent(newObject, devices, jointComponent) };
 				
 				jointComponent = jointComponent->NextSiblingElement();
-				BodyComponent* body{ createBodyComponent(newObject, devices, jointComponent) };
+				BodyComponent* body{ createBodyComponent(newObject, devices, jointComponent, sprite) };
 				
+				sprite->spriteBody = body;
+
 				//First one just gets added. Future ones must follow the chain to the end!
 				if (jointNumber == 0)
 				{
@@ -144,12 +152,13 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 					BodyComponent* currBody = newObject->getComponent<BodyComponent>();
 					int joinTo;
 					JointParams->QueryIntAttribute("joinTo", &joinTo);
+					//TODO::this doesn't work with the head case!
+					if (joinTo == 0) presets.BodyB = currBody;
 					while (currSprite->sprite)
-					{
-						if (joinTo == 0) presets.BodyB = currBody;
+					{						
 						currSprite = currSprite->sprite.get();
 						currBody = currBody->joinedWith.get();
-						joinTo--;
+						if (joinTo--; joinTo == 0) presets.BodyB = currBody;
 					}
 
 					if (!presets.BodyB)
@@ -161,13 +170,13 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 					currBody->joinedWith = unique_ptr<BodyComponent>(body);
 										
 					presets.BodyA = body;
-					presets.type = setJointType(jointComponent->Attribute("type"));
-					jointComponent->QueryBoolAttribute("collide", &presets.CollideConnected);
-					jointComponent->QueryIntAttribute("anchorXFromCenter", (int*)&presets.AnchorA.x);
-					jointComponent->QueryIntAttribute("anchorYFromCenter", (int*)&presets.AnchorA.y);
-					jointComponent->QueryIntAttribute("joinToAnchorXFromCenter", (int*)&presets.AnchorB.x);
-					jointComponent->QueryIntAttribute("joinToAnchorYFromCenter", (int*)&presets.AnchorB.y);
-					jointComponent->QueryIntAttribute("referenceAngle", (int*)&presets.referenceAngle);
+					presets.type = setJointType((string)componentElement->Attribute("type"));
+					componentElement->QueryBoolAttribute("collide", &presets.CollideConnected);
+					JointParams->QueryIntAttribute("anchorXFromCenter", (int*)(&presets.AnchorA.x));
+					JointParams->QueryIntAttribute("anchorYFromCenter", (int*)(&presets.AnchorA.y));
+					JointParams->QueryIntAttribute("joinToAnchorXFromCenter", (int*)(&presets.AnchorB.x));
+					JointParams->QueryIntAttribute("joinToAnchorYFromCenter", (int*)(&presets.AnchorB.y));
+					JointParams->QueryIntAttribute("referenceAngle", (int*)(&presets.referenceAngle));
 					
 					//TODO::flush out for other types of joints that need other information!
 					switch (presets.type)

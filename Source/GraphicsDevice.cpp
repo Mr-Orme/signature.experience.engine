@@ -210,14 +210,14 @@ bool GraphicsDevice::setFont(std::string path, EngineInt size, RGBA color)
         printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
 	}
 
-	color =
+	this->color =
 	{
 		(Uint8)(color.R),
 		(Uint8)(color.G),
 		(Uint8)(color.B),
 		(Uint8)(color.A)
 	};
-
+	
 	return(true);
 
 }

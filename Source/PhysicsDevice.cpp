@@ -171,7 +171,13 @@ Position PhysicsDevice::getVelocity(const BodyComponent* object) const
 bool PhysicsDevice::createFixture( BodyComponent* object, BodyPresets presets)
 //**************************************
 {
-	Texture* texture = object->getOwner()->getComponent<SpriteComponent>()->texture;
+	Texture* texture{ presets.sprite->texture };
+	
+	if (!texture)
+	{
+		texture = object->getOwner()->getComponent<SpriteComponent>()->texture;
+	}
+
 	//new body definition
 	b2BodyDef* bd = new b2BodyDef;
 	//made need one or the other, depending on what was passed.

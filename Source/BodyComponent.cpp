@@ -8,16 +8,8 @@
 
 BodyComponent::BodyComponent(Object* owner, ResourceManager* devices, BodyPresets presets):Component(owner), devices(devices)
 {
-	if (SpriteComponent* sprite = owner->getComponent<SpriteComponent>(); sprite)
-	{
-
-		//Create fixture.
-		initialized = devices->pDevice->createFixture(this, presets);
-	}
-	else
-	{
-		initialized = false;
-	}
+	//Create fixture.
+	initialized = devices->pDevice->createFixture(this, presets);
 }
 
 void BodyComponent::start()
