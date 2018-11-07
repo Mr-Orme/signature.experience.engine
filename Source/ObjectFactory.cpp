@@ -85,7 +85,7 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 	Object* newObject = new Object();
 	ObjectFactoryPresets presets;
 	presets.objectType = objectElement->Attribute("type");
-	//MrOrme:: Need to finish initializing components!
+	//ToDo:: Need to finish initializing components!
 	for (
 		tinyxml2::XMLElement* componentElement = objectElement->FirstChildElement();
 		componentElement;
@@ -119,7 +119,6 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 		}
 		else if (componentName == "Joint")
 		{
-			//TODO:: joint code
 			for (
 				tinyxml2::XMLElement* JointParams = componentElement->FirstChildElement();
 				JointParams;
@@ -187,13 +186,9 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 
 					devices->pDevice->createJoint(presets);
 					//***************************************
-				}
-
-				
-				
+				}				
 			}
-		}
-		
+		}	
 	}
 	return newObject;
 }
