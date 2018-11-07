@@ -116,7 +116,6 @@ bool ResourceManager::initialize(std::string assetPath)
 			exit(1);
 		}
 	}	
-
 	//========================================
 	//Construct Asset Library
 	//========================================
@@ -125,16 +124,20 @@ bool ResourceManager::initialize(std::string assetPath)
 	{
 		//TODO::initialize in constructor for all devices. Have initialized member that we check!
 		assetLibrary = std::make_unique<AssetLibrary>();
-		if (!assetLibrary->initialize(gDevice.get())) { exit(1); }
+		if (!assetLibrary->initialize(this)) { exit(1); }
 
+		//*********************Load sprites***************************
 		tinyxml2::XMLElement* asset = deviceConfig->FirstChildElement("Asset");
-
+		
 		while (asset)
 		{
-			assetLibrary->setArtAsset(asset->Attribute("name"), asset->Attribute("spritePath"));
+			assetLibrary->addArtAsset(asset->Attribute("name"), asset->Attribute("spritePath"));
 			asset = asset->NextSiblingElement("Asset");
-		} 
+		}
+
+	
 	}
+	
 
 	//========================================
 	//Construct Sound Device
@@ -142,15 +145,13 @@ bool ResourceManager::initialize(std::string assetPath)
 	deviceConfig = deviceConfig->NextSiblingElement("Sound");
 	if (createThisDevice(deviceConfig))
 	{
-		sDevice = std::make_unique<SoundDevice>();
+		sDevice = std::make_unique<SoundDevice>(assetLibrary.get());
 		if (!sDevice->getInitialized())
 		{
 			printf("Sound Device could not intialize!");
 			exit(1);
 		}
-		
 		//*********************Load Sounds***************************
-		//grab first sound
 		tinyxml2::XMLElement* sounds = deviceConfig->FirstChildElement("SoundEffect");
 		while (sounds)
 		{
@@ -159,18 +160,20 @@ bool ResourceManager::initialize(std::string assetPath)
 
 			if (background)
 			{
-				sDevice->addBackgroundMusic(sounds->Attribute("name"), sounds->Attribute("path"));
+				assetLibrary->addBackgroundMusic(sounds->Attribute("name"), sounds->Attribute("path"));
 			}
 			else
 			{
-				sDevice->addSoundEffect(sounds->Attribute("name"), sounds->Attribute("path"));
+				assetLibrary->addSoundEffect(sounds->Attribute("name"), sounds->Attribute("path"));
 			}
 			sounds = sounds->NextSiblingElement("SoundEffect");
 		}
-
 	}
 	
-	
+
+	//========================================
+	//Construct Objects
+	//========================================
 	for (
 			levelElement = levelElement->NextSiblingElement("Object"); 
 			levelElement; 

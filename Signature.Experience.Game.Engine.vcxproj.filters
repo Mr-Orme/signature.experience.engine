@@ -30,9 +30,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Source.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ContactListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -89,6 +86,12 @@
     </ClCompile>
     <ClCompile Include="Source\SpriteComponent.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Sound.cpp">
+      <Filter>Source Files\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Source.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="Source\Initializers.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Sound.h">
+      <Filter>Header Files\Devices</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

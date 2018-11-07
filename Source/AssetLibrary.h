@@ -9,24 +9,38 @@
 #include "ObjectFactory.h"
 #include "PhysicsDevice.h"
 #include "Texture.h"
+#include "Sound.h"
 
 class GraphicsDevice;
 class Object;
 class Component;
+
+class BackgroundMusic;
 
 class AssetLibrary
 {
 public:
 	AssetLibrary() {};
 	~AssetLibrary() {};
-	bool initialize(GraphicsDevice* gDevice);
+	bool initialize(ResourceManager* devices);
 
 	Texture* getArtAsset(std::string name);
-	bool setArtAsset(std::string name, std::string path);	
+	bool addArtAsset(std::string name, std::string path);	
+	
+	bool addSoundEffect(std::string name, std::string path);
+	bool addBackgroundMusic(std::string name, std::string path);
+
+	SoundEffect* playSoundEffect(std::string name);
+	BackgroundMusic* playBackgroundMusic(std::string name);
+
+	bool hasSprites();
+	bool hasSounds();
 
 private:
 	std::map<std::string, std::unique_ptr<Texture>> artLibrary;	
-	GraphicsDevice* gDevice{ nullptr };
+	std::map<std::string, std::unique_ptr<SoundEffect> > soundEffectLibrary;
+	std::map<std::string, std::unique_ptr<BackgroundMusic> > musicLibrary;
+	ResourceManager* devices{ nullptr };
 
 };
 #endif // !ASSETLIBRARIES_H

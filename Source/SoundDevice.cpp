@@ -1,5 +1,8 @@
-#include "SoundDevice.h"
 #include "SDL_mixer.h"
+
+#include "AssetLibrary.h"
+#include "SoundDevice.h"
+
 
 
 SoundDevice::~SoundDevice()
@@ -10,9 +13,10 @@ SoundDevice::~SoundDevice()
 
 //**************************************
 //set's up initial setting for sound device
-SoundDevice::SoundDevice()
+SoundDevice::SoundDevice(AssetLibrary* aLibrary)
 //**************************************
 {
+	this->aLibrary = aLibrary;
 	//allows for OGG support
 	{
 		auto flags = MIX_INIT_OGG;
@@ -38,67 +42,72 @@ SoundDevice::SoundDevice()
 	initialized = true;
 }
 
-//**************************************
-//plays a sound for a number of loops, must be in the sound library.
-bool SoundDevice::PlaySound(std::string sound, int numLoops)
-//**************************************
+
+bool SoundDevice::playSound(SoundEffect * sound, int numLoops, int channel)
 {
-	int channelID = -1; //Select first available channel
-	PlaySound(sound, numLoops, channelID);
+	Mix_PlayChannel(channel, sound->effect, numLoops);
 	return true;
 }
 //**************************************
 //same as above, but here we can specify a channel to play the sound on.
-bool SoundDevice::PlaySound(std::string sound, int numLoops, int channel)
+bool SoundDevice::playSound(std::string sound, int numLoops, int channel)
 //**************************************
 {
-	Mix_PlayChannel(channel, getSoundEffect(sound), numLoops);
-	return true;
+	return playSound(aLibrary->playSoundEffect(sound), numLoops, channel);
 }
 //**************************************
 //set's the background music to play.
-void SoundDevice::setBackground(std::string background)
+void SoundDevice::setAsBackground(std::string background)
 //**************************************
 {
-	if(Mix_PlayMusic(getMusic(background), -1) == -1)
-	{printf("Mix_PlayMusic: %s\n", Mix_GetError());}
+	setAsBackground(aLibrary->playBackgroundMusic(background));
 }
-Mix_Chunk * SoundDevice::getSoundEffect(std::string name)
+
+void SoundDevice::setAsBackground(BackgroundMusic * background)
 {
-	auto soundIter = soundEffectLibrary.find(name);
-	if (soundIter == soundEffectLibrary.end())
+	if (Mix_PlayMusic(background->background, -1) == -1)
 	{
-		{printf("Sound Effect File not found!"); }
-		return nullptr;
+		printf("Mix_PlayMusic: %s\n", Mix_GetError());
 	}
-	return soundIter->second;
 }
 
-Mix_Music * SoundDevice::getMusic(std::string name)
-{
-	std::map<std::string, Mix_Music*>::iterator musicIter = musicLibrary.find(name);
-	//make sure we found one.
-	if (musicIter == musicLibrary.end())
-	{
-		{printf("Background File not found!"); }
-		return nullptr;
-	}
-	else return musicIter->second;;
-}
 
-bool SoundDevice::addSoundEffect(std::string name, std::string path)
-{
-
-	if (soundEffectLibrary[name] = Mix_LoadWAV(path.c_str())) return true;
-	return false;
-}
-
-bool SoundDevice::addBackgroundMusic(std::string name, std::string path)
-{
-	//Mix_Load
-	if (musicLibrary[name] = Mix_LoadMUS(path.c_str())) return true;
-	return false;
-}
+//Mix_Chunk * SoundDevice::getSoundEffect(std::string name)
+//{
+//	auto soundIter = soundEffectLibrary.find(name);
+//	if (soundIter == soundEffectLibrary.end())
+//	{
+//		{printf("Sound Effect File not found!"); }
+//		return nullptr;
+//	}
+//	return soundIter->second;
+//}
+//
+//Mix_Music * SoundDevice::getMusic(std::string name)
+//{
+//	std::map<std::string, Mix_Music*>::iterator musicIter = musicLibrary.find(name);
+//	//make sure we found one.
+//	if (musicIter == musicLibrary.end())
+//	{
+//		{printf("Background File not found!"); }
+//		return nullptr;
+//	}
+//	else return musicIter->second;;
+//}
+//
+//bool SoundDevice::addSoundEffect(std::string name, std::string path)
+//{
+//
+//	if (soundEffectLibrary[name] = Mix_LoadWAV(path.c_str())) return true;
+//	return false;
+//}
+//
+//bool SoundDevice::addBackgroundMusic(std::string name, std::string path)
+//{
+//	//Mix_Load
+//	if (musicLibrary[name] = Mix_LoadMUS(path.c_str())) return true;
+//	return false;
+//}
 //**************************************
 //Have not set this up yet, as there has bee no need for it.
 bool SoundDevice::removeSound(std::string name)

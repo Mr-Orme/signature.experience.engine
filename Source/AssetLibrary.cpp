@@ -2,24 +2,15 @@
 
 #include "AssetLibrary.h"
 #include "Texture.h"
-#include "GraphicsDevice.h"
+#include "ResourceManager.h"
 #include "ComponentsList.h"
 #include "Object.h"
 
 
-bool AssetLibrary::initialize(GraphicsDevice * gDevice)
+bool AssetLibrary::initialize(ResourceManager* devices)
 {
-	if (!gDevice)
-	{
-		printf("Bad sound or graphic's device");
-		return false;
-	}
-	else
-	{
-		this->gDevice = gDevice;
-		return true;
-	}
-
+	this->devices = devices;
+	return true;
 }
 
 Texture * AssetLibrary::getArtAsset(std::string searchString)
@@ -27,9 +18,9 @@ Texture * AssetLibrary::getArtAsset(std::string searchString)
 	return artLibrary.find(searchString)->second.get();
 }
 
-bool AssetLibrary::setArtAsset(std::string name, std::string path)
+bool AssetLibrary::addArtAsset(std::string name, std::string path)
 {
-	artLibrary[name] = std::make_unique<Texture>(gDevice, path);
+	artLibrary[name] = std::make_unique<Texture>(devices->gDevice.get(), path);
 
 	if (!artLibrary[name]->initialzied) 
 	{ 
@@ -38,6 +29,62 @@ bool AssetLibrary::setArtAsset(std::string name, std::string path)
 		return false; 
 	}
 
+	return true;
+}
+
+bool AssetLibrary::addSoundEffect(std::string name, std::string path)
+{
+	soundEffectLibrary[name] = std::make_unique<SoundEffect>(path, devices->sDevice.get());
+	return true;
+	
+}
+
+bool AssetLibrary::addBackgroundMusic(std::string name, std::string path)
+{
+	musicLibrary[name] = std::make_unique<BackgroundMusic>(path, devices->sDevice.get());
+	return true;
+}
+
+SoundEffect * AssetLibrary::playSoundEffect(std::string name)
+{
+	if (auto sound = soundEffectLibrary.find(name); sound != soundEffectLibrary.end())
+	{
+		return sound->second.get();
+	}
+	else
+	{
+		return nullptr;
+	}
+
+}
+
+BackgroundMusic * AssetLibrary::playBackgroundMusic(std::string name)
+{
+	if (auto sound = musicLibrary.find(name); sound != musicLibrary.end())
+	{
+		return sound->second.get();
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+bool AssetLibrary::hasSprites()
+{
+	if (artLibrary.empty())
+	{
+		return false;
+	}
+	return true;
+}
+
+bool AssetLibrary::hasSounds()
+{
+	if (soundEffectLibrary.empty() && musicLibrary.empty())
+	{
+		return false;
+	}
 	return true;
 }
 

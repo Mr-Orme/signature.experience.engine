@@ -78,7 +78,7 @@
     </Component>
   </Object>
   <Object type="Text">
-    <Component name="Sprite" text="Double Click on Object to change it's settings" sprite="false"></Component>
+    <Component name="Sprite" text="Double Click on an object to change its settings" sprite="false"></Component>
     <Component name="Body" x="20.0f" y="10.0f" density="15.0f" restitution="0.0f" angularDamping="0.0f" linearDamping="0.0f" bodyType="STATIC" bodyShape="RECTANGLE" physicsOn = "false"/>
   </Object>
 </Level>

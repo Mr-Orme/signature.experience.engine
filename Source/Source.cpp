@@ -18,7 +18,5 @@ int main(int argc, char *args[])
 	while (engine->run()) {}
 
 	engine = nullptr;
-
-	system("PAUSE");
 	return 0;
 }

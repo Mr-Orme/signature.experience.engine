@@ -163,10 +163,11 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
     <ClCompile Include="Source\Object.cpp" />
     <ClCompile Include="Source\ObjectFactory.cpp" />
     <ClCompile Include="Source\PhysicsDevice.cpp" />
+    <ClCompile Include="Source\Sound.cpp" />
+    <ClCompile Include="Source\Source.cpp" />
     <ClCompile Include="Source\SpriteComponent.cpp" />
     <ClCompile Include="Source\ResourceManager.cpp" />
     <ClCompile Include="Source\SoundDevice.cpp" />
-    <ClCompile Include="Source\Source.cpp" />
     <ClCompile Include="Source\Texture.cpp" />
     <ClCompile Include="Source\Timer.cpp" />
     <ClCompile Include="Source\UserInputComponent.cpp" />
@@ -188,6 +189,7 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
     <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\ObjectFactory.h" />
     <ClInclude Include="Source\PhysicsDevice.h" />
+    <ClInclude Include="Source\Sound.h" />
     <ClInclude Include="Source\SpriteComponent.h" />
     <ClInclude Include="Source\ResourceManager.h" />
     <ClInclude Include="Source\SoundDevice.h" />
