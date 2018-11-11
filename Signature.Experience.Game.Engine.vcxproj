@@ -158,7 +158,7 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
     <ClCompile Include="Source\ContactListener.cpp" />
     <ClCompile Include="Source\Engine.cpp" />
     <ClCompile Include="Source\GraphicsDevice.cpp" />
-    <ClCompile Include="Source\HealthComponent.cpp" />
+    <ClCompile Include="Source\StatComponent.cpp" />
     <ClCompile Include="Source\InputDevice.cpp" />
     <ClCompile Include="Source\Object.cpp" />
     <ClCompile Include="Source\ObjectFactory.cpp" />
@@ -183,7 +183,7 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
     <ClInclude Include="Source\Definitions.h" />
     <ClInclude Include="Source\Engine.h" />
     <ClInclude Include="Source\GraphicsDevice.h" />
-    <ClInclude Include="Source\HealthComponent.h" />
+    <ClInclude Include="Source\StatComponent.h" />
     <ClInclude Include="Source\Initializers.h" />
     <ClInclude Include="Source\InputDevice.h" />
     <ClInclude Include="Source\Object.h" />

@@ -1,4 +1,4 @@
-#include "HealthComponent.h"
+#include "StatComponent.h"
 #include "SpriteComponent.h"
 #include "BodyComponent.h"
 #include "ResourceManager.h"
@@ -6,7 +6,7 @@
 #include "AssetLibrary.h"
 #include "Object.h"
 
-HealthComponent::HealthComponent(Object* owner, ResourceManager* devices, EngineInt health):Component(owner)
+StatComponent::StatComponent(Object* owner, ResourceManager* devices, EngineInt health):Component(owner)
 {
 	this->devices = devices;
 	this->health = health;
@@ -17,7 +17,7 @@ HealthComponent::HealthComponent(Object* owner, ResourceManager* devices, Engine
 //**************************************
 //This "killObject" is for items that leave a sprite that is dead 
 //and does not interact with the world
-bool HealthComponent::killObject(std::string deathSprite)
+bool StatComponent::killObject(std::string deathSprite)
 //**************************************
 {
 	//Stop the physics of the object
@@ -32,39 +32,41 @@ bool HealthComponent::killObject(std::string deathSprite)
 }
 //**************************************
 //For objects that disappear from the game.
-bool HealthComponent::killObject()
+bool StatComponent::killObject()
 //**************************************
 {
 	//this will cause it to be elimanted on the next game update
 	isDead = true;
 	return true;
 }
-void HealthComponent::start()
+void StatComponent::start()
 {
 	
 }
 
 //**************************************
 //checks for death and deals with it
-Object* HealthComponent::update()
+Object* StatComponent::update()
 //**************************************
 {
 	//if dead
 	if(health <= 0)
+		//Got the conditional correct, will have to get some input on how to set Object pointer to owner's bodyComponent object.
 	{
 		//TODO:: update joint deletion for dying things.
 		//if this is a joined object
-		//if(owner -> getJoinedWith() != nullptr)
-		//{
-		//	//Turn off the joined object
-		//	Object* joined =  owner -> getJoinedWith();
+		
+		if(owner->getComponent<BodyComponent>()->joinedWith != nullptr)
+		{
+			//Turn off the joined object
+			Object* joined = owner->getComponent<BodyComponent>()->joinedWith;
 		//	devices -> pDevice -> setStopPhysics(joined);
 		//	//destroy the joints
 		//	devices -> pDevice -> destroyJoint(owner);
-		//}
+		}
 		//kill it
 		killObject();
 	}
 	return nullptr;
 }
-void HealthComponent::finish(){}
+void StatComponent::finish(){}

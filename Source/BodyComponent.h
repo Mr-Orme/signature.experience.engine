@@ -11,6 +11,8 @@ class BodyComponent : public Component
 {
 public:
 	BodyComponent(Object* owner, ResourceManager* devices, BodyPresets);
+	//added destructor
+	~BodyComponent();
 		
 	void start() final;
 	Object* update() final;
@@ -22,7 +24,17 @@ public:
 	Position getVelocity();
 	EngineInt getWidth();
 	EngineInt getHeight();
+	//added setVelocity and individual X and Y Velocity
+	void setVelocity(Position velocity);
+	void setXVelocity(float xVel);
+	void setYVelocity(float yVel);
 	void setAngle(EngineFloat angle);
+	//Added changePosition and ability to increase speed. Maybe a float to get current speed and x y positions
+	void changePosition(Position position);
+	void increaseSpeed(float num);
+	float getXPos();
+	float getYPos();
+	float getSpeed();
 	void adjustAngle(EngineFloat adjustAmount);
 	void linearStop();
 	
