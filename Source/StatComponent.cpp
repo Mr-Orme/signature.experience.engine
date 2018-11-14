@@ -39,6 +39,13 @@ bool StatComponent::killObject()
 	isDead = true;
 	return true;
 }
+EngineInt StatComponent::getStat()
+{
+	if (modifier)
+		return modifier->getStat() + statistic;
+	else
+		return statistic;
+}
 void StatComponent::start()
 {
 	
@@ -55,14 +62,16 @@ Object* StatComponent::update()
 	{
 		//TODO:: update joint deletion for dying things.
 		//if this is a joined object
-		
-		if(owner->getComponent<BodyComponent>()->joinedWith != nullptr)
+		BodyComponent* jointToDelete = owner->getComponent<BodyComponent>();
+		while(jointToDelete->joinedWith != nullptr)
 		{
 			//Turn off the joined object
-			Object* joined = owner->getComponent<BodyComponent>()->joinedWith;
+			//BodyComponent* joined = owner->getComponent<BodyComponent>()->joinedWith.get();
 		//	devices -> pDevice -> setStopPhysics(joined);
 		//	//destroy the joints
-		//	devices -> pDevice -> destroyJoint(owner);
+			devices->pDevice->destroyJoint(jointToDelete);
+			jointToDelete = jointToDelete->joinedWith.get();
+
 		}
 		//kill it
 		killObject();

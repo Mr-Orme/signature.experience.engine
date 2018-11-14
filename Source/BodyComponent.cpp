@@ -40,6 +40,7 @@ Object* BodyComponent::update()
 void BodyComponent::finish()
 //**************************************
 {
+	//TODO:: this is not needed
 	if(joinedWith) joinedWith->finish();
 	//remove the physics body
 	if(!devices -> pDevice -> removeObject(this))

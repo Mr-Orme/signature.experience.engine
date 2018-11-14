@@ -17,14 +17,18 @@ public:
 	Object* update() final;
 	void finish() final;
 
+	//TODO: move to eventManager when we have one. The even should check for a health stat component.
 	bool killObject(std::string deathSprite);
 	bool killObject();
-	//Added a string to handle status effects and added EngineInt to handle changes due to status Effects.
-	std::string statusEffect = " ";
-	EngineInt buffOrNerf{ 0 };
-	EngineInt health{ 0 };
-	bool isDead{ false };
 
+	EngineInt getStat();
+	//Added a string to handle status effects and added EngineInt to handle changes due to status Effects.
+	std::string name;
+	/*std::string statusEffect = " ";
+	EngineInt buffOrNerf{ 0 };*/
+	EngineInt statistic{ 0 };
+	bool isDead{ false };
+	std::unique_ptr<StatComponent> modifier{ nullptr };
 private:
 	
 	ResourceManager* devices{ nullptr };

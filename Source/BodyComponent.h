@@ -26,12 +26,13 @@ public:
 	EngineInt getHeight();
 	//added setVelocity and individual X and Y Velocity
 	void setVelocity(Position velocity);
-	void setXVelocity(float xVel);
-	void setYVelocity(float yVel);
+	void setXVelocity(EngineFloat xVel);
+	void setYVelocity(EngineFloat yVel);
 	void setAngle(EngineFloat angle);
 	//Added changePosition and ability to increase speed. Maybe a float to get current speed and x y positions
 	void changePosition(Position position);
-	void increaseSpeed(float num);
+	void increaseForwardVelocity(EngineFloat num);
+	void decreaseForwardVelocity(EngineFloat num);
 	float getXPos();
 	float getYPos();
 	float getSpeed();

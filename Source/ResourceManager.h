@@ -19,7 +19,8 @@ public:
 
 	void update();
 	void draw();
-
+	//TODO:: use this to test out killing objects and destroying joints.
+	bool killObject(Object* butAScratch);
 	//Devices
 	std::unique_ptr<GraphicsDevice> gDevice{ nullptr };
 	std::unique_ptr<InputDevice> iDevice{ nullptr };
