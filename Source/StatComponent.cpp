@@ -9,7 +9,8 @@
 StatComponent::StatComponent(Object* owner, ResourceManager* devices, EngineInt health):Component(owner)
 {
 	this->devices = devices;
-	this->health = health;
+	//if statistic will contain health then set input health to our current health.
+	this->statistic = health;
 	initialized = devices && health;
 }
 
@@ -46,10 +47,11 @@ EngineInt StatComponent::getStat()
 	else
 		return statistic;
 }
-void StatComponent::start()
+//commented out start since there is no need.
+/*void StatComponent::start()
 {
 	
-}
+}*/
 
 //**************************************
 //checks for death and deals with it
@@ -57,13 +59,15 @@ Object* StatComponent::update()
 //**************************************
 {
 	//if dead
-	if(health <= 0)
+	//Changed health to statistic, don't exactly know how this is going to work.
+	if(statistic <= 0)
 		//Got the conditional correct, will have to get some input on how to set Object pointer to owner's bodyComponent object.
 	{
 		//TODO:: update joint deletion for dying things.
 		//if this is a joined object
 		BodyComponent* jointToDelete = owner->getComponent<BodyComponent>();
-		while(jointToDelete->joinedWith != nullptr)
+		//modified while statement
+		while(!jointToDelete->joinedWith)
 		{
 			//Turn off the joined object
 			//BodyComponent* joined = owner->getComponent<BodyComponent>()->joinedWith.get();
@@ -78,4 +82,5 @@ Object* StatComponent::update()
 	}
 	return nullptr;
 }
-void StatComponent::finish(){}
+//commented out finish and added destructor in its place.
+//void StatComponent::finish(){}

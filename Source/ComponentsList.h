@@ -9,8 +9,8 @@
 */
 #include "Component.h"
 #include "BodyComponent.h"
-
-#include "HealthComponent.h"
+//Changed from HealthComponent to StatComponent
+#include "StatComponent.h"
 #include "SpriteComponent.h"
 
 #include "UserInputComponent.h"
