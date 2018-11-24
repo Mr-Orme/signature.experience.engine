@@ -14,7 +14,6 @@ UserInputComponent::UserInputComponent(Object* owner, ResourceManager* devices):
 }
 UserInputComponent::~UserInputComponent(){}
 
-void UserInputComponent::start(){}
 
 //**************************************
 //reacts to keyboard input and adjusts the world accoringly.
@@ -34,5 +33,3 @@ Object* UserInputComponent::update()
 	}
 	return nullptr;
 }
-
-void UserInputComponent::finish(){}

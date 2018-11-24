@@ -8,7 +8,8 @@ public:
 
 	bool initialize(Position position);
 	bool update();
-	
+	//Declared addScroller function within header file before beginning definition process.
+	void addScroller(Object* object);
 	Position position;
 
 };

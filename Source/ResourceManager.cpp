@@ -27,20 +27,17 @@ inline bool createThisDevice(tinyxml2::XMLElement* createMe)
 	createMe->QueryBoolAttribute("create", &create);
 	return create;
 }
-//**************************************
-//prepares all asset libraries based on path passed xml file
-//and creastes and initialzies all devices
-bool ResourceManager::initialize(std::string assetPath)
+ResourceManager::ResourceManager(std::string assetPath)
 {
 	tinyxml2::XMLDocument levelConfig;
-	if (!levelConfig.LoadFile(assetPath.c_str())==tinyxml2::XML_SUCCESS) 
-	{ 
-		return false; 
+	if (!levelConfig.LoadFile(assetPath.c_str()) == tinyxml2::XML_SUCCESS)
+	{
+		std::cout << "Error, Problem in loading levelConfig file. Please check to see if valid file." << std::endl;
 	};
-		
+
 	tinyxml2::XMLElement* levelRoot = levelConfig.FirstChildElement();//Level
 	tinyxml2::XMLElement* levelElement = levelRoot->FirstChildElement();//Screen
-	
+
 	int screenWidth{ 0 };
 	int screenHeight{ 0 };
 	levelElement->QueryIntAttribute("width", &screenWidth);
@@ -55,38 +52,38 @@ bool ResourceManager::initialize(std::string assetPath)
 		printf("Graphics Device could not Initialize!");
 		exit(1);
 	}
-	
+
 	if (tinyxml2::XMLElement* fontConfig = levelElement->FirstChildElement(); fontConfig)
 	{
 		std::unique_ptr<RGBA> fontColor = std::make_unique<RGBA>();
-			
+
 		fontConfig->QueryIntAttribute("R", (int*)&fontColor.get()->R);
 		fontConfig->QueryIntAttribute("G", (int*)&fontColor.get()->G);
 		fontConfig->QueryIntAttribute("B", (int*)&fontColor.get()->B);
 		fontConfig->QueryIntAttribute("A", (int*)&fontColor.get()->A);
-		
+
 		int fontSize;
 		fontConfig->QueryIntAttribute("size", &fontSize);
-		
+
 		string fontPath = fontConfig->Attribute("path");
-		
-		gDevice->setFont(fontPath, fontSize, *fontColor);		
+
+		gDevice->setFont(fontPath, fontSize, *fontColor);
 	}
-	
+
 	levelElement = levelElement->NextSiblingElement();//FPS
 	FPS = std::stoi(levelElement->GetText());
-	
+
 	//========================================
 	//Construct Object Factory
 	//========================================
 	factory = std::make_unique<ObjectFactory>(this);
-	
+
 	levelElement = levelElement->NextSiblingElement();//Devices
-	
-	
-	//========================================
-	//Construct Input Device
-	//========================================
+
+
+													  //========================================
+													  //Construct Input Device
+													  //========================================
 	tinyxml2::XMLElement* deviceConfig = levelElement->FirstChildElement("Input");
 	if (createThisDevice(deviceConfig))
 	{
@@ -98,7 +95,7 @@ bool ResourceManager::initialize(std::string assetPath)
 			exit(1);
 		}
 	}
-	
+
 	//========================================
 	//Construct Physics Device
 	//========================================
@@ -115,7 +112,7 @@ bool ResourceManager::initialize(std::string assetPath)
 			printf("Physics Device could not intialize!");
 			exit(1);
 		}
-	}	
+	}
 	//========================================
 	//Construct Asset Library
 	//========================================
@@ -128,16 +125,16 @@ bool ResourceManager::initialize(std::string assetPath)
 
 		//*********************Load sprites***************************
 		tinyxml2::XMLElement* asset = deviceConfig->FirstChildElement("Asset");
-		
+
 		while (asset)
 		{
 			assetLibrary->addArtAsset(asset->Attribute("name"), asset->Attribute("spritePath"));
 			asset = asset->NextSiblingElement("Asset");
 		}
 
-	
+
 	}
-	
+
 
 	//========================================
 	//Construct Sound Device
@@ -169,43 +166,36 @@ bool ResourceManager::initialize(std::string assetPath)
 			sounds = sounds->NextSiblingElement("SoundEffect");
 		}
 	}
-	
+
 
 	//========================================
 	//Construct Objects
 	//========================================
 	for (
-			levelElement = levelElement->NextSiblingElement("Object"); 
-			levelElement; 
-			levelElement = levelElement->NextSiblingElement("Object")
+		levelElement = levelElement->NextSiblingElement("Object");
+		levelElement;
+		levelElement = levelElement->NextSiblingElement("Object")
 		)
 	{
 		objects.push_back(std::unique_ptr<Object>(factory->Create(levelElement)));
 	}
 
 	//***********************************************************
-	
+
 	//
 	//set-up debugging
 	//
 	//Box2DDebugdraw* debugdraw = new Box2DDebugdraw();
 	//debugdraw->Initialize(this);
- //   debugdraw->setFlags(b2draw::e_shapeBit | b2draw::e_aabbBit);  //Turn on shape (red color) and aabb (green) 
+	//   debugdraw->setFlags(b2draw::e_shapeBit | b2draw::e_aabbBit);  //Turn on shape (red color) and aabb (green) 
 
 	////Add the Debug draw to the world
 	//if(debugdraw!=NULL)
 	//{
 	//	pDevice -> getWorld() -> setDebugdraw(debugdraw);
 	//}
-	return true;
 }
-
-//**************************************
-//Deletes all the devices.
-//need to switch to smart pointers.
-bool ResourceManager::shutdown()
-//**************************************
-
+ResourceManager::~ResourceManager()
 {
 	if (!objects.empty())
 	{
@@ -217,11 +207,26 @@ bool ResourceManager::shutdown()
 	pDevice = nullptr;
 	assetLibrary = nullptr;
 	factory = nullptr;
-
-
-
-	return true;
 }
+//**************************************
+//prepares all asset libraries based on path passed xml file
+//and creastes and initialzies all devices
+//This is handled in Constructor
+/*bool ResourceManager::initialize(std::string assetPath)
+{
+	
+}*/
+
+//**************************************
+//Deletes all the devices.
+//need to switch to smart pointers.
+//This is handled in destructor
+/*bool ResourceManager::shutdown()
+//**************************************
+
+{
+	
+}*/
 
 void ResourceManager::update()
 {
@@ -231,7 +236,8 @@ void ResourceManager::update()
 	for (auto objectIter = objects.begin(); objectIter != objects.end(); )
 	{
 		if (
-			HealthComponent* compHealth = (*objectIter)->getComponent<HealthComponent>(); 
+			//Changed HealthComponent to StatComponent
+			StatComponent* compHealth = (*objectIter)->getComponent<StatComponent>(); 
 			compHealth != nullptr && compHealth->isDead)
 		{
 			//**************Bring out your dead********************
@@ -274,6 +280,14 @@ void ResourceManager::draw()
 	gDevice->draw();
 
 	gDevice->Present();
+}
+
+bool ResourceManager::killObject(Object * butAScratch)
+{
+	if (butAScratch)
+	{
+		//set up the object for death.
+	}
 }
 
 

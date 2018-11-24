@@ -11,9 +11,14 @@
 
 SpriteComponent::SpriteComponent(Object* owner, const SpritePresets& presets):Component(owner)
 {
-	this->devices = presets.Devices;
-	this->texture = presets.spriteTexture;
-	initialized = (devices && texture);
+	//Took conditional statement from start function and put into constructor. If there is a sprite continue with constructor.
+	if (sprite)
+	{
+
+		this->devices = presets.Devices;
+		this->texture = presets.spriteTexture;
+		initialized = (devices && texture);
+	}
 }
 
 //**************************************
@@ -41,13 +46,6 @@ void SpriteComponent::draw(Position position, EngineFloat angle)
 	texture ->draw(devices -> gDevice -> getRenderer(), position, angle, NULL);
 }
 
-void SpriteComponent::start()
-{
-	if (sprite)
-	{
-		sprite->start();
-	}
-}
 
 Object* SpriteComponent::update(){return nullptr;}
 
@@ -60,11 +58,11 @@ Position SpriteComponent::getViewAdjustedPosition()
 	return (devices->pDevice->getPosition(spriteBody) 
 		+ devices->gDevice->getView()->position);
 }
-
-void SpriteComponent::finish()
+//No need for finish function since our destructor will handle this process
+/*void SpriteComponent::finish()
 {
 	if (sprite)
 	{
 		sprite->finish();
 	}
-}
+}*/

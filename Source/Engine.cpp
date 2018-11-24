@@ -23,16 +23,22 @@ Engine::~Engine()
 	}
 }
 
+Engine::Engine()
+{
+	reset();
+	engineDevices = make_unique<ResourceManager>();
+	engineDevices->initialize("./Assets/Config/engine.xml");
+	//initialize function was deleted since our Constructor takes care of its processes.
+	//We can't call our Constructor so maybe I misunderstood and should have copy pasted entire function
+	//in our constructor?
+}
+
 //**************************************
 //Initializes Engine & Art Asset Libraries.
 bool Engine::initialize()
 //**************************************
 {	
-	reset();
-	engineDevices = make_unique<ResourceManager>();
-	engineDevices->initialize("./Assets/Config/engine.xml");
 	
-	return true;
 }
 
 //**************************************

@@ -28,7 +28,7 @@ public:
 	bool setStatic(const BodyComponent* object);
 	bool setStopPhysics(const BodyComponent* object);
 	bool setAngle(const BodyComponent* object, EngineFloat angle);
-
+	
 	EngineFloat getAngularVelocity( const BodyComponent* object) const;
 	Position getPosition( const BodyComponent* object) const;
 	EngineFloat getAngle( const BodyComponent* object) const;

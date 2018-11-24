@@ -10,6 +10,7 @@ StatComponent::StatComponent(Object* owner, ResourceManager* devices, EngineInt 
 {
 	this->devices = devices;
 	//if statistic will contain health then set input health to our current health.
+	//Maybe statistic should be struct containing health?
 	this->statistic = health;
 	initialized = devices && health;
 }

@@ -12,10 +12,8 @@ public:
 	~Component();
 	void OwnerDestroyed();
 	Object* getOwner() const;
-
-	virtual void start()=0;
+	//No need for pure virtual void start and finish functions.
 	virtual Object* update()=0;
-	virtual void finish()=0;
 	
 	bool initialized{ false };
 protected:

@@ -14,7 +14,6 @@ public:
 	//added destructor, deleted the finish method and copy pasted to destructor.
 	~BodyComponent();
 		
-	void start() final;
 	Object* update() final;
 
 	//TODO:: add more functionality for other things Box2D can do.

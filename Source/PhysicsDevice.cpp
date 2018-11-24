@@ -62,6 +62,7 @@ bool PhysicsDevice::setAngle(const BodyComponent* object, EngineFloat angle)
 	return true;
 }
 
+
 //**************************************
 //sets angular velocity
 bool PhysicsDevice::setAngularVelocity(const BodyComponent* object, EngineFloat angularVelocity)
