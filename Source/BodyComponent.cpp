@@ -12,13 +12,6 @@ BodyComponent::BodyComponent(Object* owner, ResourceManager* devices, BodyPreset
 {
 	//Create fixture.
 	initialized = devices->pDevice->createFixture(this, presets);
-	//Copy pasted from start function.
-	//No need for this function.
-	/*
-	if (joinedWith)
-	{
-		joinedWith->start();
-	}*/
 }
 //**************************************
 //**************************************
@@ -33,6 +26,14 @@ BodyComponent::~BodyComponent()
 	{
 		printf("Object could not be removed from Physics World");
 		exit(1);
+	}
+}
+
+void BodyComponent::start()
+{
+	if (joinedWith)
+	{
+		joinedWith->start();
 	}
 }
 

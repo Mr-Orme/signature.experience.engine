@@ -15,8 +15,9 @@ public:
 	//Added destructor
 	~SpriteComponent() {};
 
+	void start() final;
 	Object* update() final;
-	//void finish() final;
+	void finish() final;
 
 	void draw();
 	void draw(Position position, EngineFloat angle);

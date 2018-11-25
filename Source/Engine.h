@@ -12,7 +12,6 @@
 class Engine{
 public:	
 	~Engine();
-	Engine();
 	bool initialize();
 	void reset();
 	bool run();
