@@ -11,30 +11,33 @@ class BodyComponent : public Component
 {
 public:
 	BodyComponent(Object* owner, ResourceManager* devices, BodyPresets);
-	//added destructor
+	//added destructor, deleted the finish method and copy pasted to destructor.
 	~BodyComponent();
 		
 	Object* update() final;
-	void finish() final;
 
 	//TODO:: add more functionality for other things Box2D can do.
+	//Added more functionality and defined functions in cpp file
 	EngineFloat getAngle();
 	Position getPosition();
 	Position getVelocity();
 	EngineInt getWidth();
 	EngineInt getHeight();
 	//added setVelocity and individual X and Y Velocity
+	//Defined functions in the cpp file
 	void setVelocity(Position velocity);
 	void setXVelocity(EngineFloat xVel);
 	void setYVelocity(EngineFloat yVel);
 	void setAngle(EngineFloat angle);
 	//Added changePosition and ability to increase speed. Maybe a float to get current speed and x y positions
-	void changePosition(Position position);
+	//Changed changePosition to setPosition
+	void setPosition(Position position);
 	void increaseForwardVelocity(EngineFloat num);
 	void decreaseForwardVelocity(EngineFloat num);
 	float getXPos();
 	float getYPos();
-	float getSpeed();
+	//Commented out getSpeed since this is a scalar and not a vector.
+	//float getSpeed();
 	void adjustAngle(EngineFloat adjustAmount);
 	void linearStop();
 	
