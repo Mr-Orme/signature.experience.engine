@@ -12,8 +12,6 @@ class SpriteComponent : public Component
 {
 public:
 	SpriteComponent(Object* owner, const SpritePresets& presets);
-	//Added destructor
-	~SpriteComponent() {};
 
 	Object* update() final;
 	//void finish() final;
