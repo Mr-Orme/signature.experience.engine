@@ -13,12 +13,12 @@ bool AssetLibrary::initialize(ResourceManager* devices)
 	return true;
 }
 
-Texture * AssetLibrary::getArtAsset(std::string searchString)
+Texture * AssetLibrary::getArtAsset(std::string &searchString)
 {
 	return artLibrary.find(searchString)->second.get();
 }
 
-bool AssetLibrary::addArtAsset(std::string name, std::string path)
+bool AssetLibrary::addArtAsset(std::string &name, std::string &path)
 {
 	artLibrary[name] = std::make_unique<Texture>(devices->gDevice.get(), path);
 
@@ -32,20 +32,20 @@ bool AssetLibrary::addArtAsset(std::string name, std::string path)
 	return true;
 }
 
-bool AssetLibrary::addSoundEffect(std::string name, std::string path)
+bool AssetLibrary::addSoundEffect(std::string &name, std::string &path)
 {
 	soundEffectLibrary[name] = std::make_unique<SoundEffect>(path, devices->sDevice.get());
 	return true;
 	
 }
 
-bool AssetLibrary::addBackgroundMusic(std::string name, std::string path)
+bool AssetLibrary::addBackgroundMusic(std::string &name, std::string &path)
 {
 	musicLibrary[name] = std::make_unique<BackgroundMusic>(path, devices->sDevice.get());
 	return true;
 }
 
-SoundEffect * AssetLibrary::playSoundEffect(std::string name)
+SoundEffect * AssetLibrary::playSoundEffect(std::string &name)
 {
 	if (auto sound = soundEffectLibrary.find(name); sound != soundEffectLibrary.end())
 	{
@@ -58,7 +58,7 @@ SoundEffect * AssetLibrary::playSoundEffect(std::string name)
 
 }
 
-BackgroundMusic * AssetLibrary::playBackgroundMusic(std::string name)
+BackgroundMusic * AssetLibrary::playBackgroundMusic(std::string &name)
 {
 	if (auto sound = musicLibrary.find(name); sound != musicLibrary.end())
 	{

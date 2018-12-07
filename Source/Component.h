@@ -13,9 +13,9 @@ public:
 	void OwnerDestroyed();
 	Object* getOwner() const;
 
-	virtual void start()=0;
+	//deleted pure virtual function start
 	virtual Object* update()=0;
-	virtual void finish()=0;
+	//deleted pure virtual function finish
 	
 	bool initialized{ false };
 protected:

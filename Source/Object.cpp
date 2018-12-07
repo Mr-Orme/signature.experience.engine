@@ -7,7 +7,7 @@
 	initialized = false;
 }
 
- Object::~ Object()
+ Object::~Object()
 {
 
 }
@@ -52,7 +52,7 @@ bool  Object::removeComponents()
 	
 	for (auto& comp: components)
 	{
-		comp -> finish();
+		comp -> ~Component();
 		
 	}
 	components.clear();

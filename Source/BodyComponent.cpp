@@ -12,6 +12,10 @@ BodyComponent::BodyComponent(Object* owner, ResourceManager* devices, BodyPreset
 {
 	//Create fixture.
 	initialized = devices->pDevice->createFixture(this, presets);
+	if (joinedWith)
+	{
+		joinedWith->start();
+	}
 }
 //**************************************
 //**************************************
@@ -29,13 +33,6 @@ BodyComponent::~BodyComponent()
 	}
 }
 
-void BodyComponent::start()
-{
-	if (joinedWith)
-	{
-		joinedWith->start();
-	}
-}
 
 //**************************************
 //

@@ -10,7 +10,8 @@ class SoundEffect
 {
 public:
 	SoundEffect() = delete;
-	SoundEffect(std::string path, SoundDevice* sDevice);
+	//passing string value by reference
+	SoundEffect(std::string &path, SoundDevice* sDevice);
 	void playSound(int numLoops=1);
 	Mix_Chunk * effect{ nullptr };
 private:
@@ -21,7 +22,8 @@ class BackgroundMusic
 {
 public:
 	BackgroundMusic() = delete;
-	BackgroundMusic(std::string path, SoundDevice* sDevice);
+	//passing string value by reference
+	BackgroundMusic(std::string &path, SoundDevice* sDevice);
 	void setAsBackground();
 	Mix_Music * background{ nullptr };
 private:

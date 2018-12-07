@@ -11,7 +11,7 @@ Texture::~Texture()
 }
 
 
-Texture::Texture(GraphicsDevice* gDevice, std::string pathOrText, bool isSprite)
+Texture::Texture(GraphicsDevice* gDevice, std::string &pathOrText, bool isSprite)
 {
 
 	//Destroy existing texture information

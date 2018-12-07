@@ -14,9 +14,9 @@ public:
 	UserInputComponent(Object* owner, ResourceManager* devices);
 	~UserInputComponent();
 	
-	void start() final;
+	//no need for start function
 	Object* update() final;
-	void finish() final;
+	//no need for finish function
 		
 private:
 

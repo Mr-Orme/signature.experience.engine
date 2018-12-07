@@ -30,6 +30,7 @@ public:
 	GraphicsDevice(Uint32, Uint32);
 
 	//startup and Shutdown
+	//Since these are boolean functions there's no direct conversion to constructor and destructor.
 	bool initialize(bool);
 	bool ShutDown();
 

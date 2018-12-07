@@ -48,10 +48,7 @@ EngineInt StatComponent::getStat()
 		return statistic;
 }
 //commented out start since there is no need.
-/*void StatComponent::start()
-{
-	
-}*/
+
 
 //**************************************
 //checks for death and deals with it
@@ -83,4 +80,3 @@ Object* StatComponent::update()
 	return nullptr;
 }
 //commented out finish and added destructor in its place.
-//void StatComponent::finish(){}

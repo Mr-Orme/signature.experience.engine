@@ -15,10 +15,8 @@ public:
 	//added destructor
 	~StatComponent() {};
 	//no need for start
-	//void start() final;
 	Object* update() final;
 	//added destructor in finishes' place
-	//void finish() final;
 
 	//TODO: move to eventManager when we have one. The event should check for a health stat component.
 	bool killObject(std::string deathSprite);

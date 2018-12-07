@@ -13,11 +13,11 @@ class SpriteComponent : public Component
 public:
 	SpriteComponent(Object* owner, const SpritePresets& presets);
 	//Added destructor
-	~SpriteComponent() {};
+	~SpriteComponent();
 
-	void start() final;
+	//deleted start, no need for functionality since constructor is called on creation
 	Object* update() final;
-	void finish() final;
+	//finish functionality added to destructor
 
 	void draw();
 	void draw(Position position, EngineFloat angle);

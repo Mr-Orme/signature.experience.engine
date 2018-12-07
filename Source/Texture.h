@@ -11,7 +11,8 @@ class Texture{
     public:
 		
 		//Loads image at specified path
-		Texture(GraphicsDevice* gDevice, std::string pathOrText, bool isSprite = true);
+		//passing string value by reference
+		Texture(GraphicsDevice* gDevice, std::string &pathOrText, bool isSprite = true);
 
 		//Deallocates memory
         ~Texture();

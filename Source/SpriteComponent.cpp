@@ -16,6 +16,14 @@ SpriteComponent::SpriteComponent(Object* owner, const SpritePresets& presets):Co
 	initialized = (devices && texture);
 }
 
+SpriteComponent::~SpriteComponent()
+{
+	if (sprite)
+	{
+		sprite->~SpriteComponent();
+	}
+}
+
 //**************************************
 // updates the position based on the view and draws the sprite
 void SpriteComponent::draw()
@@ -41,13 +49,7 @@ void SpriteComponent::draw(Position position, EngineFloat angle)
 	texture ->draw(devices -> gDevice -> getRenderer(), position, angle, NULL);
 }
 
-void SpriteComponent::start()
-{
-	if (sprite)
-	{
-		sprite->start();
-	}
-}
+
 
 Object* SpriteComponent::update(){return nullptr;}
 
@@ -61,10 +63,3 @@ Position SpriteComponent::getViewAdjustedPosition()
 		+ devices->gDevice->getView()->position);
 }
 
-void SpriteComponent::finish()
-{
-	if (sprite)
-	{
-		sprite->finish();
-	}
-}

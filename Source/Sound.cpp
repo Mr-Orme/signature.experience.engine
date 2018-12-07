@@ -3,7 +3,7 @@
 #include "Sound.h"
 #include "SoundDevice.h"
 
-SoundEffect::SoundEffect(std::string path, SoundDevice* sDevice)
+SoundEffect::SoundEffect(std::string &path, SoundDevice* sDevice)
 {
 	this->sDevice = sDevice;
 	effect = Mix_LoadWAV(path.c_str());
@@ -14,7 +14,7 @@ void SoundEffect::playSound(int numLoops)
 	sDevice->playSound(this, numLoops);
 }
 
-BackgroundMusic::BackgroundMusic(std::string path, SoundDevice* sDevice)
+BackgroundMusic::BackgroundMusic(std::string &path, SoundDevice* sDevice)
 {
 	this->sDevice = sDevice;
 	background = Mix_LoadMUS(path.c_str());

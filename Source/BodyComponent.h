@@ -11,10 +11,9 @@ class BodyComponent : public Component
 {
 public:
 	BodyComponent(Object* owner, ResourceManager* devices, BodyPresets);
-	//added destructor, deleted the finish method and copy pasted to destructor.
+	//added destructor, deleted the finish method and copy pasted to destructor. deleted start and copy pasted to constructor.
 	~BodyComponent();
 		
-	void start() final;
 	Object* update() final;
 
 	//TODO:: add more functionality for other things Box2D can do.

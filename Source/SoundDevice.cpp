@@ -50,14 +50,14 @@ bool SoundDevice::playSound(SoundEffect * sound, int numLoops, int channel)
 }
 //**************************************
 //same as above, but here we can specify a channel to play the sound on.
-bool SoundDevice::playSound(std::string sound, int numLoops, int channel)
+bool SoundDevice::playSound(std::string &sound, int numLoops, int channel)
 //**************************************
 {
 	return playSound(aLibrary->playSoundEffect(sound), numLoops, channel);
 }
 //**************************************
 //set's the background music to play.
-void SoundDevice::setAsBackground(std::string background)
+void SoundDevice::setAsBackground(std::string &background)
 //**************************************
 {
 	setAsBackground(aLibrary->playBackgroundMusic(background));
@@ -110,7 +110,7 @@ void SoundDevice::setAsBackground(BackgroundMusic * background)
 //}
 //**************************************
 //Have not set this up yet, as there has bee no need for it.
-bool SoundDevice::removeSound(std::string name)
+bool SoundDevice::removeSound(std::string &name)
 //**************************************
 {
 	return false;
