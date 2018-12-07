@@ -61,7 +61,7 @@ public:
 	
 	//setters
 	void setView(View* view);
-	bool setFont(std::string path, EngineInt size, RGBA color);
+	bool setFont(std::string &path, EngineInt size, RGBA color);
 	
 	TTF_Font* font{ nullptr };
 	SDL_Color color{ 0,0,0,255 };

@@ -19,7 +19,9 @@ public:
 	//added destructor in finishes' place
 
 	//TODO: move to eventManager when we have one. The event should check for a health stat component.
-	bool killObject(std::string deathSprite);
+	//So there is a killObject method within our ResourceManager.h too, so when you say eventManager do you
+	//really mean ResourceManager?
+	bool killObject(std::string &deathSprite);
 	bool killObject();
 
 	EngineInt getStat();

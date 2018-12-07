@@ -14,8 +14,11 @@ class ResourceManager
 {
 public:
 	//TODO:: move initialize to constructor and shutdown to destructor
-	bool initialize(std::string assetPath);
-	bool shutdown();
+	ResourceManager(bool initialize, std::string &assetPath);
+	~ResourceManager();
+	//deleted initialize and shutdown while moving functionality into constructor and destructor.
+	//I feel like since shutdown was deleted if we happen to reference shutdown within another file we may have
+	//to change up some things.
 
 	void update();
 	void draw();

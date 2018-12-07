@@ -27,6 +27,7 @@ Object* UserInputComponent::update()
 			Most likely some value on some object needs to be adjusted, or the view needs to be adjusted.
 			This will probably tie in closely with the event manager.....
 			*/
+			//Again the event manager sounds like the ResourceManager.
 			//maybe you need an owner or some kind of reference pointer that will be modified.
 		}
 	}

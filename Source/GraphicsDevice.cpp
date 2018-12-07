@@ -202,7 +202,7 @@ void GraphicsDevice::setView(View * view)
 }
 
 
-bool GraphicsDevice::setFont(std::string path, EngineInt size, RGBA color)
+bool GraphicsDevice::setFont(std::string &path, EngineInt size, RGBA color)
 {
 	font = TTF_OpenFont(path.c_str(), size);
 	if( font == nullptr )

@@ -18,7 +18,7 @@ StatComponent::StatComponent(Object* owner, ResourceManager* devices, EngineInt 
 //**************************************
 //This "killObject" is for items that leave a sprite that is dead 
 //and does not interact with the world
-bool StatComponent::killObject(std::string deathSprite)
+bool StatComponent::killObject(std::string &deathSprite)
 //**************************************
 {
 	//Stop the physics of the object
@@ -47,7 +47,6 @@ EngineInt StatComponent::getStat()
 	else
 		return statistic;
 }
-//commented out start since there is no need.
 
 
 //**************************************
