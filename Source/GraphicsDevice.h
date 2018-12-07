@@ -12,9 +12,6 @@
 #ifndef GRAPHICSDEVICE_H
 #define GRAPHICSDEVICE_H
 
-#include <memory>
-#include <vector>
-#include <map>
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"

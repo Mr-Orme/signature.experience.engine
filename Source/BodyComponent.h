@@ -1,7 +1,6 @@
 #ifndef BODY_COMPONENT_H
 #define BODY_COMPONENT_H
 
-#include <memory>
 #include "Component.h"
 #include "Definitions.h"
 

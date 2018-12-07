@@ -2,7 +2,6 @@
 #ifndef OBJECTFACTORY_H
 #define OBJECTFACTORY_H
 
-#include <map>
 #include "Definitions.h"
 #include "tinyxml2.h"
 

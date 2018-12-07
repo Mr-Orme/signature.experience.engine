@@ -2,8 +2,14 @@
 #define DEFINITIONS_H
 
 #include <cmath>
+#include <memory>
+#include <map>
+#include <string>
+#include <vector>
+
 //TODO:: const correctness. Check to see if consts can be put on pointer parameters and class methods.
-//TODO:: clear out #includes. Make sure every #include is needed in ever file!
+//TODO:: clear out #includes. Make sure every #include is needed in ever file! Cleared out all includes and have put them
+//in definitions
 //TODO:: Move initialization to the constructor and stopping/finishing to the destructor.
 //TODO:: Move default initialization of member variables to .h file using {} for ALL classes!
 //Basic Types

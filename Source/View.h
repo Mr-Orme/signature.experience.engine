@@ -1,6 +1,5 @@
 #ifndef VIEW_H
 #define VIEW_H
-#include <vector>
 #include "Definitions.h"
 
 class View{

@@ -1,7 +1,6 @@
 #ifndef SOUND_H
 #define SOUND_H
 
-#include <string>
 #include "SDL_mixer.h"
 
 class SoundDevice;

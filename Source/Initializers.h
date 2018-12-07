@@ -1,7 +1,6 @@
 #ifndef INITIALIZERS_H
 #define INITIALIZERS_H
 
-#include <string>
 #include "Definitions.h"
 class ResourceManager;
 class BodyComponent;

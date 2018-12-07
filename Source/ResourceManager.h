@@ -1,7 +1,6 @@
 #ifndef RESOURCEMANAGER_H
 #define RESOURCEMANAGER_H
 
-#include <memory>
 #include "Definitions.h"
 #include "GraphicsDevice.h"
 #include "InputDevice.h"

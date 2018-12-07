@@ -1,8 +1,6 @@
 #ifndef SOUNDDEVICE_H
 #define SOUNDDEVICE_H
 
-#include <string>
-#include <map>
 #include "Definitions.h"
 #include "SDL_mixer.h"
 

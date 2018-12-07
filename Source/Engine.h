@@ -1,10 +1,6 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include <string>
-#include <vector>
-#include <memory>
-
 #include "Definitions.h"
 #include "Object.h"
 #include "ResourceManager.h"

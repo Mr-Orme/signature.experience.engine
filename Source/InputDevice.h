@@ -3,7 +3,6 @@
 
 #include "Definitions.h"
 #include "SDL.h"
-#include <map>
 
 class InputDevice{
 public:

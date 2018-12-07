@@ -1,10 +1,6 @@
 #ifndef ASSETLIBRARY_H
 #define ASSETLIBRARY_H
 
-#include <map>
-#include <string>
-#include <vector>
-
 #include "Definitions.h"
 #include "ObjectFactory.h"
 #include "PhysicsDevice.h"
