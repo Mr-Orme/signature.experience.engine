@@ -1,5 +1,3 @@
-#include <iostream>
-#include <string>
 #include "ObjectFactory.h"
 #include "Component.h"
 #include "ComponentsList.h"

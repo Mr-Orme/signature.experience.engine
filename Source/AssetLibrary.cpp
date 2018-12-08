@@ -1,5 +1,3 @@
-#include <map>
-
 #include "AssetLibrary.h"
 #include "Texture.h"
 #include "ResourceManager.h"

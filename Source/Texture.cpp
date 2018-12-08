@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Texture.h"
 #include "GraphicsDevice.h"
 

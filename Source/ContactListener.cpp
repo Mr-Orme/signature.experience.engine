@@ -1,4 +1,3 @@
-#include <string>
 #include "ContactListener.h"
 #include "Object.h"
 //#include "ComponentsList.h"

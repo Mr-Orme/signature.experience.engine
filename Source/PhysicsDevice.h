@@ -12,6 +12,7 @@ class BodyComponent;
 
 class PhysicsDevice{
 public:
+	//Tricky trying to get initialize into one of the constructors.
 	PhysicsDevice() {}
 	~PhysicsDevice() {}
 	PhysicsDevice(Position gravity);

@@ -1,5 +1,3 @@
-#include <cmath>
-
 #include "PhysicsDevice.h"
 #include "SpriteComponent.h"
 #include "ContactListener.h"

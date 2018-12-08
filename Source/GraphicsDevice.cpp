@@ -1,4 +1,3 @@
-#include<iostream>
 #include "SDL2_gfxPrimitives.h"
 #include "SDL_mixer.h"
 #include "GraphicsDevice.h"
@@ -14,6 +13,24 @@ GraphicsDevice::GraphicsDevice(Uint32 width, Uint32 height) : SCREEN_WIDTH(width
 
 }
 
+
+GraphicsDevice::~GraphicsDevice()
+{
+	//Free the window
+	SDL_DestroyWindow(screen);
+	screen = nullptr;
+
+	//Free renderer
+	SDL_DestroyRenderer(renderer);
+	renderer = nullptr;
+
+
+	//Quit SDL Subsystems
+	TTF_Quit();
+	IMG_Quit();
+	SDL_Quit();
+
+}
 
 bool GraphicsDevice::initialize(bool fullScreen)
 {
@@ -81,26 +98,6 @@ bool GraphicsDevice::initialize(bool fullScreen)
 
 	return(true);
 
-}
-
-bool GraphicsDevice::ShutDown()
-{
-	//Free the window
-	SDL_DestroyWindow(screen);
-	screen = nullptr;
-
-	//Free renderer
-	SDL_DestroyRenderer(renderer);
-	renderer = nullptr;
-	
-
-	//Quit SDL Subsystems
-	TTF_Quit();
-	IMG_Quit();
-	SDL_Quit();
-
-
-	return(true);
 }
 
 

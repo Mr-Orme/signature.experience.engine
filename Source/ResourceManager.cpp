@@ -1,6 +1,3 @@
-
-#include <iostream>
-#include <memory>
 #include "tinyxml2.h"
 
 #include "ResourceManager.h"

@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "timer.h"
 
 Timer::Timer()

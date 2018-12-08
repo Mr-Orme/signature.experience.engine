@@ -4,15 +4,15 @@
 //**************************************
 //sets all keystates to false. sets initial event to NA
 //NA should be passed in, but can be any valid event.
-bool InputDevice::initialize()
-//**************************************
+
+InputDevice::InputDevice()
 {
 	//========================================
 	//Construct Event System
 	//========================================
 	event = new SDL_Event();
-	if(!event){
-		printf( "SDL Event could not initialize!");
+	if (!event) {
+		printf("SDL Event could not initialize!");
 		exit(1);
 	}
 
@@ -26,7 +26,6 @@ bool InputDevice::initialize()
 	keyStates[InputEvents::SHIFT] = false;
 	keyStates[InputEvents::B] = false;
 	update();
-	return true;
 }
 
 //**************************************

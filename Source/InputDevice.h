@@ -6,7 +6,8 @@
 
 class InputDevice{
 public:
-	bool initialize();
+	InputDevice();
+	//Put initialize into constructor.
 	void update();
 	
 	enum class InputEvents

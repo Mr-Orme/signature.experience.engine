@@ -1,8 +1,6 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-#include <memory>
-
 #include "Component.h"
 #include "Definitions.h"
 

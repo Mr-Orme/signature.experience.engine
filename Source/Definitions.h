@@ -6,7 +6,7 @@
 #include <map>
 #include <string>
 #include <vector>
-
+#include <iostream>
 //TODO:: const correctness. Check to see if consts can be put on pointer parameters and class methods.
 //TODO:: clear out #includes. Make sure every #include is needed in ever file! Cleared out all includes and have put them
 //in definitions

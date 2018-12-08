@@ -25,11 +25,11 @@ public:
 
 	//Constructors and Destructors
 	GraphicsDevice(Uint32, Uint32);
+	~GraphicsDevice();
 
 	//startup and Shutdown
-	//Since these are boolean functions there's no direct conversion to constructor and destructor.
+	//Going to have to get creative here. Shutdown sent to Destructor but initialize is a little bit trickier.
 	bool initialize(bool);
-	bool ShutDown();
 
 	//Rendering functions
 	void Begin();
