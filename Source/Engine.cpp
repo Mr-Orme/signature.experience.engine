@@ -18,7 +18,6 @@ Engine::~Engine()
 {
 	if(engineDevices)
 	{
-		engineDevices -> shutdown();
 		engineDevices = nullptr;
 	}
 }
@@ -29,8 +28,7 @@ bool Engine::initialize()
 //**************************************
 {	
 	reset();
-	engineDevices = make_unique<ResourceManager>();
-	engineDevices->initialize("./Assets/Config/engine.xml");
+	engineDevices = make_unique<ResourceManager>("./Assets/Config/engine.xml");
 	
 	return true;
 }
@@ -75,7 +73,6 @@ void Engine::reset()
 
 {
 	//kill old Resource Manager;
-	if (engineDevices) engineDevices->shutdown();
 	engineDevices = nullptr;
 
 

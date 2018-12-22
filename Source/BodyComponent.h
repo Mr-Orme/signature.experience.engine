@@ -17,27 +17,32 @@ public:
 
 	//TODO:: add more functionality for other things Box2D can do.
 	//Added more functionality and defined functions in cpp file
-	EngineFloat getAngle();
-	Position getPosition();
-	Position getVelocity();
-	EngineInt getWidth();
-	EngineInt getHeight();
-	//added setVelocity and individual X and Y Velocity
-	//Defined functions in the cpp file
-	void setVelocity(Position velocity);
-	void setXVelocity(EngineFloat xVel);
-	void setYVelocity(EngineFloat yVel);
-	void setAngle(EngineFloat angle);
-	//Added changePosition and ability to increase speed. Maybe a float to get current speed and x y positions
-	//Changed changePosition to setPosition
-	void setPosition(Position position);
-	void increaseForwardVelocity(EngineFloat num);
-	void decreaseForwardVelocity(EngineFloat num);
-	float getXPos();
-	float getYPos();
-	//Commented out getSpeed since this is a scalar and not a vector.
-	//float getSpeed();
-	void adjustAngle(EngineFloat adjustAmount);
+	EngineDefs::Float getAngle();
+
+	EngineDefs::Vector getPosition();
+	EngineDefs::Float getXPos();
+	EngineDefs::Float getYPos();
+
+	EngineDefs::Vector getVelocity();
+
+	EngineDefs::Int getWidth();
+	EngineDefs::Int getHeight();
+	
+	void setVelocity(EngineDefs::Vector velocity);
+	void setXVelocity(EngineDefs::Float value);
+	void setYVelocity(EngineDefs::Float value);
+	
+	//
+	void accelerate(EngineDefs::Float force);
+	void deccelerate(EngineDefs::Float force);
+
+	void setAngle(EngineDefs::Float angle);
+	void rotate(EngineDefs::Float degrees);
+
+	void setPosition(EngineDefs::Vector position);
+
+	
+	
 	void linearStop();
 	
 	std::unique_ptr<BodyComponent> joinedWith{ nullptr };

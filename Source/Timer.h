@@ -9,7 +9,7 @@ class Timer
 public:
 	//Initializes variables
 	Timer();
-	bool Initialize(EngineInt);
+	bool Initialize(EngineDefs::Int);
 
 	//The various clock actions
 	void start();
@@ -18,7 +18,7 @@ public:
 	void unpause();
 
 	//Gets the timer's time
-	EngineInt getTicks();
+	EngineDefs::Int getTicks();
 
 	//Checks the status of the timer
 	bool isStarted();
@@ -29,11 +29,11 @@ public:
 
 private:
 	//The clock time when the timer started
-	EngineInt startTicks;
-	EngineFloat mpf; //millisecond per frame
+	EngineDefs::Int startTicks;
+	EngineDefs::Float mpf; //millisecond per frame
 
 	//The ticks stored when the timer was paused
-	EngineInt pausedTicks;
+	EngineDefs::Int pausedTicks;
 
 	//The timer status
 	bool paused;

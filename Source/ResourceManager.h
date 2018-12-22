@@ -13,7 +13,7 @@ class ResourceManager
 {
 public:
 	//TODO:: move initialize to constructor and shutdown to destructor
-	ResourceManager(bool initialize, std::string &assetPath);
+	ResourceManager(std::string assetPath);
 	~ResourceManager();
 	//deleted initialize and shutdown while moving functionality into constructor and destructor.
 	//I feel like since shutdown was deleted if we happen to reference shutdown within another file we may have
@@ -37,7 +37,7 @@ public:
 
 	std::vector<std::unique_ptr<Object>> objects;
 	
-	EngineInt FPS{ 0 };
+	EngineDefs::Int FPS{ 0 };
 
 private:
 	std::vector<std::unique_ptr<Object>> newObjects;

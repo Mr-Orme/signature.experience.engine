@@ -10,11 +10,11 @@ Timer::Timer()
 	mpf = 0.0f;
 }
 
-bool Timer::Initialize(EngineInt fps)
+bool Timer::Initialize(EngineDefs::Int fps)
 {
 	if(fps>0)
 	{
-		mpf = (EngineFloat)1000/fps;
+		mpf = (EngineDefs::Float)1000/fps;
 		return(true);
 	}
 	else{
@@ -109,6 +109,6 @@ void Timer::fpsRegulate()
 	//Pause for a length of time such that frame rate is maintained
 	if(getTicks() < mpf)
 	{
-		SDL_Delay((EngineInt)mpf - getTicks());
+		SDL_Delay((EngineDefs::Int)mpf - getTicks());
 	}
 }

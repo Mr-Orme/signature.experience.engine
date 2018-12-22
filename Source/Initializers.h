@@ -18,46 +18,47 @@ struct SpritePresets
 };
 struct RotateBody
 {
-	EngineFloat torque;
-	EngineFloat maxAngularVelocity;
-	EngineInt radius;
-	Position center;
+	EngineDefs::Float torque;
+	EngineDefs::Float maxAngularVelocity;
+	EngineDefs::Int radius;
+	EngineDefs::Vector center;
 };
 
 enum class BodyShape { Rectangle, Circle };
 enum class BodyType { Static, Kinematic, Dynamic };
 enum class JointType{Revolute, Distance, Prismatic, Wheel, Weld, Pulley, Friction, Gear, Mouse, Rope, None};
+
 struct Joints
 {
 	JointType type;
 	BodyComponent* BodyA;
 	BodyComponent* BodyB;
 	bool CollideConnected;
-	Position AnchorA;
-	Position AnchorB;
-	EngineFloat referenceAngle;
-	EngineFloat JointLimit;
+	EngineDefs::Vector AnchorA;
+	EngineDefs::Vector AnchorB;
+	EngineDefs::Float referenceAngle;
+	EngineDefs::Float JointLimit;
 
 };
 
 struct PhysicsStats
 {
-	EngineFloat spinSpeed{ 0.0f };
+	EngineDefs::Float spinSpeed{ 0.0f };
 	BodyType bodyType{ BodyType::Static };
 	BodyShape bodyShape{BodyShape::Rectangle};
-	EngineFloat density{ 0.0f };
-	EngineFloat friction{ 0.0f };
-	EngineFloat restitution{ 0.0f };
-	EngineFloat angularDamping{ 0.0f };
-	EngineFloat linearDamping{ 0.0f };
-	EngineFloat force{ 0.0f };
+	EngineDefs::Float density{ 0.0f };
+	EngineDefs::Float friction{ 0.0f };
+	EngineDefs::Float restitution{ 0.0f };
+	EngineDefs::Float angularDamping{ 0.0f };
+	EngineDefs::Float linearDamping{ 0.0f };
+	EngineDefs::Float force{ 0.0f };
 	Joints joint;
 	bool physicsOn{ false };
 };
 struct BodyPresets
 {
-	Position position{ 0,0 };
-	EngineFloat angle{ 0.0f };
+	EngineDefs::Vector position{ 0,0 };
+	EngineDefs::Float angle{ 0.0f };
 	PhysicsStats physics;
 	SpriteComponent* sprite{ nullptr };
 };
@@ -67,8 +68,7 @@ struct ObjectFactoryPresets
 	SpritePresets spriteInitializers;
 	BodyPresets bodyInitializers;
 	
-	//TODO: need to update userInputComponent with this!
-	EngineInt health{ 0 };//move to new AssetLibraryGame
+	EngineDefs::Int health{ 0 };//move to new AssetLibraryGame
 	ResourceManager* devices{ nullptr };
 };
 #endif // !INITIALIZERS_H

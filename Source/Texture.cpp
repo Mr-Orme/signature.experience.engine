@@ -10,7 +10,7 @@ Texture::~Texture()
 }
 
 
-Texture::Texture(GraphicsDevice* gDevice, std::string &pathOrText, bool isSprite)
+Texture::Texture(GraphicsDevice* gDevice, const std::string pathOrText, const bool isSprite)
 {
 
 	//Destroy existing texture information
@@ -40,7 +40,7 @@ Texture::Texture(GraphicsDevice* gDevice, std::string &pathOrText, bool isSprite
 			SDL_FreeSurface(surface);
 		}
 	}
-	else 
+	else
 	{
 		this->sprite = SDL_CreateTextureFromSurface(
 			gDevice->getRenderer(),
@@ -51,10 +51,10 @@ Texture::Texture(GraphicsDevice* gDevice, std::string &pathOrText, bool isSprite
 		initialzied = this->sprite != nullptr;
 	}
 
-		//set the height and width from the texture
-		SDL_QueryTexture(sprite, NULL, NULL, &width, &height);
+	//set the height and width from the texture
+	SDL_QueryTexture(sprite, NULL, NULL, &width, &height);
 
-	
+
 }
 
 bool Texture::load(SDL_Texture* texture)
@@ -78,7 +78,7 @@ void Texture::free()
 }
 	   
 
-void Texture::draw(SDL_Renderer* renderer, Position position, EngineFloat angle, SDL_Rect* clip)
+void Texture::draw(SDL_Renderer* renderer, EngineDefs::Vector position, EngineDefs::Float angle, SDL_Rect* clip)
 {
 	if (sprite)
 	{

@@ -12,10 +12,10 @@ BodyComponent::BodyComponent(Object* owner, ResourceManager* devices, BodyPreset
 {
 	//Create fixture.
 	initialized = devices->pDevice->createFixture(this, presets);
-	if (joinedWith)
-	{
-		joinedWith->start();
-	}
+	//if (joinedWith)
+	//{
+	//	joinedWith->start();
+	//}
 }
 //**************************************
 //**************************************
@@ -23,8 +23,7 @@ BodyComponent::BodyComponent(Object* owner, ResourceManager* devices, BodyPreset
 BodyComponent::~BodyComponent()
 //**************************************
 {
-	//TODO:: this is not needed
-	//if(joinedWith) joinedWith->finish(); removed joinedWith recursive wrapper from function
+
 	//remove the physics body
 	if (!devices->pDevice->removeObject(this))
 	{
@@ -49,72 +48,86 @@ Object* BodyComponent::update()
 	return nullptr;
 }
 
-EngineFloat BodyComponent::getAngle()
+EngineDefs::Float BodyComponent::getAngle()
 {
 	return devices->pDevice->getAngle(this);
 }
 
-Position BodyComponent::getPosition()
+EngineDefs::Vector BodyComponent::getPosition()
 {
 	return devices->pDevice->getPosition(this);
 }
-Position BodyComponent::getVelocity()
+EngineDefs::Vector BodyComponent::getVelocity()
 {
 	return devices->pDevice->getVelocity(this);
 }
-EngineInt BodyComponent::getWidth()
+EngineDefs::Int BodyComponent::getWidth()
 {
 	return owner->getComponent<SpriteComponent>()->texture->getWidth();
 }
-EngineInt BodyComponent::getHeight()
+EngineDefs::Int BodyComponent::getHeight()
 {
 	return owner->getComponent<SpriteComponent>()->texture->getHeight();
 }
-void BodyComponent::setVelocity(Position velocity)
+void BodyComponent::setVelocity(EngineDefs::Vector velocity)
 {
-	this->getVelocity = velocity;
+	devices->pDevice->setLinearVelocity(this, velocity);
 }
-void BodyComponent::setXVelocity(EngineFloat xVel)
+void BodyComponent::setXVelocity(EngineDefs::Float value)
 {
-	this->getVelocity->x = xVel;
+	devices->pDevice->setLinearVelocity
+	(
+		this, 
+		{ value, devices->pDevice->getLinearVelocity(this).y }
+	);
 }
-void BodyComponent::setYVelocity(EngineFloat yVel)
+void BodyComponent::setYVelocity(EngineDefs::Float value)
 {
-	this->getVelocity->y = yVel;
+	devices->pDevice->setLinearVelocity
+	(
+		this,
+		{ devices->pDevice->getLinearVelocity(this).x, value }
+	);
 }
-void BodyComponent::setAngle(EngineFloat angle)
+void BodyComponent::setAngle(EngineDefs::Float angle)
 {
 	devices->pDevice->setAngle(this, angle);
 }
 
-void BodyComponent::setPosition(Position position)
+void BodyComponent::setPosition(EngineDefs::Vector position)
 {
-	this->getPosition = position;
+	devices->pDevice->setTransform(this, position, devices->pDevice->getAngle(this));
 }
 
-void BodyComponent::increaseForwardVelocity(EngineFloat num)
+void BodyComponent::accelerate(EngineDefs::Float force)
 {
-	this->getVelocity += num;
+	devices->pDevice->accelerate
+	(
+		this,
+		{
+			force*cos(getAngle() * PI / 180.0f - PI / 2),
+			force*sin(getAngle() * PI / 180.0f - PI / 2)
+		}
+	);
+}
+void BodyComponent::deccelerate(EngineDefs::Float force)
+{
+	accelerate(force*-1);
 }
 
-void BodyComponent::decreaseForwardVelocity(EngineFloat num)
+EngineDefs::Float BodyComponent::getXPos()
 {
-	this->getVelocity -= num;
+	return getPosition().x;
 }
 
-float BodyComponent::getXPos()
+EngineDefs::Float BodyComponent::getYPos()
 {
-	return this->getPosition->x;
+	return getPosition().y;
 }
 
-float BodyComponent::getYPos()
+void BodyComponent::rotate(EngineDefs::Float degrees)
 {
-	return this->getPosition->y;
-}
-
-void BodyComponent::adjustAngle(EngineFloat adjustAmount)
-{
-	setAngle(getAngle() + adjustAmount);
+	setAngle(getAngle() + degrees);
 }
 
 void BodyComponent::linearStop()

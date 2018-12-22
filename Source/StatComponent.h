@@ -11,24 +11,19 @@ class ResourceManager;
 class StatComponent : public Component
 {
 public:
-	StatComponent(Object* owner, ResourceManager* devices, EngineInt health);
-	//added destructor
+	StatComponent(Object* owner, ResourceManager* devices, EngineDefs::Int health);
 	~StatComponent() {};
-	//no need for start
+
 	Object* update() final;
-	//added destructor in finishes' place
 
 	//TODO: move to eventManager when we have one. The event should check for a health stat component.
 	//So there is a killObject method within our ResourceManager.h too, is it related?
 	bool killObject(std::string &deathSprite);
 	bool killObject();
 
-	EngineInt getStat();
-	//Added a string to handle status effects and added EngineInt to handle changes due to status Effects.
+	EngineDefs::Int getStat();
 	std::string name;
-	/*std::string statusEffect = " ";
-	EngineInt buffOrNerf{ 0 };*/
-	EngineInt statistic{ 0 };
+	EngineDefs::Int statistic{ 0 };
 	bool isDead{ false };
 	std::unique_ptr<StatComponent> modifier{ nullptr };
 private:

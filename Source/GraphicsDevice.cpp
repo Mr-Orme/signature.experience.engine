@@ -8,7 +8,7 @@
 
 
 
-GraphicsDevice::GraphicsDevice(Uint32 width, Uint32 height) : SCREEN_WIDTH(width), SCREEN_HEIGHT(height)
+GraphicsDevice::GraphicsDevice(Uint32 width, Uint32 height, bool fullScreen = true) : SCREEN_WIDTH(width), SCREEN_HEIGHT(height)
 {
 
 }
@@ -159,7 +159,7 @@ void GraphicsDevice::draw()
 		
 			
 //!!!!!!!!!!!!!!!!!!!!!!!!!!this needs to be elsewhere!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//	EngineInt spheresFound = 0; //number of spheres found
+//	EngineDefs::Int spheresFound = 0; //number of spheres found
 //	//if we found all the spheres.
 //	if(spheresFound >= 6)
 //	{
@@ -199,7 +199,7 @@ void GraphicsDevice::setView(View * view)
 }
 
 
-bool GraphicsDevice::setFont(std::string &path, EngineInt size, RGBA color)
+bool GraphicsDevice::setFont(const std::string &path, const EngineDefs::Int size, const RGBA color)
 {
 	font = TTF_OpenFont(path.c_str(), size);
 	if( font == nullptr )
@@ -230,7 +230,7 @@ bool GraphicsDevice::setFont(std::string &path, EngineInt size, RGBA color)
 //}
 //**************************************
 //draws a filled circle.
-void GraphicsDevice::drawFilledCircle(Position position, EngineInt radius, RGBA RGBA)
+void GraphicsDevice::drawFilledCircle(EngineDefs::Vector position, EngineDefs::Int radius, RGBA RGBA)
 //**************************************
 {
 	filledCircleRGBA
@@ -246,7 +246,7 @@ void GraphicsDevice::drawFilledCircle(Position position, EngineInt radius, RGBA 
 	);
 }
 
-bool GraphicsDevice::drawBox(Position topLeft, Position bottomRight, RGBA RGBA)
+bool GraphicsDevice::drawBox(EngineDefs::Vector topLeft, EngineDefs::Vector bottomRight, RGBA RGBA)
 {
 	boxRGBA
 	(
@@ -263,17 +263,17 @@ bool GraphicsDevice::drawBox(Position topLeft, Position bottomRight, RGBA RGBA)
 	return true;
 }
 
-void GraphicsDevice::drawOverlay(Position topLeft, Position bottomRight, RGBA boxBackgroundColor, RGBA boxBorderColor, std::map<Texture*, Position> objects)
+void GraphicsDevice::drawOverlay(EngineDefs::Vector topLeft, EngineDefs::Vector bottomRight, RGBA boxBackgroundColor, RGBA boxBorderColor, std::map<Texture*, EngineDefs::Vector> objects)
 {
 	overlay newOverlay = {topLeft, bottomRight, boxBackgroundColor, boxBorderColor, objects};
 	overlays.push_back(newOverlay);
 }
 
-EngineFloat GraphicsDevice::Center(EngineFloat centerOn, EngineFloat width)
+EngineDefs::Float GraphicsDevice::Center(EngineDefs::Float centerOn, EngineDefs::Float width)
 {
 			
 			
-	EngineFloat point = (centerOn - width)/2;
+	EngineDefs::Float point = (centerOn - width)/2;
 			
 	return point;
 }

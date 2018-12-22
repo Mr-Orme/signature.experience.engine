@@ -17,6 +17,7 @@
 #include "SDL_ttf.h"
 #include "Definitions.h"
 #include "View.h"
+
 class Texture;
 
 class GraphicsDevice
@@ -24,7 +25,8 @@ class GraphicsDevice
 public:
 
 	//Constructors and Destructors
-	GraphicsDevice(Uint32, Uint32);
+	GraphicsDevice(Uint32, Uint32, bool fullScreen);
+	GraphicsDevice() =delete;
 	~GraphicsDevice();
 
 	//startup and Shutdown
@@ -36,35 +38,47 @@ public:
 	void draw();
 	void Present();
 
-	void drawFilledCircle(Position position, EngineInt radius, RGBA RGBA);
-	bool drawBox(Position topLeft, Position bottomRight, RGBA RGBA);
+	void drawFilledCircle
+	(
+		EngineDefs::Vector position, 
+		EngineDefs::Int radius, 
+		RGBA RGBA
+	);
+	bool drawBox
+	(
+		EngineDefs::Vector topLeft, 
+		EngineDefs::Vector bottomRight, 
+		RGBA RGBA
+	);
 	
 	void drawOverlay
-		(
-			//round corner box that contains overlay
-			Position topLeft, Position bottomRight, RGBA boxBackgroundColor, RGBA boxBorderColor, 
-			//any objects drawn in stated box
-			//at given position
-			std::map<Texture*, Position> objects
-			
-		);
+	(
+		//round corner box that contains overlay
+		EngineDefs::Vector topLeft, 
+		EngineDefs::Vector bottomRight, 
+		RGBA boxBackgroundColor, 
+		RGBA boxBorderColor,
+		//any objects drawn in stated box
+		//at given position
+		std::map<Texture*, EngineDefs::Vector> objects			
+	);
 
 	//getters
 	SDL_Renderer* getRenderer();
 	//SDL_Window* getWindow();
-	EngineInt getScreenWidth(){return SCREEN_WIDTH;}
-	EngineInt getScreenHeight(){return SCREEN_HEIGHT;}
+	EngineDefs::Int getScreenWidth(){return SCREEN_WIDTH;}
+	EngineDefs::Int getScreenHeight(){return SCREEN_HEIGHT;}
 	View* getView();
 	
 	//setters
 	void setView(View* view);
-	bool setFont(std::string &path, EngineInt size, RGBA color);
+	bool setFont(const std::string &path, const EngineDefs::Int size, const RGBA color);
 	
 	TTF_Font* font{ nullptr };
 	SDL_Color color{ 0,0,0,255 };
 
 private:
-	EngineFloat Center(EngineFloat centerOn, EngineFloat width);
+	EngineDefs::Float Center(EngineDefs::Float centerOn, EngineDefs::Float width);
 	//Parameters
 	const Uint32 SCREEN_WIDTH{ 0 };
 	const Uint32 SCREEN_HEIGHT{ 0 };
@@ -77,11 +91,11 @@ private:
 
 	struct overlay
 	{
-		Position topLeft{ 0 };
-		Position bottomRight{ 0 };
+		EngineDefs::Vector topLeft{ 0 };
+		EngineDefs::Vector bottomRight{ 0 };
 		RGBA boxBackgroundColor{ 0,0,0,0 };
 		RGBA boxBorderColor{ 0,0,0,0 };
-		std::map<Texture*, Position> objects;
+		std::map<Texture*, EngineDefs::Vector> objects;
 	};
 
 	std::vector<overlay> overlays;

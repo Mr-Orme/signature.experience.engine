@@ -10,6 +10,7 @@
 
 using namespace std;
 
+//TODO:: Make this into a conversion constructor!
 SpriteComponent* createSpriteComponent(Object* newObject, ResourceManager* devices, tinyxml2::XMLElement * componentElement)
 {
 	bool isSprite{ false };
@@ -27,6 +28,7 @@ SpriteComponent* createSpriteComponent(Object* newObject, ResourceManager* devic
 	}
 	return new SpriteComponent(newObject, initializers);
 }
+//TODO:: Make this into a conversion constructor!!
 BodyComponent* createBodyComponent(Object* newObject, ResourceManager* devices, tinyxml2::XMLElement * componentElement, SpriteComponent* sprite = nullptr)
 {
 	BodyPresets initializers;
@@ -93,8 +95,7 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 		string componentName = componentElement->Attribute("name");
 		if (componentName == "Sprite")
 		{
-			newObject->AddComponent(createSpriteComponent(newObject, devices, componentElement));
-			
+			newObject->AddComponent(createSpriteComponent(newObject, devices, componentElement));			
 		}
 		else if (componentName == "Body")
 		{
@@ -104,10 +105,10 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 				sprite->spriteBody = newObject->getComponent<BodyComponent>();
 			}
 		}
-		else if (componentName == "Health")
+		else if (componentName == "Stat")
 		{
 
-			newObject->AddComponent(new HealthComponent(newObject, devices, stoi(componentElement->Attribute("health"))));
+			newObject->AddComponent(new StatComponent(newObject, devices, stoi(componentElement->Attribute("health"))));
 
 		}
 		else if (componentName == "Input")

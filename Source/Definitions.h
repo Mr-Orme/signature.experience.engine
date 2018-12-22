@@ -13,63 +13,67 @@
 //TODO:: Move initialization to the constructor and stopping/finishing to the destructor.
 //TODO:: Move default initialization of member variables to .h file using {} for ALL classes!
 //Basic Types
-typedef unsigned int	Uint32;
-typedef float			EngineFloat;
-typedef Uint32			EngineInt;
 
-struct Position
+namespace EngineDefs
 {
-	EngineFloat x;
-	EngineFloat y;
-	
-	friend Position operator+ (const Position & src1, const Position & src2)
-	{
-		return { src1.x + src2.x, src1.y + src2.y };
-	}
-	friend Position operator- (const Position & src1, const Position & src2)
-	{
-		return { src1.x - src2.x, src1.y - src2.y };
-	}
-	friend bool operator> (const Position & src1, int src2)
-	{
-		if (src1.x > src2 && src1.y > src2)
-		{
-			return true;
-		}
-		return false;
-	}
-	friend bool operator< (const Position & src1, int src2)
-	{
-		if (src1.x < src2 && src1.y < src2)
-		{
-			return true;
-		}
-		return false;
-	}
-	friend bool operator== (const Position & src1, const Position & src2)
-	{
-		if (src1.x == src2.x && src1.y == src2.y)
-		{
-			return true;
-		}
-		return false;
-	}
-	friend Position abs(Position & src)
-	{
-		return { abs((float)src.x),abs((float)src.y) };
-	}
-};
+	typedef unsigned int	Uint32;
+	typedef float			Float;
+	typedef Uint32			Int;
 
+	struct Vector
+	{
+		Float x;
+		Float y;
 
-struct RGBA
-{
-	EngineInt R;
-	EngineInt G;
-	EngineInt B;
-	EngineInt A;
-};
+		friend Vector operator+ (const Vector & src1, const Vector & src2)
+		{
+			return { src1.x + src2.x, src1.y + src2.y };
+		}
+		friend Vector operator- (const Vector & src1, const Vector & src2)
+		{
+			return { src1.x - src2.x, src1.y - src2.y };
+		}
+		friend bool operator> (const Vector & src1, int src2)
+		{
+			if (src1.x > src2 && src1.y > src2)
+			{
+				return true;
+			}
+			return false;
+		}
+		friend bool operator< (const Vector & src1, int src2)
+		{
+			if (src1.x < src2 && src1.y < src2)
+			{
+				return true;
+			}
+			return false;
+		}
+		friend bool operator== (const Vector & src1, const Vector & src2)
+		{
+			if (src1.x == src2.x && src1.y == src2.y)
+			{
+				return true;
+			}
+			return false;
+		}
+		friend Vector abs(Vector & src)
+		{
+			return { std::abs((float)src.x),std::abs((float)src.y) };
+		}
+	};
 
-//Constants
-const EngineFloat PI = 3.14159f;
+}
+	struct RGBA
+	{
+		EngineDefs::Int R;
+		EngineDefs::Int G;
+		EngineDefs::Int B;
+		EngineDefs::Int A;
+	};
+
+	//Constants
+	const EngineDefs::Float PI = 3.14159f;
+
 
 #endif

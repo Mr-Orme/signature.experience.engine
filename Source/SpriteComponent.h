@@ -18,9 +18,9 @@ public:
 	//finish functionality added to destructor
 
 	void draw();
-	void draw(Position position, EngineFloat angle);
+	void draw(EngineDefs::Vector position, EngineDefs::Float angle);
 	
-	Position getViewAdjustedPosition();
+	EngineDefs::Vector getViewAdjustedPosition();
 		
 	Texture* texture{ nullptr };
 	std::unique_ptr<SpriteComponent> sprite{ nullptr };

@@ -11,7 +11,7 @@ class Texture{
 		
 		//Loads image at specified path
 		//passing string value by reference
-		Texture(GraphicsDevice* gDevice, std::string &pathOrText, bool isSprite = true);
+		Texture(GraphicsDevice* gDevice, const std::string pathOrText, const bool isSprite = true);
 
 		//Deallocates memory
         ~Texture();
@@ -24,7 +24,7 @@ class Texture{
 
         //Renders texture at given point
 		
-		void draw(SDL_Renderer* renderer, Position position, EngineFloat angle, SDL_Rect* clip = NULL );
+		void draw(SDL_Renderer* renderer, EngineDefs::Vector position, EngineDefs::Float angle, SDL_Rect* clip = NULL );
 		int getWidth() { return width; }
 		int getHeight() { return height; }
 		//Image dimensions

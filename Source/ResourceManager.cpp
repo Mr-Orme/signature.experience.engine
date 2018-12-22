@@ -1,3 +1,4 @@
+#include <string>
 #include "tinyxml2.h"
 
 #include "ResourceManager.h"
@@ -25,12 +26,13 @@ inline bool createThisDevice(tinyxml2::XMLElement* createMe)
 	return create;
 }
 //Made initialize an argument to be set to true or false within the constructor.
-ResourceManager::ResourceManager(bool initialize, std::string &assetPath)
+ResourceManager::ResourceManager(std::string assetPath)
 {
 	tinyxml2::XMLDocument levelConfig;
 	if (!levelConfig.LoadFile(assetPath.c_str()) == tinyxml2::XML_SUCCESS)
 	{
-		initialize = false;
+		printf("Bad File Path");
+		exit(1);
 	};
 
 	tinyxml2::XMLElement* levelRoot = levelConfig.FirstChildElement();//Level
@@ -44,7 +46,7 @@ ResourceManager::ResourceManager(bool initialize, std::string &assetPath)
 	//========================================
 	//Construct Device Manager
 	//========================================
-	gDevice = std::make_unique<GraphicsDevice>(screenWidth, screenHeight);
+	gDevice = std::make_unique<GraphicsDevice>(screenWidth, screenHeight, true);
 	if (!gDevice->initialize(true))
 	{
 		printf("Graphics Device could not Initialize!");
@@ -53,19 +55,19 @@ ResourceManager::ResourceManager(bool initialize, std::string &assetPath)
 
 	if (tinyxml2::XMLElement* fontConfig = levelElement->FirstChildElement(); fontConfig)
 	{
-		std::unique_ptr<RGBA> fontColor = std::make_unique<RGBA>();
+		RGBA fontColor;
 
-		fontConfig->QueryIntAttribute("R", (int*)&fontColor.get()->R);
-		fontConfig->QueryIntAttribute("G", (int*)&fontColor.get()->G);
-		fontConfig->QueryIntAttribute("B", (int*)&fontColor.get()->B);
-		fontConfig->QueryIntAttribute("A", (int*)&fontColor.get()->A);
+		fontConfig->QueryIntAttribute("R", (int*)&fontColor.R);
+		fontConfig->QueryIntAttribute("G", (int*)&fontColor.G);
+		fontConfig->QueryIntAttribute("B", (int*)&fontColor.B);
+		fontConfig->QueryIntAttribute("A", (int*)&fontColor.A);
 
 		int fontSize;
 		fontConfig->QueryIntAttribute("size", &fontSize);
 
 		string fontPath = fontConfig->Attribute("path");
 
-		gDevice->setFont(fontPath, fontSize, *fontColor);
+		gDevice->setFont(fontPath, fontSize, fontColor);
 	}
 
 	levelElement = levelElement->NextSiblingElement();//FPS
@@ -87,11 +89,6 @@ ResourceManager::ResourceManager(bool initialize, std::string &assetPath)
 	{
 		//TODO:: load inputs from file.
 		iDevice = std::make_unique<InputDevice>();
-		if (!iDevice->initialize())
-		{
-			printf("Input Device could not initialize!");
-			exit(1);
-		}
 	}
 
 	//========================================
@@ -100,7 +97,7 @@ ResourceManager::ResourceManager(bool initialize, std::string &assetPath)
 	deviceConfig = deviceConfig->NextSiblingElement("Physics");
 	if (createThisDevice(deviceConfig))
 	{
-		Position gravity{ 0, 0 };
+		EngineDefs::Vector gravity{ 0, 0 };
 		deviceConfig->QueryFloatAttribute("gravityX", &gravity.x);
 		deviceConfig->QueryFloatAttribute("gravityY", &gravity.y);
 		pDevice = std::make_unique<PhysicsDevice>(gravity);
@@ -194,11 +191,10 @@ ResourceManager::ResourceManager(bool initialize, std::string &assetPath)
 	//{
 	//	pDevice -> getWorld() -> setDebugdraw(debugdraw);
 	//}
-	initialize = true;
 }
 bool ResourceManager::killObject(Object* butAScratch)
 {
-
+	return false;
 }
 ResourceManager::~ResourceManager()
 {

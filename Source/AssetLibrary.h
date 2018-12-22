@@ -20,11 +20,11 @@ public:
 	~AssetLibrary() {};
 	bool initialize(ResourceManager* devices);
 	//Will convert all string values to pass by reference.
-	Texture* getArtAsset(std::string &name);
-	bool addArtAsset(std::string &name, std::string &path);	
+	Texture* getArtAsset(std::string name);
+	bool addArtAsset(std::string name, std::string path);	
 	
-	bool addSoundEffect(std::string &name, std::string &path);
-	bool addBackgroundMusic(std::string &name, std::string &path);
+	bool addSoundEffect(std::string name, std::string path);
+	bool addBackgroundMusic(std::string name, std::string path);
 
 	SoundEffect* playSoundEffect(std::string &name);
 	BackgroundMusic* playBackgroundMusic(std::string &name);
@@ -34,9 +34,9 @@ public:
 
 private:
 	//Will pass string values to pass by reference
-	std::map<std::string&, std::unique_ptr<Texture>> artLibrary;	
-	std::map<std::string&, std::unique_ptr<SoundEffect> > soundEffectLibrary;
-	std::map<std::string&, std::unique_ptr<BackgroundMusic> > musicLibrary;
+	std::map<std::string, std::unique_ptr<Texture>> artLibrary;	
+	std::map<std::string, std::unique_ptr<SoundEffect> > soundEffectLibrary;
+	std::map<std::string, std::unique_ptr<BackgroundMusic> > musicLibrary;
 	ResourceManager* devices{ nullptr };
 
 };

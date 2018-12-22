@@ -4,7 +4,7 @@
 
 //**************************************
 //set initial values
-bool View::initialize(Position position)
+bool View::initialize(EngineDefs::Vector position)
 //**************************************
 {
 	this->position = position;

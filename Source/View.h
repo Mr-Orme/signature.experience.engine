@@ -5,10 +5,10 @@
 class View{
 public:
 
-	bool initialize(Position position);
+	bool initialize(EngineDefs::Vector position);
 	bool update();
 	
-	Position position;
+	EngineDefs::Vector position;
 
 };
 
