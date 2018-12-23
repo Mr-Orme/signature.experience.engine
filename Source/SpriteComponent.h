@@ -3,6 +3,7 @@
 
 #include "Component.h"
 #include "Definitions.h"
+#include "tinyxml2.h"
 
 class Texture;
 

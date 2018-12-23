@@ -10,7 +10,7 @@ void Listner::addCallBack(ICallBack * callBack)
 void Listner::removeCallBack(const ICallBack * callBack)
 {
 	if	(
-			auto toRemove = std::search(callBacks.begin(), callBacks.end(), callBack); 
+			auto toRemove = std::find(callBacks.begin(), callBacks.end(), callBack); 
 			toRemove != callBacks.end()
 		)
 	{

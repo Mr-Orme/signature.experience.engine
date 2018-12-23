@@ -3,11 +3,11 @@
 #include <map>
 #include <memory>
 
-class Listner;
+#include "Listner.h"
 class EventHandler
 {
 public:
-	enum class Event{Notification, SoundEffect, NumEvents};
+	enum class Event{CreateObject, Notification, SoundEffect, NumEvents};
 	void notify(Event event);
 	Listner* getListner(Event event);
 private:
