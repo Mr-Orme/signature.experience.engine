@@ -11,7 +11,6 @@ StatComponent::StatComponent(Object* owner, ResourceManager* devices, EngineDefs
 	this->devices = devices;
 	//if statistic will contain health then set input health to our current health.
 	this->statistic = health;
-	initialized = devices && health;
 }
 
 

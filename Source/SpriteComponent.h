@@ -10,6 +10,7 @@ class SpriteComponent : public Component
 {
 public:
 	SpriteComponent(Object* owner, const SpritePresets& presets);
+	SpriteComponent(Object* owner, ResourceManager* devices, tinyxml2::XMLElement* componentElement);
 	//Added destructor
 	~SpriteComponent();
 

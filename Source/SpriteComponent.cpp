@@ -13,7 +13,21 @@ SpriteComponent::SpriteComponent(Object* owner, const SpritePresets& presets):Co
 {
 	this->devices = presets.Devices;
 	this->texture = presets.spriteTexture;
-	initialized = (devices && texture);
+	//initialized = (devices && texture);
+}
+
+SpriteComponent::SpriteComponent(Object * owner, ResourceManager * devices, tinyxml2::XMLElement * componentElement):Component(owner), devices(devices)
+{
+	bool isSprite{ false };
+	componentElement->QueryBoolAttribute("sprite", &isSprite);
+	if (isSprite)
+	{
+		texture = devices->assetLibrary->getArtAsset(componentElement->Attribute("asset"));
+	}
+	else
+	{
+		texture = new Texture(devices->gDevice.get(), componentElement->Attribute("text"), false);
+	}
 }
 
 SpriteComponent::~SpriteComponent()

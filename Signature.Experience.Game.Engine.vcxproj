@@ -154,10 +154,14 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
   <ItemGroup>
     <ClCompile Include="Source\AssetLibrary.cpp" />
     <ClCompile Include="Source\BodyComponent.cpp" />
+    <ClCompile Include="Source\EventHandler.cpp" />
+    <ClCompile Include="Source\ICallBack.cpp" />
     <ClCompile Include="Source\Component.cpp" />
     <ClCompile Include="Source\ContactListener.cpp" />
     <ClCompile Include="Source\Engine.cpp" />
     <ClCompile Include="Source\GraphicsDevice.cpp" />
+    <ClCompile Include="Source\Listner.cpp" />
+    <ClCompile Include="Source\NotificationEventComponent.cpp" />
     <ClCompile Include="Source\StatComponent.cpp" />
     <ClCompile Include="Source\InputDevice.cpp" />
     <ClCompile Include="Source\Object.cpp" />
@@ -177,12 +181,16 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
   <ItemGroup>
     <ClInclude Include="Source\AssetLibrary.h" />
     <ClInclude Include="Source\BodyComponent.h" />
+    <ClInclude Include="Source\EventHandler.h" />
+    <ClInclude Include="Source\ICallBack.h" />
     <ClInclude Include="Source\Component.h" />
     <ClInclude Include="Source\ComponentsList.h" />
     <ClInclude Include="Source\ContactListener.h" />
     <ClInclude Include="Source\Definitions.h" />
     <ClInclude Include="Source\Engine.h" />
     <ClInclude Include="Source\GraphicsDevice.h" />
+    <ClInclude Include="Source\Listner.h" />
+    <ClInclude Include="Source\NotificationEventComponent.h" />
     <ClInclude Include="Source\StatComponent.h" />
     <ClInclude Include="Source\Initializers.h" />
     <ClInclude Include="Source\InputDevice.h" />

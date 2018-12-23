@@ -11,7 +11,8 @@
 BodyComponent::BodyComponent(Object* owner, ResourceManager* devices, BodyPresets presets):Component(owner), devices(devices)
 {
 	//Create fixture.
-	initialized = devices->pDevice->createFixture(this, presets);
+	//initialized =
+	devices->pDevice->createFixture(this, presets);
 	//if (joinedWith)
 	//{
 	//	joinedWith->start();

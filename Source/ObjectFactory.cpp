@@ -7,27 +7,13 @@
 #include "Object.h"
 #include "AssetLibrary.h"
 #include "Initializers.h"
+#include "Listner.h"
+
 
 using namespace std;
 
 //TODO:: Make this into a conversion constructor!
-SpriteComponent* createSpriteComponent(Object* newObject, ResourceManager* devices, tinyxml2::XMLElement * componentElement)
-{
-	bool isSprite{ false };
-	componentElement->QueryBoolAttribute("sprite", &isSprite);
 
-	SpritePresets initializers;
-	initializers.Devices = devices;
-	if (isSprite)
-	{
-		initializers.spriteTexture = devices->assetLibrary->getArtAsset(componentElement->Attribute("asset"));
-	}
-	else
-	{
-		initializers.spriteTexture = new Texture(devices->gDevice.get(), componentElement->Attribute("text"), false);
-	}
-	return new SpriteComponent(newObject, initializers);
-}
 //TODO:: Make this into a conversion constructor!!
 BodyComponent* createBodyComponent(Object* newObject, ResourceManager* devices, tinyxml2::XMLElement * componentElement, SpriteComponent* sprite = nullptr)
 {
@@ -95,7 +81,7 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 		string componentName = componentElement->Attribute("name");
 		if (componentName == "Sprite")
 		{
-			newObject->AddComponent(createSpriteComponent(newObject, devices, componentElement));			
+			newObject->AddComponent(new SpriteComponent(newObject, devices, componentElement));			
 		}
 		else if (componentName == "Body")
 		{
@@ -116,6 +102,40 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 			newObject->AddComponent(new UserInputComponent(newObject,devices));
 
 		}
+		else if (componentName == "Notification")
+		{
+			newObject->AddComponent(new NotificationEventComponent(newObject, devices, componentElement));
+			/*Todo:: This needs a body component, just like a sprite.
+			It's body component determines where the notification is displayed
+			need a triggerComponent. When collision detection detects collision with a trigger component, the event is sent
+			to the eventHandler.
+			class TriggerComponent
+			{
+			public:
+				EventHandler::Event
+			};
+			BUT HOW DO I KNOW WHICH NOTIFICATION??? Do I need to store the trigger in the event?
+			Pass trigger with call to event handler? So, yes, must store trigger in notification! If it is multi-inherited
+			with a component, then more information can be sent... perhaps also send the object collided with? 
+			Do I need to create a struct of all possible event information to pass around???
+			This should take care of all collision events, maybe even input events??? death events???
+			struct EventInfo
+			{
+				Object* primaryObject;
+				Object* secondaryObject;
+			};
+			Therefore, notifications need a trigger object created at the same time!. Can trigger multiple notifications this way
+			Even if most notifications are one off!
+			Trigger can handle all events where there is a collision
+				Trigger, can handle a sound event, collision detector passes in two objects colliding.. Primary is player (has userInputComponent). 
+					each callBack can decide to play or not. 
+				Trigger can handle a item pick up
+				Trigger can handle battle damage
+			can trigger be used with keypresses???? Combined with UserInputComponent?????
+			*/
+			devices->eventHandler->getListner(EventHandler::Event::Notification)->
+				addCallBack(newObject->getComponent<NotificationEventComponent>());
+		}
 		else if (componentName == "Joint")
 		{
 			for (
@@ -128,7 +148,7 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 				JointParams->QueryIntAttribute("jointNumber", &jointNumber);
 				
 				tinyxml2::XMLElement* jointComponent = JointParams->FirstChildElement();
-				SpriteComponent* sprite{ createSpriteComponent(newObject, devices, jointComponent) };
+				SpriteComponent* sprite{ new SpriteComponent(newObject, devices, jointComponent) };
 				
 				jointComponent = jointComponent->NextSiblingElement();
 				BodyComponent* body{ createBodyComponent(newObject, devices, jointComponent, sprite) };

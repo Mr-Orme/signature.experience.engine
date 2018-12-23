@@ -9,15 +9,13 @@ class Component
 {
 public:
 	Component(Object* owner);
+	Component() = delete;
 	~Component();
-	void OwnerDestroyed();
+
 	Object* getOwner() const;
 
-	//deleted pure virtual function start
 	virtual Object* update()=0;
-	//deleted pure virtual function finish
 	
-	bool initialized{ false };
 protected:
 	Object * owner{ nullptr };
 	

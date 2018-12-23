@@ -28,6 +28,12 @@
     <Filter Include="ThirdParty">
       <UniqueIdentifier>{4d688bcd-1159-4837-9d05-6c0a73e78f5b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Devices\EventHandler">
+      <UniqueIdentifier>{b5bfa70a-739d-4a8d-bd2a-59899b07c894}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Devices\EventHandler">
+      <UniqueIdentifier>{883c147e-6ab9-4cb8-a28c-7cca2f0fbda4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ContactListener.cpp">
@@ -91,6 +97,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\StatComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EventHandler.cpp">
+      <Filter>Source Files\Devices\EventHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Listner.cpp">
+      <Filter>Source Files\Devices\EventHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ICallBack.cpp">
+      <Filter>Source Files\Devices\EventHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NotificationEventComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -162,6 +180,18 @@
       <Filter>Header Files\Devices</Filter>
     </ClInclude>
     <ClInclude Include="Source\StatComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EventHandler.h">
+      <Filter>Header Files\Devices\EventHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Listner.h">
+      <Filter>Header Files\Devices\EventHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ICallBack.h">
+      <Filter>Header Files\Devices\EventHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NotificationEventComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>

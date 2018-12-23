@@ -8,6 +8,7 @@
 #include "SoundDevice.h"
 #include "AssetLibrary.h"
 #include "ObjectFactory.h"
+#include "EventHandler.h"
 
 class ResourceManager
 {
@@ -36,6 +37,7 @@ public:
 	std::unique_ptr<ObjectFactory> factory{ nullptr };
 
 	std::vector<std::unique_ptr<Object>> objects;
+	std::unique_ptr<EventHandler> eventHandler{ nullptr };
 	
 	EngineDefs::Int FPS{ 0 };
 

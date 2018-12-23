@@ -52,7 +52,7 @@ ResourceManager::ResourceManager(std::string assetPath)
 		printf("Graphics Device could not Initialize!");
 		exit(1);
 	}
-
+	eventHandler = make_unique<EventHandler>();
 	if (tinyxml2::XMLElement* fontConfig = levelElement->FirstChildElement(); fontConfig)
 	{
 		RGBA fontColor;
