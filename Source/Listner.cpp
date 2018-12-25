@@ -18,10 +18,10 @@ void Listner::removeCallBack(const ICallBack * callBack)
 	}
 }
 
-void Listner::eventTriggered()
+void Listner::eventTriggered(void* data)
 {
 	for (auto callBack : callBacks)
 	{
-		callBack->triggered();
+		callBack->triggered(data);
 	}
 }

@@ -8,7 +8,7 @@ class Listner
 public:
 	void addCallBack(ICallBack* callBack);
 	void removeCallBack(const ICallBack* callBack);
-	void eventTriggered();
+	void eventTriggered(void* data = nullptr);
 private:
 	std::vector<ICallBack*> callBacks;
 };

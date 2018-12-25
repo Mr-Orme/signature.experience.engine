@@ -1,7 +1,15 @@
 #include "EventHandler.h"
 #include "Listner.h"
 
-void EventHandler::notify(Event event)
+EventHandler::EventHandler()
+{
+	for (int currEvent = 0; currEvent < (int)Event::NumEvents; currEvent++)
+	{
+		listners.insert_or_assign((Event)currEvent, std::make_unique<Listner>());
+	}
+}
+
+void EventHandler::notify(Event event, void* data)
 {
 	if (auto listnerIter = listners.find(event); listnerIter != listners.end())
 	{

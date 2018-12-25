@@ -41,7 +41,7 @@ bool Engine::run()
 {
 
 	//check to see if we have quit;
-	if (engineDevices->iDevice->keyStates[InputDevice::InputEvents::QUIT])
+	if (engineDevices->iDevice->keyStates[InputDevice::UserInputs::QUIT])
 	{
 		return false;
 	}

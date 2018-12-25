@@ -4,7 +4,7 @@
 class ICallBack
 {
 public:
-	virtual void triggered() = 0;
+	virtual void triggered(void* data = nullptr) = 0;
 };
 #endif // !I_CALL_BACK_H
 /*

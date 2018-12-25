@@ -7,8 +7,14 @@
 class EventHandler
 {
 public:
-	enum class Event{CreateObject, Notification, SoundEffect, NumEvents};
-	void notify(Event event);
+	EventHandler();
+	enum class Event{
+		CreateObject, 
+		Notification, 
+		SoundEffect, 
+		UserInput,
+		NumEvents};
+	void notify(Event event, void* data);
 	Listner* getListner(Event event);
 private:
 	void addListner(Event event);

@@ -10,7 +10,7 @@ public:
 	//Put initialize into constructor.
 	void update();
 	
-	enum class InputEvents
+	enum class UserInputs
 	{
 		NA,
 		UP,
@@ -19,14 +19,18 @@ public:
 		RIGHT,
 		SPACE,
 		SHIFT,
+		MOUSE_MOVE,
+		LEFT_CLICK,
+		RIGHT_CLICK,
+		DOUBLE_CLICK,
 		B,
 		QUIT,
 		NUM_EVENTS
 	};
 
-	std::map<InputEvents, bool> keyStates;
+	std::map<UserInputs, bool> keyStates;
 private:
-	InputEvents Translate(SDL_Event* event);
+	UserInputs Translate(SDL_Event* event);
 	SDL_Event* event {nullptr};
 	
 };

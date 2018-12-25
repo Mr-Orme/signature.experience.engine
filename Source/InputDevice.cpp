@@ -16,15 +16,15 @@ InputDevice::InputDevice()
 		exit(1);
 	}
 
-	keyStates[InputEvents::NA] = false;
-	keyStates[InputEvents::DOWN] = false;
-	keyStates[InputEvents::UP] = false;
-	keyStates[InputEvents::LEFT] = false;
-	keyStates[InputEvents::RIGHT] = false;
-	keyStates[InputEvents::SPACE] = false;
-	keyStates[InputEvents::QUIT] = false;
-	keyStates[InputEvents::SHIFT] = false;
-	keyStates[InputEvents::B] = false;
+	keyStates[UserInputs::NA] = false;
+	keyStates[UserInputs::DOWN] = false;
+	keyStates[UserInputs::UP] = false;
+	keyStates[UserInputs::LEFT] = false;
+	keyStates[UserInputs::RIGHT] = false;
+	keyStates[UserInputs::SPACE] = false;
+	keyStates[UserInputs::QUIT] = false;
+	keyStates[UserInputs::SHIFT] = false;
+	keyStates[UserInputs::B] = false;
 	update();
 }
 
@@ -33,7 +33,7 @@ InputDevice::InputDevice()
 void InputDevice::update()
 //**************************************
 {
-	InputEvents gEvent;
+	UserInputs gEvent;
 	if(SDL_PollEvent(event))
 	{
 		//updates the proper key state based on the event that was passed in
@@ -50,7 +50,7 @@ void InputDevice::update()
 			keyStates.find(gEvent) -> second = false;
 			break;
 		case SDL_QUIT:
-			keyStates.find(InputEvents::QUIT) -> second = true;
+			keyStates.find(UserInputs::QUIT) -> second = true;
 			break;
 		default:
 			break;
@@ -60,35 +60,35 @@ void InputDevice::update()
 
 //**************************************
 //converts the SDL event to a game event
-InputDevice::InputEvents InputDevice::Translate(SDL_Event* event)
+InputDevice::UserInputs InputDevice::Translate(SDL_Event* event)
 //**************************************
 {
 	//This switch is here in case we want to add other events, such as mouse events.
 	switch(event->key.keysym.sym)
 		{
 		case SDLK_LEFT:
-			return InputEvents::LEFT;
+			return UserInputs::LEFT;
 			break;
 		case SDLK_RIGHT:
-			return InputEvents::RIGHT;
+			return UserInputs::RIGHT;
 			break;
 		case SDLK_UP:
-			return InputEvents::UP;
+			return UserInputs::UP;
 			break;
 		case SDLK_DOWN:
-			return InputEvents::DOWN;
+			return UserInputs::DOWN;
 			break;	
 		case SDLK_SPACE:
-			return InputEvents::SPACE;
+			return UserInputs::SPACE;
 			break;
 		case SDLK_RSHIFT:
 		case SDLK_LSHIFT:
-			return InputEvents::SHIFT;
+			return UserInputs::SHIFT;
 			break;
 		case SDLK_b:
-			return InputEvents::B;
+			return UserInputs::B;
 			break;
 		}
 
-	return InputEvents::NA;
+	return UserInputs::NA;
 }

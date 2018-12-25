@@ -105,11 +105,11 @@
     <ClCompile Include="Source\Listner.cpp">
       <Filter>Source Files\Devices\EventHandler</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ICallBack.cpp">
-      <Filter>Source Files\Devices\EventHandler</Filter>
-    </ClCompile>
     <ClCompile Include="Source\NotificationEventComponent.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BodyCallBack.cpp">
+      <Filter>Source Files\Devices\EventHandler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +193,12 @@
     </ClInclude>
     <ClInclude Include="Source\NotificationEventComponent.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\IEventTrigger.h">
+      <Filter>Header Files\Devices\EventHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BodyCallBack.h">
+      <Filter>Header Files\Devices\EventHandler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
