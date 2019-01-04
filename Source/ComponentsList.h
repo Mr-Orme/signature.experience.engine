@@ -6,11 +6,10 @@
 */
 #include "Component.h"
 #include "BodyComponent.h"
-//Changed from HealthComponent to StatComponent
 #include "StatComponent.h"
 #include "SpriteComponent.h"
 
-#include "UserInputComponent.h"
+#include "UserInputTriggerComponent.h"
 #include "NotificationEventComponent.h"
 //#include "BackpackComponent.h"
 //#include "InventoryComponent.h"

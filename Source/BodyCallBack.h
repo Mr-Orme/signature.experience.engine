@@ -9,12 +9,13 @@
 
 class BodyCallBack : public ICallBack
 {
+public:
 	BodyCallBack(
 		ResourceManager* devices,
 		EventHandler::Event callBackEvent,
 		BodyComponent* owner, 
 		EngineDefs::Vector adjustAmount, 
-		void (BodyComponent::*BodyCall)(EngineDefs::Vector) const, 
+		void (BodyComponent::*BodyMethod)(EngineDefs::Vector) const, 
 		void* secondaryData = nullptr);
 
 	/*
@@ -30,7 +31,8 @@ class BodyCallBack : public ICallBack
 		a EngineDefs::Vector. Unless I can use templates to call the correct overload????
 	*/
 	void triggered(void* data) override;
-	void (BodyComponent::*BodyCall)(EngineDefs::Vector) const { nullptr };
+	//Pointer to method to call in BodyComponent
+	void (BodyComponent::*BodyMethod)(EngineDefs::Vector) const { nullptr };
 
 	EngineDefs::Vector adjustAmount{ 0.0f, 0.0f };
 	BodyComponent* owner{ nullptr };

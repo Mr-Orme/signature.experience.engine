@@ -4,7 +4,7 @@
 #include "Object.h"
 #include "AssetLibrary.h"
 
-//UserInputComponent::UserInputComponent(Object* owner, ResourceManager* devices):Component(owner)
+//UserInputTriggerComponent::UserInputTriggerComponent(Object* owner, ResourceManager* devices):Component(owner)
 //{
 //	this->devices = devices;
 //
@@ -13,11 +13,11 @@
 //		pressControl[(InputDevice::UserInputs)i] = true;
 //	}
 //}
-//UserInputComponent::~UserInputComponent(){}
+//UserInputTriggerComponent::~UserInputTriggerComponent(){}
 //
 ////**************************************
 ////reacts to keyboard input and adjusts the world accoringly.
-//Object* UserInputComponent::update()
+//Object* UserInputTriggerComponent::update()
 ////**************************************
 //{
 //	for (auto key : devices->iDevice->keyStates)
@@ -35,7 +35,7 @@
 //	return nullptr;
 //}
 
-UserInputComponent::UserInputComponent(Object * owner, ResourceManager * devices, InputDevice::UserInputs input):
+UserInputTriggerComponent::UserInputTriggerComponent(Object * owner, ResourceManager * devices, InputDevice::UserInputs input):
 	Component(owner), 
 	devices(devices),
 	TriggeredInput(input)
@@ -43,12 +43,12 @@ UserInputComponent::UserInputComponent(Object * owner, ResourceManager * devices
 	eventToTrigger = EventHandler::Event::UserInput;
 }
 
-void UserInputComponent::triggerEvent(void* data)
+void UserInputTriggerComponent::triggerEvent(void* data)
 {
 	devices->eventHandler->notify(eventToTrigger, data);
 }
 
-Object * UserInputComponent::update()
+Object * UserInputTriggerComponent::update()
 {
 	if (auto inputTrigger = devices->iDevice->keyStates.find(TriggeredInput); 
 	inputTrigger != devices->iDevice->keyStates.end() && inputTrigger ->second)

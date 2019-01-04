@@ -6,6 +6,7 @@ class ResourceManager;
 class BodyComponent;
 class SpriteComponent;
 class Texture;
+class BodyCallBack;
 
 struct SpritePresets
 {
@@ -61,6 +62,7 @@ struct BodyPresets
 	EngineDefs::Float angle{ 0.0f };
 	PhysicsStats physics;
 	SpriteComponent* sprite{ nullptr };
+	std::vector<std::unique_ptr<BodyCallBack>> callBacks;
 };
 struct ObjectFactoryPresets
 {

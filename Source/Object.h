@@ -13,11 +13,12 @@ class GhostComponent;
 class HealthComponent;
 class InventoryComponent;
 class SpriteComponent;
-class UserInputComponent;
+class UserInputTriggerComponent;
 
 class Object
 {
 public:
+	//Todo::Josh::add move constructor, copy constructor, and = move constructor to this!
 	 Object();
 	~Object();
 	

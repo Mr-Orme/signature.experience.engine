@@ -99,7 +99,7 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 		}
 		else if (componentName == "Input")
 		{
-			newObject->AddComponent(new UserInputComponent(newObject,devices));
+			newObject->AddComponent(new UserInputTriggerComponent(newObject,devices));
 
 		}
 		else if (componentName == "Notification")
@@ -131,7 +131,7 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 					each callBack can decide to play or not. 
 				Trigger can handle a item pick up
 				Trigger can handle battle damage
-			can trigger be used with keypresses???? Combined with UserInputComponent?????
+			can trigger be used with keypresses???? Combined with UserInputTriggerComponent?????
 			*/
 			devices->eventHandler->getListner(EventHandler::Event::Notification)->
 				addCallBack(newObject->getComponent<NotificationEventComponent>());

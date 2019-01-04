@@ -7,14 +7,13 @@
 #include "IEventTrigger.h"
 class Object;
 class ResourceManager;
-class UserInputComponent : public Component, public ITrigger
+class UserInputTriggerComponent : public Component, public ITrigger
 {
 public:
-	UserInputComponent(Object* owner, ResourceManager* devices, InputDevice::UserInputs TriggeredInput);
+	UserInputTriggerComponent(Object* owner, ResourceManager* devices, InputDevice::UserInputs TriggeredInput);
 	void triggerEvent(void* data) override;
 	Object* update() override;
 private:
-	Object* owner;
 	ResourceManager* devices;
 	InputDevice::UserInputs TriggeredInput;
 
@@ -27,11 +26,11 @@ private:
 //
 //class ResourceManager;
 //
-//class UserInputComponent : public Component
+//class UserInputTriggerComponent : public Component
 //{
 //public:
-//	UserInputComponent(Object* owner, ResourceManager* devices);
-//	~UserInputComponent();
+//	UserInputTriggerComponent(Object* owner, ResourceManager* devices);
+//	~UserInputTriggerComponent();
 //	
 //	//no need for start function
 //	Object* update() final;
@@ -47,7 +46,7 @@ private:
 //	//Come back to this later
 //	//turned this into a struct but not sure how to implement a struct with a map.
 //	//UPDATE: put struct in public instead of private so we can reference in our map.
-//	//std::map<InputDevice::UserInputs, UserInputComponent::Running> pressControl;
+//	//std::map<InputDevice::UserInputs, UserInputTriggerComponent::Running> pressControl;
 //	std::map<InputDevice::UserInputs, bool> pressControl;
 //	//TODO: This needs moved in with the map above. Not just a bool, but a struct of some sort. . .
 //	//May have to get further input

@@ -51,9 +51,6 @@
     <ClCompile Include="Source\Component.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\UserInputComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Source\AssetLibrary.cpp">
       <Filter>Source Files\Devices</Filter>
     </ClCompile>
@@ -111,6 +108,9 @@
     <ClCompile Include="Source\BodyCallBack.cpp">
       <Filter>Source Files\Devices\EventHandler</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UserInputTriggerComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ContactListener.h">
@@ -124,9 +124,6 @@
     </ClInclude>
     <ClInclude Include="Source\ObjectFactory.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UserInputComponent.h">
-      <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\ComponentsList.h">
       <Filter>Header Files\Components</Filter>
@@ -199,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="Source\BodyCallBack.h">
       <Filter>Header Files\Devices\EventHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UserInputTriggerComponent.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

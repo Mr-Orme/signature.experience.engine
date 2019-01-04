@@ -10,13 +10,10 @@
 
 BodyComponent::BodyComponent(Object* owner, ResourceManager* devices, BodyPresets presets):Component(owner), devices(devices)
 {
+	this->callBacks = std::move(presets.callBacks);
 	//Create fixture.
-	//initialized =
 	devices->pDevice->createFixture(this, presets);
-	//if (joinedWith)
-	//{
-	//	joinedWith->start();
-	//}
+
 }
 //**************************************
 //**************************************

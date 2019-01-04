@@ -16,7 +16,7 @@ public:
 	~SpriteComponent();
 
 	//deleted start, no need for functionality since constructor is called on creation
-	Object* update() final;
+	Object* update() override;
 	//finish functionality added to destructor
 
 	void draw();
@@ -26,6 +26,7 @@ public:
 		
 	Texture* texture{ nullptr };
 	std::unique_ptr<SpriteComponent> sprite{ nullptr };
+	//Hack::because the sprite and corresponding body can be and different depths, we need to keep the sprite and it's body associated.
 	BodyComponent* spriteBody{ nullptr };
 
 private:
