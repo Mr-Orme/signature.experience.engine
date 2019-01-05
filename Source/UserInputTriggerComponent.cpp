@@ -43,7 +43,7 @@ UserInputTriggerComponent::UserInputTriggerComponent(Object * owner, ResourceMan
 	eventToTrigger = EventHandler::Event::UserInput;
 }
 
-void UserInputTriggerComponent::triggerEvent(void* data)
+void UserInputTriggerComponent::triggerEvent(EventHandler::EventData data)
 {
 	devices->eventHandler->notify(eventToTrigger, data);
 }
@@ -53,7 +53,7 @@ Object * UserInputTriggerComponent::update()
 	if (auto inputTrigger = devices->iDevice->keyStates.find(TriggeredInput); 
 	inputTrigger != devices->iDevice->keyStates.end() && inputTrigger ->second)
 	{
-		triggerEvent((void*)&inputTrigger->first);
+		triggerEvent(&inputTrigger->first);
 	}
 	return nullptr;
 }

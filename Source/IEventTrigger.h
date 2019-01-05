@@ -5,6 +5,6 @@ class ITrigger
 {
 public:
 	EventHandler::Event eventToTrigger;
-	virtual void triggerEvent(void* data)=0;
+	virtual void triggerEvent(EventHandler::EventData data)=0;
 };
 #endif // !I_EVENT_TRIGGER_H

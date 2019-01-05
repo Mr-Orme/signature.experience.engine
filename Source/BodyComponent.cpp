@@ -5,14 +5,22 @@
 #include "Object.h"
 #include "PhysicsDevice.h"
 #include "Texture.h"
+#include "ICallBack.h"
+#include "BodyCallBack.h"
 
 
 
-BodyComponent::BodyComponent(Object* owner, ResourceManager* devices, BodyPresets presets):Component(owner), devices(devices)
+BodyComponent::BodyComponent(Object* owner, ResourceManager* devices, BodyPresets presets)
+	:Component(owner), devices(devices)
 {
-	this->callBacks = std::move(presets.callBacks);
+	for (auto& callBack : presets.callBacks)
+	{
+		callBacks.push_back(std::unique_ptr<BodyCallBack>(static_cast<BodyCallBack*>(callBack.release())));		
+	}
+	presets.callBacks.clear();
+	
 	//Create fixture.
-	devices->pDevice->createFixture(this, presets);
+	devices->pDevice->createFixture(this, std::move(presets));
 
 }
 //**************************************

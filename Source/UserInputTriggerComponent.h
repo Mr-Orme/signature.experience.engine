@@ -11,7 +11,7 @@ class UserInputTriggerComponent : public Component, public ITrigger
 {
 public:
 	UserInputTriggerComponent(Object* owner, ResourceManager* devices, InputDevice::UserInputs TriggeredInput);
-	void triggerEvent(void* data) override;
+	void triggerEvent(EventHandler::EventData data) override;
 	Object* update() override;
 private:
 	ResourceManager* devices;

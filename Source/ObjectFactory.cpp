@@ -46,7 +46,7 @@ BodyComponent* createBodyComponent(Object* newObject, ResourceManager* devices, 
 
 	componentElement->QueryBoolAttribute("physicsOn", &initializers.physics.physicsOn);
 
-	return new BodyComponent(newObject, devices, initializers);
+	return new BodyComponent(newObject, devices, std::move(initializers));
 }
 JointType setJointType(string type)
 {
@@ -99,7 +99,8 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 		}
 		else if (componentName == "Input")
 		{
-			newObject->AddComponent(new UserInputTriggerComponent(newObject,devices));
+			//TODO::need to change XML to include the input for this trigger.
+			//newObject->AddComponent(new UserInputTriggerComponent(newObject,devices));
 
 		}
 		else if (componentName == "Notification")

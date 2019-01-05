@@ -9,7 +9,11 @@ EventHandler::EventHandler()
 	}
 }
 
-void EventHandler::notify(Event event, void* data)
+EventHandler::~EventHandler()
+{
+}
+
+void EventHandler::notify(Event event, EventHandler::EventData data)
 {
 	if (auto listnerIter = listners.find(event); listnerIter != listners.end())
 	{

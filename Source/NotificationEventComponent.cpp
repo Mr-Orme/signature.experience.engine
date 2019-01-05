@@ -8,13 +8,16 @@ NotificationEventComponent::NotificationEventComponent(Object * owner, ResourceM
 	:SpriteComponent(owner, devices, componentElement)
 {}
 
-void NotificationEventComponent::triggered(void* data)
+void NotificationEventComponent::triggered(EventHandler::EventData data)
 {
-	if(std::find(triggers.begin(), triggers.end(), (IEventTrigger*)data)!=triggers.end())
-		draw();
+	if (std::holds_alternative<IEventTrigger*>(data))
+	{
+		if (std::find(triggers.begin(), triggers.end(), std::get<IEventTrigger*>(data)) != triggers.end())
+			draw();
+	}
 }
 
-void NotificationEventComponent::addTrigger(IEventTrigger * triggerforMe)
+void NotificationEventComponent::addTrigger(IEventTrigger * triggerForMe)
 {
-	triggers.insert(triggerforMe);
+	triggers.insert(triggerForMe);
 }

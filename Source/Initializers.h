@@ -2,11 +2,12 @@
 #define INITIALIZERS_H
 
 #include "Definitions.h"
+#include "ICallBack.h"
 class ResourceManager;
 class BodyComponent;
 class SpriteComponent;
 class Texture;
-class BodyCallBack;
+
 
 struct SpritePresets
 {
@@ -62,7 +63,7 @@ struct BodyPresets
 	EngineDefs::Float angle{ 0.0f };
 	PhysicsStats physics;
 	SpriteComponent* sprite{ nullptr };
-	std::vector<std::unique_ptr<BodyCallBack>> callBacks;
+	std::vector<std::unique_ptr<ICallBack>> callBacks;
 };
 struct ObjectFactoryPresets
 {

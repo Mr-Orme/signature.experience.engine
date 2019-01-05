@@ -1,6 +1,7 @@
 #include <algorithm>
 #include "Listner.h"
 #include "ICallBack.h"
+#include "EventHandler.h"
 
 void Listner::addCallBack(ICallBack * callBack)
 {
@@ -18,7 +19,7 @@ void Listner::removeCallBack(const ICallBack * callBack)
 	}
 }
 
-void Listner::eventTriggered(void* data)
+void Listner::eventTriggered(EventHandler::EventData data)
 {
 	for (auto callBack : callBacks)
 	{
