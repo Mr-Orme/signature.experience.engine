@@ -7,9 +7,8 @@
 class InputDevice{
 public:
 	InputDevice();
-	//Put initialize into constructor.
-	void update();
 	
+	void update();
 	enum class UserInputs
 	{
 		NA,
@@ -31,7 +30,7 @@ public:
 	std::map<UserInputs, bool> keyStates;
 private:
 	UserInputs Translate(SDL_Event* event);
-	SDL_Event* event {nullptr};
+	SDL_Event* event {nullptr}; //Todo::Make unique_ptr
 	
 };
 

@@ -3,12 +3,16 @@
 #include "ResourceManager.h"
 #include "ComponentsList.h"
 #include "Object.h"
+#include "Sound.h"
 
 
-bool AssetLibrary::initialize(ResourceManager* devices)
+AssetLibrary::AssetLibrary(ResourceManager* devices)
 {
 	this->devices = devices;
-	return true;
+}
+
+AssetLibrary::~AssetLibrary()
+{
 }
 
 Texture * AssetLibrary::getArtAsset(std::string searchString)
@@ -70,20 +74,13 @@ BackgroundMusic * AssetLibrary::playBackgroundMusic(std::string &name)
 
 bool AssetLibrary::hasSprites()
 {
-	if (artLibrary.empty())
-	{
-		return false;
-	}
-	return true;
+	return !artLibrary.empty();
 }
 
 bool AssetLibrary::hasSounds()
 {
-	if (soundEffectLibrary.empty() && musicLibrary.empty())
-	{
-		return false;
-	}
-	return true;
+	return  !(soundEffectLibrary.empty() && musicLibrary.empty());
+	
 }
 
 

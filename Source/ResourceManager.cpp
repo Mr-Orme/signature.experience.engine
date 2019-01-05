@@ -114,9 +114,7 @@ ResourceManager::ResourceManager(std::string assetPath)
 	deviceConfig = deviceConfig->NextSiblingElement("AssetLibrary");
 	if (createThisDevice(deviceConfig))
 	{
-		//TODO::initialize in constructor for all devices. Have initialized member that we check!
-		assetLibrary = std::make_unique<AssetLibrary>();
-		if (!assetLibrary->initialize(this)) { exit(1); }
+		assetLibrary = std::make_unique<AssetLibrary>(this);
 
 		//*********************Load sprites***************************
 		tinyxml2::XMLElement* asset = deviceConfig->FirstChildElement("Asset");

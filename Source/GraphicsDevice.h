@@ -16,8 +16,8 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 #include "Definitions.h"
-#include "View.h"
 
+class View;
 class Texture;
 
 class GraphicsDevice
