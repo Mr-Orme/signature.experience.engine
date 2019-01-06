@@ -6,7 +6,7 @@
 #include "InputDevice.h"
 #include "EventHandler.h"
 #include "ResourceManager.h"
-
+class BodyComponent;
 class BodyCallBack : public ICallBack
 {
 public:

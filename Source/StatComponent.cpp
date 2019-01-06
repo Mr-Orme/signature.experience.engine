@@ -68,8 +68,8 @@ Object* StatComponent::update()
 			//BodyComponent* joined = owner->getComponent<BodyComponent>()->joinedWith.get();
 		//	devices -> pDevice -> setStopPhysics(joined);
 		//	//destroy the joints
-			devices->pDevice->destroyJoint(jointToDelete);
-			jointToDelete = jointToDelete->joinedWith.get();
+//			devices->pDevice->destroyJoint(jointToDelete);
+			//jointToDelete = jointToDelete->joinedWith.get();
 
 		}
 		//kill it

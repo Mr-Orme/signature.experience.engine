@@ -37,22 +37,21 @@ ResourceManager::ResourceManager(std::string assetPath)
 
 	tinyxml2::XMLElement* levelRoot = levelConfig.FirstChildElement();//Level
 	tinyxml2::XMLElement* levelElement = levelRoot->FirstChildElement();//Screen
-
-	int screenWidth{ 0 };
-	int screenHeight{ 0 };
-	levelElement->QueryIntAttribute("width", &screenWidth);
-	levelElement->QueryIntAttribute("height", &screenHeight);
+	
+	//========================================
+	//Construct Event Handler
+	//========================================
+	eventHandler = make_unique<EventHandler>();
 
 	//========================================
 	//Construct Device Manager
 	//========================================
-	gDevice = std::make_unique<GraphicsDevice>(screenWidth, screenHeight, true);
-	if (!gDevice->initialize(true))
-	{
-		printf("Graphics Device could not Initialize!");
-		exit(1);
-	}
-	eventHandler = make_unique<EventHandler>();
+	int screenWidth{ 0 };
+	int screenHeight{ 0 };
+	levelElement->QueryIntAttribute("width", &screenWidth);
+	levelElement->QueryIntAttribute("height", &screenHeight);
+	
+	gDevice = std::make_unique<GraphicsDevice>(this, screenWidth, screenHeight, true);	
 	if (tinyxml2::XMLElement* fontConfig = levelElement->FirstChildElement(); fontConfig)
 	{
 		RGBA fontColor;
@@ -101,12 +100,6 @@ ResourceManager::ResourceManager(std::string assetPath)
 		deviceConfig->QueryFloatAttribute("gravityX", &gravity.x);
 		deviceConfig->QueryFloatAttribute("gravityY", &gravity.y);
 		pDevice = std::make_unique<PhysicsDevice>(gravity);
-
-		if (!pDevice->initialize())
-		{
-			printf("Physics Device could not intialize!");
-			exit(1);
-		}
 	}
 	//========================================
 	//Construct Asset Library
@@ -137,7 +130,7 @@ ResourceManager::ResourceManager(std::string assetPath)
 	if (createThisDevice(deviceConfig))
 	{
 		sDevice = std::make_unique<SoundDevice>(assetLibrary.get());
-		if (!sDevice->getInitialized())
+		if (!sDevice->initialized)
 		{
 			printf("Sound Device could not intialize!");
 			exit(1);
@@ -207,14 +200,6 @@ ResourceManager::~ResourceManager()
 	assetLibrary = nullptr;
 	factory = nullptr;
 }
-//**************************************
-//prepares all asset libraries based on path passed xml file
-//and creastes and initialzies all devices
-
-//**************************************
-//Deletes all the devices.
-//need to switch to smart pointers.
-//**************************************
 
 void ResourceManager::update()
 {
@@ -224,7 +209,7 @@ void ResourceManager::update()
 	for (auto objectIter = objects.begin(); objectIter != objects.end(); )
 	{
 		if (
-			//changed to StatComponenet but may have to deal with health later.
+			//Todo::changed to StatComponenet but may have to deal with health later.
 			StatComponent* compHealth = (*objectIter)->getComponent<StatComponent>(); 
 			compHealth != nullptr && compHealth->isDead)
 		{
@@ -252,8 +237,6 @@ void ResourceManager::update()
 		objects.insert(objects.end(), std::make_move_iterator(newObjects.begin()), std::make_move_iterator(newObjects.end()));
 		newObjects.clear();
 	}
-
-	gDevice->getView()->update();
 }
 
 void ResourceManager::draw()

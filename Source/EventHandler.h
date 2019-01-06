@@ -20,8 +20,9 @@ public:
 		Notification, 
 		SoundEffect, 
 		UserInput,
+		AdjustView,
 		NumEvents};
-	using EventData = std::variant<int, EventHandler::Event, IEventTrigger*, const InputDevice::UserInputs*>;
+	using EventData = std::variant<int, EngineDefs::Vector, EventHandler::Event, IEventTrigger*, const InputDevice::UserInputs*>;
 	void notify(Event event, EventData data);
 	Listner* getListner(Event event);
 private:

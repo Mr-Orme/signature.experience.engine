@@ -10,7 +10,7 @@ InputDevice::InputDevice()
 	//========================================
 	//Construct Event System
 	//========================================
-	event = new SDL_Event();
+	event = std::make_unique<SDL_Event>();
 	if (!event) {
 		printf("SDL Event could not initialize!");
 		exit(1);
@@ -34,19 +34,19 @@ void InputDevice::update()
 //**************************************
 {
 	UserInputs gEvent;
-	if(SDL_PollEvent(event))
+	if(SDL_PollEvent(event.get()))
 	{
 		//updates the proper key state based on the event that was passed in
 		switch (event -> type)
 		{
 		case SDL_KEYDOWN:
 			//translates the SDL even to a game event.
-			gEvent = Translate(event);
+			gEvent = Translate();
 			keyStates.find(gEvent) -> second = true;
 			break;
 		case SDL_KEYUP:
 			//translates the SDL even to a game event.
-			gEvent = Translate(event);
+			gEvent = Translate();
 			keyStates.find(gEvent) -> second = false;
 			break;
 		case SDL_QUIT:
@@ -60,7 +60,7 @@ void InputDevice::update()
 
 //**************************************
 //converts the SDL event to a game event
-InputDevice::UserInputs InputDevice::Translate(SDL_Event* event)
+InputDevice::UserInputs InputDevice::Translate()
 //**************************************
 {
 	//This switch is here in case we want to add other events, such as mouse events.

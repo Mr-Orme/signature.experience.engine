@@ -6,16 +6,18 @@ using namespace std;
 
 Texture::~Texture()
 {
-	free();
+	if (sprite != nullptr)
+	{
+		SDL_DestroyTexture(sprite);
+		sprite = nullptr;
+		width = 0;
+		height = 0;
+	}
 }
 
 
-Texture::Texture(GraphicsDevice* gDevice, const std::string pathOrText, const bool isSprite)
+Texture::Texture(GraphicsDevice* gDevice, const std::string & pathOrText, const bool isSprite)
 {
-
-	//Destroy existing texture information
-	free();
-
 	if (isSprite)
 	{
 		//Load the image
@@ -54,26 +56,6 @@ Texture::Texture(GraphicsDevice* gDevice, const std::string pathOrText, const bo
 	//set the height and width from the texture
 	SDL_QueryTexture(sprite, NULL, NULL, &width, &height);
 
-
-}
-
-bool Texture::load(SDL_Texture* texture)
-{
-	this -> sprite = texture;
-	//set the height and width from the texture
-	SDL_QueryTexture(texture,NULL,NULL,&width,&height);
-	return true;
-}
-
-void Texture::free()
-{
-	if(sprite != nullptr)
-	{
-		SDL_DestroyTexture(sprite);
-  		sprite = nullptr;
-		width = 0;
-		height = 0;
-	}
 
 }
 	   

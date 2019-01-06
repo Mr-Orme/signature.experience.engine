@@ -1,29 +1,23 @@
 #include "View.h"
 #include "Object.h"
+#include "ResourceManager.h"
+#include "Listner.h"
+#include "EventHandler.h"
 
-
-//**************************************
-//set initial values
-bool View::initialize(EngineDefs::Vector position)
-//**************************************
+View::View(EngineDefs::Vector position, ResourceManager* devices):position(position)
 {
-	this->position = position;
-	return true;
+	devices->eventHandler->getListner(EventHandler::Event::AdjustView)->addCallBack(this);
 }
 
-//**************************************
-//NOT USED
-bool View::update()
-//**************************************
+void View::triggered(EventHandler::EventData data)
 {
-//*********************************************************************************
-	return true;
+	if(std::holds_alternative<EngineDefs::Vector>(data))
+	{
+		position += std::get<EngineDefs::Vector>(data);
+	}
 }
 
 
-//void View::addScroller( Object * object)
-//{
-//	//TODO: scrollers component based on time, owner position, or input. Store the amount of scroll in a position variable.
-//	//owner position could have a map of scroll vectors based ond different positions. . .
-//	scrollers.push_back(object);
-//}
+
+//TODO: create a view adjust event. View should be a child of the ICallBack class!
+

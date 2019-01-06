@@ -4,13 +4,67 @@
 #include "View.h"
 #include "Texture.h"
 #include "SoundDevice.h"
+#include "ResourceManager.h"
 
 
 
 
-GraphicsDevice::GraphicsDevice(Uint32 width, Uint32 height, bool fullScreen = true) : SCREEN_WIDTH(width), SCREEN_HEIGHT(height)
+GraphicsDevice::GraphicsDevice(ResourceManager* devices, Uint32 width, Uint32 height, bool fullScreen = true) : SCREEN_WIDTH(width), SCREEN_HEIGHT(height)
 {
+	//initialize all SDL subsystems
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
+	{
+		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+	}
 
+	//initialize SDL_image subsystems
+	if (!IMG_Init(IMG_INIT_PNG))
+	{
+		printf("SDL_image could not initialize! SDL_Error: %s\n", IMG_GetError());
+	}
+
+	//initialize SDL_ttf subsystems
+	if (TTF_Init() == -1)
+	{
+		printf("SDL_ttf could not initialize! SDL_Error: %s\n", TTF_GetError());
+	}
+
+	if (!fullScreen)
+	{
+		//Construct and check window construction
+		screen = SDL_CreateWindow("Signature Game Engine",
+			SDL_WINDOWPOS_UNDEFINED,
+			SDL_WINDOWPOS_UNDEFINED,
+			SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN);
+	}
+	else
+	{
+		screen = SDL_CreateWindow("Signature Game Engine",
+			SDL_WINDOWPOS_UNDEFINED,
+			SDL_WINDOWPOS_UNDEFINED,
+			SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+
+	}
+	if (screen == nullptr)
+	{
+		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+	}
+
+	//Construct the renderer
+	renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_ACCELERATED);
+	if (renderer == nullptr)
+	{
+		printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
+	}
+
+	//set the background color (default)
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+	//========================================
+	//create view
+	//========================================
+	EngineDefs::Vector position{ 0,0 };
+	view = std::make_unique<View>(position, devices);
 }
 
 
@@ -31,77 +85,6 @@ GraphicsDevice::~GraphicsDevice()
 	SDL_Quit();
 
 }
-
-bool GraphicsDevice::initialize(bool fullScreen)
-{
-
-
-	//initialize all SDL subsystems
-	if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
-	{
-		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
-		return(false);
-	}
-
-	//initialize SDL_image subsystems
-	if(!IMG_Init(IMG_INIT_PNG))
-	{
-		printf( "SDL_image could not initialize! SDL_Error: %s\n", IMG_GetError() );
-		return(false);
-	}
-
-	//initialize SDL_ttf subsystems
-	if(TTF_Init()==-1)
-	{
-		printf( "SDL_ttf could not initialize! SDL_Error: %s\n", TTF_GetError() );
-		return(false);
-	}
-
-	if(!fullScreen)
-	{
-		//Construct and check window construction
-		screen = SDL_CreateWindow("Signature Game Engine",
-			SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED,
-			SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN);
-	}
-	else
-	{
-		screen = SDL_CreateWindow("Signature Game Engine",
-			SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED,
-			SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-
-	}
-	if(screen==nullptr)
-	{
-		printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-		return(false);
-	}
-
-	//Construct the renderer
-	renderer = SDL_CreateRenderer(screen,-1,SDL_RENDERER_ACCELERATED);
-	if(renderer==nullptr)
-	{
-		printf( "Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
-		return(false);
-	}
-
-	//set the background color (default)
-	SDL_SetRenderDrawColor(renderer,0,0,0,255);
-
-	//========================================
-	//create view
-	//========================================
-	view = std::make_unique<View>();
-	view->initialize({ 0, 0 });
-
-	return(true);
-
-}
-
-
-
 
 void GraphicsDevice::Begin()
 {
@@ -155,22 +138,6 @@ void GraphicsDevice::draw()
 			object.first ->draw(renderer, object.second, 0, NULL);
 
 		}
-
-		
-			
-//!!!!!!!!!!!!!!!!!!!!!!!!!!this needs to be elsewhere!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//	EngineDefs::Int spheresFound = 0; //number of spheres found
-//	//if we found all the spheres.
-//	if(spheresFound >= 6)
-//	{
-//		ResourceManager* devices = levelExit -> getComponent<BodyComponent>() -> getDevices().get();
-//		//stop the physics on the trapdoor so we can walk onto that square.
-//		devices -> pDevice -> setStopPhysics(levelExit.get());
-//		//get rid of the notice stating we need to find the spheres.
-//		Notice notice = {15, 0, W, ""};
-//		devices -> getNoticesLibrary() -> RemoveAsset(notice);
-//
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	}
 	//back to black. . .

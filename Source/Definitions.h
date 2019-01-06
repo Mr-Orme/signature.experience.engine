@@ -29,6 +29,12 @@ namespace EngineDefs
 		{
 			return { src1.x + src2.x, src1.y + src2.y };
 		}
+		friend Vector& operator+=(Vector& src1, const Vector& src2)
+		{
+			src1.x += src2.x;
+			src1.y += src2.y;
+			return src1;
+		}
 		friend Vector operator- (const Vector & src1, const Vector & src2)
 		{
 			return { src1.x - src2.x, src1.y - src2.y };
@@ -64,6 +70,7 @@ namespace EngineDefs
 	};
 
 }
+
 	struct RGBA
 	{
 		EngineDefs::Int R;

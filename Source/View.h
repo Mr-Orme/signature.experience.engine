@@ -1,13 +1,18 @@
 #ifndef VIEW_H
 #define VIEW_H
 #include "Definitions.h"
+#include "ICallBack.h"
 
-class View{
+
+class ResourceManager;
+class View: public ICallBack
+{
 public:
+	View() = delete;
+	View(EngineDefs::Vector position, ResourceManager* devices);
 
-	bool initialize(EngineDefs::Vector position);
-	bool update();
-	
+	void triggered(EventHandler::EventData data) override;
+
 	EngineDefs::Vector position;
 
 };

@@ -1,8 +1,10 @@
 #ifndef INPUTDEVICE_H
 #define INPUTDEVICE_H
 
-#include "Definitions.h"
+#include <memory>
 #include "SDL.h"
+#include "Definitions.h"
+
 
 class InputDevice{
 public:
@@ -29,9 +31,9 @@ public:
 
 	std::map<UserInputs, bool> keyStates;
 private:
-	UserInputs Translate(SDL_Event* event);
-	SDL_Event* event {nullptr}; //Todo::Make unique_ptr
-	
+
+	UserInputs Translate();
+	std::unique_ptr<SDL_Event> event {nullptr}; 	
 };
 
 

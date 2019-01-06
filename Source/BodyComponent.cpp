@@ -69,11 +69,11 @@ EngineDefs::Vector BodyComponent::getVelocity()
 }
 EngineDefs::Int BodyComponent::getWidth()
 {
-	return owner->getComponent<SpriteComponent>()->texture->getWidth();
+	return owner->getComponent<SpriteComponent>()->texture->width;
 }
 EngineDefs::Int BodyComponent::getHeight()
 {
-	return owner->getComponent<SpriteComponent>()->texture->getHeight();
+	return owner->getComponent<SpriteComponent>()->texture->height;
 }
 void BodyComponent::setVelocity(EngineDefs::Vector velocity)
 {

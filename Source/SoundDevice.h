@@ -23,9 +23,10 @@ public:
 	void setAsBackground(BackgroundMusic* background);
 	
 	bool removeSound(std::string &name);
-	bool getInitialized() { return initialized; }
-private:
 	bool initialized{ false };
+
+private:
+	
 	AssetLibrary* aLibrary{ nullptr };
 };
 

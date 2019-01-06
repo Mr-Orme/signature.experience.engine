@@ -10,21 +10,17 @@
 
 const float PhysicsDevice::fPRV{ 10.0f };
 
+PhysicsDevice::~PhysicsDevice()
+{
+}
+
 PhysicsDevice::PhysicsDevice(EngineDefs::Vector gravity):gravity(gravity.x, gravity.y)
 {
-
-}
-//**************************************
-//Creates a new world on initialization
-bool PhysicsDevice::initialize()
-//**************************************
-{
-	world = new b2World(gravity);
-	if (world == NULL) return false;
+	world = std::make_unique<b2World>(GV2PV(gravity));
 	ContactListener* c1 = new ContactListener();
-	world -> SetContactListener(c1);
-	return true;
+	world->SetContactListener(c1);
 }
+
 
 //**************************************
 //Steps the physics world
@@ -211,9 +207,9 @@ bool PhysicsDevice::createFixture( BodyComponent* object, BodyPresets presets)
 
 	//********Adjust postion because SDL is top left, while box2d is center*************
 	//subtract off half the width.
-	presets.position.x += (texture -> getWidth()/2);
+	presets.position.x += (texture -> width/2);
 	//subtract off half the height
-	presets.position.y += (texture -> getHeight()/2);
+	presets.position.y += (texture -> height/2);
 	//**********************************************************************************
 
 	// set starting position & angle
@@ -232,13 +228,13 @@ bool PhysicsDevice::createFixture( BodyComponent* object, BodyPresets presets)
 	{
 	case BodyShape::Rectangle:
 		//rectangle's dimensions
-		pShape.SetAsBox(RW2PW(texture-> getWidth()/2.0f), RW2PW(texture-> getHeight()/2.0f));
+		pShape.SetAsBox(RW2PW(texture-> width/2.0f), RW2PW(texture-> height/2.0f));
 		shapefd.shape = &pShape;
 		break;
 	case BodyShape::Circle:
 		//circle radius based on object's width.
-		EngineDefs::Float width = texture-> getWidth()/2.0f;
-		EngineDefs::Float height = texture-> getHeight()/2.0f;
+		EngineDefs::Float width = texture-> width/2.0f;
+		EngineDefs::Float height = texture-> height/2.0f;
 
 		if (width > height)	cShape.m_radius = (RW2PW(width));
 		else cShape.m_radius = (RW2PW(height));
@@ -409,9 +405,9 @@ EngineDefs::Vector PhysicsDevice::alignCenters(const BodyComponent* object) cons
 	Texture* texture = object->getOwner()->getComponent<SpriteComponent>()->texture;
 
 		//subtract off half the width.
-		position.x = PW2RW(physPosition.x) - (texture -> getWidth()/2);
+		position.x = PW2RW(physPosition.x) - (texture -> width/2);
 		//subtract off half the height
-		position.y = PW2RW(physPosition.y) - (texture -> getHeight()/2);
+		position.y = PW2RW(physPosition.y) - (texture -> height/2);
 	
 
 	return (position);

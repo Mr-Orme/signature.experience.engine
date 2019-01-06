@@ -9,31 +9,17 @@ class Texture{
 
     public:
 		
-		//Loads image at specified path
-		//passing string value by reference
-		Texture(GraphicsDevice* gDevice, const std::string pathOrText, const bool isSprite = true);
-
-		//Deallocates memory
+		Texture() = delete;
+		Texture(GraphicsDevice* gDevice, const std::string & pathOrText, const bool isSprite = true);
         ~Texture();
 
-        
-		bool load(SDL_Texture* texture);
-
-        //Deallocates texture
-        void free();
-
-        //Renders texture at given point
+        void draw(SDL_Renderer* renderer, EngineDefs::Vector position, EngineDefs::Float angle, SDL_Rect* clip = NULL );
 		
-		void draw(SDL_Renderer* renderer, EngineDefs::Vector position, EngineDefs::Float angle, SDL_Rect* clip = NULL );
-		int getWidth() { return width; }
-		int getHeight() { return height; }
-		//Image dimensions
-		
-		bool initialzied{ false };
-    private:
 		int width{ 0 };
 		int height{ 0 };
-        //The actual hardware texture
+		bool initialzied{ false };
+private:
+        //The actual hardware texture. created and destroyed by SDL
 		SDL_Texture * sprite{ nullptr };
 
 

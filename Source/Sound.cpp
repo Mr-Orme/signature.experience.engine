@@ -3,6 +3,11 @@
 #include "Sound.h"
 #include "SoundDevice.h"
 
+SoundEffect::~SoundEffect()
+{
+	Mix_FreeChunk(effect);
+}
+
 SoundEffect::SoundEffect(std::string &path, SoundDevice* sDevice)
 {
 	this->sDevice = sDevice;
@@ -12,6 +17,11 @@ SoundEffect::SoundEffect(std::string &path, SoundDevice* sDevice)
 void SoundEffect::playSound(int numLoops)
 {
 	sDevice->playSound(this, numLoops);
+}
+
+BackgroundMusic::~BackgroundMusic()
+{
+	Mix_FreeMusic(background);
 }
 
 BackgroundMusic::BackgroundMusic(std::string &path, SoundDevice* sDevice)

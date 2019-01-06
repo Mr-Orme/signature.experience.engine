@@ -10,6 +10,7 @@ class SoundEffect
 {
 public:
 	SoundEffect() = delete;
+	~SoundEffect();
 	//passing string value by reference
 	SoundEffect(std::string &path, SoundDevice* sDevice);
 	void playSound(int numLoops=1);
@@ -22,6 +23,7 @@ class BackgroundMusic
 {
 public:
 	BackgroundMusic() = delete;
+	~BackgroundMusic();
 	//passing string value by reference
 	BackgroundMusic(std::string &path, SoundDevice* sDevice);
 	void setAsBackground();

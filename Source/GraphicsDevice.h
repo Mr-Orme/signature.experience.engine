@@ -19,19 +19,16 @@
 
 class View;
 class Texture;
+class ResourceManager;
 
 class GraphicsDevice
 {		
 public:
 
 	//Constructors and Destructors
-	GraphicsDevice(Uint32, Uint32, bool fullScreen);
+	GraphicsDevice(ResourceManager* devices, Uint32 width, Uint32 height, bool fullScreen);
 	GraphicsDevice() =delete;
 	~GraphicsDevice();
-
-	//startup and Shutdown
-	//Going to have to get creative here. Shutdown sent to Destructor but initialize is a little bit trickier.
-	bool initialize(bool);
 
 	//Rendering functions
 	void Begin();

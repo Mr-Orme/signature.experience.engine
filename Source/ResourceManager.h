@@ -2,28 +2,28 @@
 #define RESOURCEMANAGER_H
 
 #include "Definitions.h"
-#include "GraphicsDevice.h"
-#include "InputDevice.h"
-#include "PhysicsDevice.h"
-#include "SoundDevice.h"
-#include "AssetLibrary.h"
-#include "ObjectFactory.h"
-#include "EventHandler.h"
 
+class ObjectFactory;
+class AssetLibrary;
+class SoundDevice;
+class PhysicsDevice;
+class InputDevice;
+class GraphicsDevice;
+class EventHandler;
+class Object;
 class ResourceManager
 {
 public:
-	//TODO:: move initialize to constructor and shutdown to destructor
+	
+	ResourceManager() = delete;
 	ResourceManager(std::string assetPath);
 	~ResourceManager();
-	//deleted initialize and shutdown while moving functionality into constructor and destructor.
-	//I feel like since shutdown was deleted if we happen to reference shutdown within another file we may have
-	//to change up some things.
-
+	
 	void update();
 	void draw();
-	//TODO:: use this to test out killing objects and destroying joints.
+	//TODO::Josh::use this to test out killing objects and destroying joints.
 	bool killObject(Object* butAScratch);
+	
 	//Devices
 	std::unique_ptr<GraphicsDevice> gDevice{ nullptr };
 	std::unique_ptr<InputDevice> iDevice{ nullptr };
