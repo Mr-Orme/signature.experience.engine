@@ -10,7 +10,7 @@
 #include "SpriteComponent.h"
 
 #include "UserInputTriggerComponent.h"
-#include "NotificationEventComponent.h"
+#include "NotificationCallBackComponent.h"
 //#include "BackpackComponent.h"
 //#include "InventoryComponent.h"
 //#include "GhostComponent.h"

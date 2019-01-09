@@ -102,13 +102,13 @@
     <ClCompile Include="Source\Listner.cpp">
       <Filter>Source Files\Devices\EventHandler</Filter>
     </ClCompile>
-    <ClCompile Include="Source\NotificationEventComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Source\BodyCallBack.cpp">
       <Filter>Source Files\Devices\EventHandler</Filter>
     </ClCompile>
     <ClCompile Include="Source\UserInputTriggerComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NotificationCallBackComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -188,9 +188,6 @@
     <ClInclude Include="Source\ICallBack.h">
       <Filter>Header Files\Devices\EventHandler</Filter>
     </ClInclude>
-    <ClInclude Include="Source\NotificationEventComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Source\IEventTrigger.h">
       <Filter>Header Files\Devices\EventHandler</Filter>
     </ClInclude>
@@ -198,6 +195,9 @@
       <Filter>Header Files\Devices\EventHandler</Filter>
     </ClInclude>
     <ClInclude Include="Source\UserInputTriggerComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NotificationCallBackComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>

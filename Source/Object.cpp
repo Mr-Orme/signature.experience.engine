@@ -1,6 +1,7 @@
 //#include "ComponentsList.h"
 #include "Object.h"
 #include "SpriteComponent.h"
+#include "NotificationCallBackComponent.h"
 
  Object:: Object()
 {
@@ -39,9 +40,13 @@ void  Object::AddComponent(Component* component)
 }
 void  Object::draw()
 {
-	if (SpriteComponent* sprite = getComponent<SpriteComponent>(); sprite != nullptr)
+	//Todo::MrOrme need to not draw if notification component...
+	if (getComponent <NotificationCallBackComponent>() == nullptr)
 	{
-		sprite->draw();
+		if (SpriteComponent* sprite = getComponent<SpriteComponent>(); sprite != nullptr)
+		{
+			sprite->draw();
+		}
 	}
 }
 //**************************************
