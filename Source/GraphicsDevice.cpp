@@ -3,7 +3,7 @@
 #include "GraphicsDevice.h"
 #include "View.h"
 #include "Texture.h"
-#include "SoundDevice.h"
+//#include "SoundDevice.h"
 #include "ResourceManager.h"
 
 
@@ -63,7 +63,7 @@ GraphicsDevice::GraphicsDevice(ResourceManager* devices, Uint32 width, Uint32 he
 	//========================================
 	//create view
 	//========================================
-	EngineDefs::Vector position{ 0,0 };
+	Vector2D position{ 0,0 };
 	view = std::make_unique<View>(position, devices);
 }
 
@@ -166,7 +166,7 @@ void GraphicsDevice::setView(View * view)
 }
 
 
-bool GraphicsDevice::setFont(const std::string &path, const EngineDefs::Int size, const RGBA color)
+bool GraphicsDevice::setFont(const std::string &path, const eInt size, const RGBA color)
 {
 	font = TTF_OpenFont(path.c_str(), size);
 	if( font == nullptr )
@@ -197,7 +197,7 @@ bool GraphicsDevice::setFont(const std::string &path, const EngineDefs::Int size
 //}
 //**************************************
 //draws a filled circle.
-void GraphicsDevice::drawFilledCircle(EngineDefs::Vector position, EngineDefs::Int radius, RGBA RGBA)
+void GraphicsDevice::drawFilledCircle(Vector2D position, eInt radius, RGBA RGBA)
 //**************************************
 {
 	filledCircleRGBA
@@ -213,7 +213,7 @@ void GraphicsDevice::drawFilledCircle(EngineDefs::Vector position, EngineDefs::I
 	);
 }
 
-bool GraphicsDevice::drawBox(EngineDefs::Vector topLeft, EngineDefs::Vector bottomRight, RGBA RGBA)
+bool GraphicsDevice::drawBox(Vector2D topLeft, Vector2D bottomRight, RGBA RGBA)
 {
 	boxRGBA
 	(
@@ -230,17 +230,17 @@ bool GraphicsDevice::drawBox(EngineDefs::Vector topLeft, EngineDefs::Vector bott
 	return true;
 }
 
-void GraphicsDevice::drawOverlay(EngineDefs::Vector topLeft, EngineDefs::Vector bottomRight, RGBA boxBackgroundColor, RGBA boxBorderColor, std::map<Texture*, EngineDefs::Vector> objects)
+void GraphicsDevice::drawOverlay(Vector2D topLeft, Vector2D bottomRight, RGBA boxBackgroundColor, RGBA boxBorderColor, std::map<Texture*, Vector2D> objects)
 {
 	overlay newOverlay = {topLeft, bottomRight, boxBackgroundColor, boxBorderColor, objects};
 	overlays.push_back(newOverlay);
 }
 
-EngineDefs::Float GraphicsDevice::Center(EngineDefs::Float centerOn, EngineDefs::Float width)
+eFloat GraphicsDevice::Center(eFloat centerOn, eFloat width)
 {
 			
 			
-	EngineDefs::Float point = (centerOn - width)/2;
+	eFloat point = (centerOn - width)/2;
 			
 	return point;
 }

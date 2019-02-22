@@ -9,11 +9,11 @@ class View: public ICallBack
 {
 public:
 	View() = delete;
-	View(EngineDefs::Vector position, ResourceManager* devices);
+	View(Vector2D position, ResourceManager* devices);
 
 	void triggered(EventHandler::EventData data) override;
 
-	EngineDefs::Vector position;
+	Vector2D position;
 
 };
 

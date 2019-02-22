@@ -6,7 +6,7 @@
 #include "AssetLibrary.h"
 #include "Object.h"
 
-StatComponent::StatComponent(Object* owner, ResourceManager* devices, EngineDefs::Int health):Component(owner)
+StatComponent::StatComponent(Object* owner, ResourceManager* devices, eInt health):Component(owner)
 {
 	this->devices = devices;
 	//if statistic will contain health then set input health to our current health.
@@ -39,7 +39,7 @@ bool StatComponent::killObject()
 	isDead = true;
 	return true;
 }
-EngineDefs::Int StatComponent::getStat()
+eInt StatComponent::getStat()
 {
 	if (modifier)
 		return modifier->getStat() + statistic;

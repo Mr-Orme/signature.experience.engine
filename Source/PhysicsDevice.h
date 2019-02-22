@@ -14,41 +14,41 @@ public:
 	//Tricky trying to get initialize into one of the constructors.
 	PhysicsDevice() = delete;
 	~PhysicsDevice();
-	PhysicsDevice(EngineDefs::Vector gravity);
+	PhysicsDevice(Vector2D gravity);
 	
 	bool update(float dt);
 	bool createFixture(BodyComponent* object, BodyPresets presets);
 	bool createJoint(Joints joint);
 	bool removeObject(BodyComponent* object);
 
-	bool setTransform( const BodyComponent* object, EngineDefs::Vector position, EngineDefs::Float angle);
-	bool setLinearVelocity( const BodyComponent* object, EngineDefs::Vector linearVelociy);
-	bool setAngularVelocity( const BodyComponent* object, EngineDefs::Float angularVelocity);
-	bool setTorque(const BodyComponent* object, EngineDefs::Float torque);
-	bool setLinearImpulse(const BodyComponent* object, EngineDefs::Vector forceVec, EngineDefs::Vector forceCenter);
+	bool setTransform( const BodyComponent* object, Vector2D position, eFloat angle);
+	bool setLinearVelocity( const BodyComponent* object, Vector2D linearVelociy);
+	bool setAngularVelocity( const BodyComponent* object, eFloat angularVelocity);
+	bool setTorque(const BodyComponent* object, eFloat torque);
+	bool setLinearImpulse(const BodyComponent* object, Vector2D forceVec, Vector2D forceCenter);
 	bool setStatic(const BodyComponent* object);
 	bool setStopPhysics(const BodyComponent* object);
-	bool setAngle(const BodyComponent* object, EngineDefs::Float angle);
-	bool accelerate(const BodyComponent* object, EngineDefs::Vector forceVec);
+	bool setAngle(const BodyComponent* object, eFloat angle);
+	bool accelerate(const BodyComponent* object, Vector2D forceVec);
 
-	EngineDefs::Float getAngularVelocity( const BodyComponent* object) const;
-	EngineDefs::Vector getPosition( const BodyComponent* object) const;
-	EngineDefs::Float getAngle( const BodyComponent* object) const;
-	EngineDefs::Vector getVelocity( const BodyComponent* object) const;
-	EngineDefs::Vector getLinearVelocity( const BodyComponent* object) const;	
+	eFloat getAngularVelocity( const BodyComponent* object) const;
+	Vector2D getPosition( const BodyComponent* object) const;
+	eFloat getAngle( const BodyComponent* object) const;
+	Vector2D getVelocity( const BodyComponent* object) const;
+	Vector2D getLinearVelocity( const BodyComponent* object) const;	
 
 private:
 
 	b2Body * FindBody(const BodyComponent* bodyComponent) const;
 	
-	inline float PW2RW(EngineDefs::Float x)const { return x * fPRV; }
-	inline float RW2PW(EngineDefs::Float x)const { return x / fPRV; }
-	inline float RW2PW(EngineDefs::Int x)const { return (float)x / fPRV; }
-	inline float RW2PWAngle(EngineDefs::Float x)const { return((float)x*(2.0f*3.14159f) / 360.0f); } //degrees to radians
-	inline float PW2RWAngle(EngineDefs::Float x)const { return((float)x*360.0f / (2.0f*3.14159f)); } //radians to degrees
-	b2Vec2 GV2PV(EngineDefs::Vector gameVec)const;
-	EngineDefs::Vector PV2GV(b2Vec2 physicsVec)const;
-	EngineDefs::Vector alignCenters(const  BodyComponent* object)const;
+	inline float PW2RW(eFloat x)const { return x * fPRV; }
+	inline float RW2PW(eFloat x)const { return x / fPRV; }
+	inline float RW2PW(eInt x)const { return (float)x / fPRV; }
+	inline float RW2PWAngle(eFloat x)const { return((float)x*(2.0f*3.14159f) / 360.0f); } //degrees to radians
+	inline float PW2RWAngle(eFloat x)const { return((float)x*360.0f / (2.0f*3.14159f)); } //radians to degrees
+	b2Vec2 GV2PV(Vector2D gameVec)const;
+	Vector2D PV2GV(b2Vec2 physicsVec)const;
+	Vector2D alignCenters(const  BodyComponent* object)const;
 
 	
 	bool destroyJoint(BodyComponent* object);

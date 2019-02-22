@@ -96,7 +96,7 @@ ResourceManager::ResourceManager(std::string assetPath)
 	deviceConfig = deviceConfig->NextSiblingElement("Physics");
 	if (createThisDevice(deviceConfig))
 	{
-		EngineDefs::Vector gravity{ 0, 0 };
+		Vector2D gravity{ 0, 0 };
 		deviceConfig->QueryFloatAttribute("gravityX", &gravity.x);
 		deviceConfig->QueryFloatAttribute("gravityY", &gravity.y);
 		pDevice = std::make_unique<PhysicsDevice>(gravity);

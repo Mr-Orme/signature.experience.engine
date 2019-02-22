@@ -39,7 +39,7 @@ public:
 	std::vector<std::unique_ptr<Object>> objects;
 	std::unique_ptr<EventHandler> eventHandler{ nullptr };
 	
-	EngineDefs::Int FPS{ 0 };
+	eInt FPS{ 0 };
 
 private:
 	std::vector<std::unique_ptr<Object>> newObjects;

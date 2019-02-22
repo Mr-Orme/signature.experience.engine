@@ -54,32 +54,32 @@ Object* BodyComponent::update()
 	return nullptr;
 }
 
-EngineDefs::Float BodyComponent::getAngle()
+eFloat BodyComponent::getAngle()
 {
 	return devices->pDevice->getAngle(this);
 }
 
-EngineDefs::Vector BodyComponent::getPosition()
+Vector2D BodyComponent::getPosition()
 {
 	return devices->pDevice->getPosition(this);
 }
-EngineDefs::Vector BodyComponent::getVelocity()
+Vector2D BodyComponent::getVelocity()
 {
 	return devices->pDevice->getVelocity(this);
 }
-EngineDefs::Int BodyComponent::getWidth()
+eInt BodyComponent::getWidth()
 {
 	return owner->getComponent<SpriteComponent>()->texture->width;
 }
-EngineDefs::Int BodyComponent::getHeight()
+eInt BodyComponent::getHeight()
 {
 	return owner->getComponent<SpriteComponent>()->texture->height;
 }
-void BodyComponent::setVelocity(EngineDefs::Vector velocity)
+void BodyComponent::setVelocity(Vector2D velocity)
 {
 	devices->pDevice->setLinearVelocity(this, velocity);
 }
-void BodyComponent::setXVelocity(EngineDefs::Float value)
+void BodyComponent::setXVelocity(eFloat value)
 {
 	devices->pDevice->setLinearVelocity
 	(
@@ -87,7 +87,7 @@ void BodyComponent::setXVelocity(EngineDefs::Float value)
 		{ value, devices->pDevice->getLinearVelocity(this).y }
 	);
 }
-void BodyComponent::setYVelocity(EngineDefs::Float value)
+void BodyComponent::setYVelocity(eFloat value)
 {
 	devices->pDevice->setLinearVelocity
 	(
@@ -95,17 +95,17 @@ void BodyComponent::setYVelocity(EngineDefs::Float value)
 		{ devices->pDevice->getLinearVelocity(this).x, value }
 	);
 }
-void BodyComponent::setAngle(EngineDefs::Float angle)
+void BodyComponent::setAngle(eFloat angle)
 {
 	devices->pDevice->setAngle(this, angle);
 }
 
-void BodyComponent::setPosition(EngineDefs::Vector position)
+void BodyComponent::setPosition(Vector2D position)
 {
 	devices->pDevice->setTransform(this, position, devices->pDevice->getAngle(this));
 }
 
-void BodyComponent::accelerate(EngineDefs::Float force)
+void BodyComponent::accelerate(eFloat force)
 {
 	devices->pDevice->accelerate
 	(
@@ -116,22 +116,22 @@ void BodyComponent::accelerate(EngineDefs::Float force)
 		}
 	);
 }
-void BodyComponent::deccelerate(EngineDefs::Float force)
+void BodyComponent::deccelerate(eFloat force)
 {
 	accelerate(force*-1);
 }
 
-EngineDefs::Float BodyComponent::getXPos()
+eFloat BodyComponent::getXPos()
 {
 	return getPosition().x;
 }
 
-EngineDefs::Float BodyComponent::getYPos()
+eFloat BodyComponent::getYPos()
 {
 	return getPosition().y;
 }
 
-void BodyComponent::rotate(EngineDefs::Float degrees)
+void BodyComponent::rotate(eFloat degrees)
 {
 	setAngle(getAngle() + degrees);
 }

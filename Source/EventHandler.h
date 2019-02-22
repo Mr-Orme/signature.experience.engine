@@ -23,7 +23,7 @@ public:
 		AdjustView,
 		NumEvents};
 	//Hack:: int is just to have a null version..
-	using EventData = std::variant<int, EngineDefs::Vector, EventHandler::Event, IEventTrigger*, const InputDevice::UserInputs*>;
+	using EventData = std::variant<int, Vector2D, EventHandler::Event, IEventTrigger*, const InputDevice::UserInputs*>;
 	void notify(Event event, EventData data);
 	Listner* getListner(Event event);
 private:

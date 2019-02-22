@@ -14,32 +14,31 @@
 //TODO:: Move default initialization of member variables to .h file using {} for ALL classes!
 //Basic Types
 
-namespace EngineDefs
-{
+
 	typedef unsigned int	Uint32;
-	typedef float			Float;
-	typedef Uint32			Int;
+	typedef float			eFloat;
+	typedef Uint32			eInt;
 
-	struct Vector
+	struct Vector2D
 	{
-		Float x;
-		Float y;
+		eFloat x;
+		eFloat y;
 
-		friend Vector operator+ (const Vector & src1, const Vector & src2)
+		friend Vector2D operator+ (const Vector2D & src1, const Vector2D & src2)
 		{
 			return { src1.x + src2.x, src1.y + src2.y };
 		}
-		friend Vector& operator+=(Vector& src1, const Vector& src2)
+		friend Vector2D& operator+=(Vector2D& src1, const Vector2D& src2)
 		{
 			src1.x += src2.x;
 			src1.y += src2.y;
 			return src1;
 		}
-		friend Vector operator- (const Vector & src1, const Vector & src2)
+		friend Vector2D operator- (const Vector2D & src1, const Vector2D & src2)
 		{
 			return { src1.x - src2.x, src1.y - src2.y };
 		}
-		friend bool operator> (const Vector & src1, int src2)
+		friend bool operator> (const Vector2D & src1, int src2)
 		{
 			if (src1.x > src2 && src1.y > src2)
 			{
@@ -47,7 +46,7 @@ namespace EngineDefs
 			}
 			return false;
 		}
-		friend bool operator< (const Vector & src1, int src2)
+		friend bool operator< (const Vector2D & src1, int src2)
 		{
 			if (src1.x < src2 && src1.y < src2)
 			{
@@ -55,7 +54,7 @@ namespace EngineDefs
 			}
 			return false;
 		}
-		friend bool operator== (const Vector & src1, const Vector & src2)
+		friend bool operator== (const Vector2D & src1, const Vector2D & src2)
 		{
 			if (src1.x == src2.x && src1.y == src2.y)
 			{
@@ -63,24 +62,22 @@ namespace EngineDefs
 			}
 			return false;
 		}
-		friend Vector abs(Vector & src)
+		friend Vector2D abs(Vector2D & src)
 		{
 			return { std::abs((float)src.x),std::abs((float)src.y) };
 		}
 	};
 
-}
-
 	struct RGBA
 	{
-		EngineDefs::Int R;
-		EngineDefs::Int G;
-		EngineDefs::Int B;
-		EngineDefs::Int A;
+		eInt R;
+		eInt G;
+		eInt B;
+		eInt A;
 	};
 
 	//Constants
-	const EngineDefs::Float PI = 3.14159f;
+	const eFloat PI = 3.14159f;
 
 
 #endif
