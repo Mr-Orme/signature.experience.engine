@@ -11,7 +11,7 @@
 //
 //------------------------------------------------------------------------
 #include <vector>
-#include <windows.h>
+#include <algorithm>
 #include <string>
 #include <list>
 
@@ -45,7 +45,7 @@ const double WaypointSeekDist = 20;
 
 //------------------------------------------------------------------------
 
-class SteeringBehavior : public Component
+class SteeringBehaviorComponent : public Component
 {
 public:
 
@@ -265,7 +265,7 @@ private:
 
 public:
 
-	SteeringBehavior(GameObject* agent);
+	SteeringBehaviorComponent(GameObject* agent);
 
 	//virtual ~SteeringBehavior();
 

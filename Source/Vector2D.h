@@ -9,8 +9,8 @@
 //  Author: Mat Buckland (fup@ai-junkie.com)
 //
 //------------------------------------------------------------------------
-#include <math.h>
-#include <windows.h>
+#include <cmath>
+#include <algorithm>
 #include <iosfwd>
 #include <limits>
 #include "Utils.h"

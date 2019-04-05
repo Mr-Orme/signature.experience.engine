@@ -9,7 +9,8 @@
 //  Author: Mat Buckland (fup@ai-junkie.com)
 //
 //------------------------------------------------------------------------
-#include <math.h>
+#include <cmath>
+#include <cassert>
 #include <sstream>
 #include <string>
 #include <vector>

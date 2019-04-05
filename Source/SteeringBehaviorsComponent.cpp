@@ -1,6 +1,6 @@
-#include "SteeringBehaviors.h"
+#include "SteeringBehaviorsComponent.h"
 #include "Utils.h"
-#include "GameObject.h"
+#include "Object.h"
 #include "Timer.h"
 
 
@@ -11,7 +11,7 @@
 using std::string;
 using std::vector;
 
-SteeringBehavior::SteeringBehavior(GameObject * agent) :m_pVehicle(agent)
+SteeringBehaviorComponent::SteeringBehaviorComponent(Object* owner) :Object(owner)
 {
 }
 
