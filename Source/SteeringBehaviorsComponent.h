@@ -1,6 +1,6 @@
 #ifndef STEERINGBEHAVIORS_H
 #define STEERINGBEHAVIORS_H
-#pragma warning (disable:4786)
+//#pragma warning (disable:4786)
 //------------------------------------------------------------------------
 //
 //  Name:   SteeringBehaviors.h
@@ -20,7 +20,7 @@
 #include "Vector2D.h"
 
 
-class GameObject;
+class Object;
 class CController;
 class Wall2D;
 class BaseGameEntity;
@@ -79,16 +79,14 @@ private:
 private:
 
 
-	//a pointer to the owner of this instance
-	GameObject*     m_pVehicle;
 
 	//the steering force created by the combined effect of all
 	//the selected behaviors
 	Vector2D    m_vSteeringForce;
 
 	//these can be used to keep track of friends, pursuers, or prey
-	GameObject*     m_pTargetAgent1;
-	GameObject*     m_pTargetAgent2;
+	Object*     m_pTargetAgent1;
+	Object*     m_pTargetAgent2;
 
 	//the current target
 	Vector2D    m_vTarget;
@@ -196,14 +194,14 @@ private:
 
 	//this behavior predicts where an agent will be in time T and seeks
 	//towards that point to intercept it.
-	//Vector2D Pursuit(const GameObject* agent);
+	//Vector2D Pursuit(const Object* agent);
 
 	//this behavior maintains a position, in the direction of offset
 	//from the target vehicle
-	//Vector2D OffsetPursuit(const GameObject* agent, const Vector2D offset);
+	//Vector2D OffsetPursuit(const Object* agent, const Vector2D offset);
 
 	//this behavior attempts to evade a pursuer
-	//Vector2D Evade(const GameObject* agent);
+	//Vector2D Evade(const Object* agent);
 
 	//this behavior makes the agent wander about randomly
 	//Vector2D Wander();
@@ -223,26 +221,26 @@ private:
 
 	//this results in a steering force that attempts to steer the vehicle
 	//to the center of the vector connecting two moving agents.
-	//Vector2D Interpose(const GameObject* VehicleA, const GameObject* VehicleB);
+	//Vector2D Interpose(const Object* VehicleA, const Object* VehicleB);
 
 	//given another agent position to hide from and a list of BaseGameEntitys this
 	//method attempts to put an obstacle between itself and its opponent
-	//Vector2D Hide(const GameObject* hunter, const std::vector<BaseGameEntity*>& obstacles);
+	//Vector2D Hide(const Object* hunter, const std::vector<BaseGameEntity*>& obstacles);
 
 
 	// -- Group Behaviors -- //
 
-	//Vector2D Cohesion(const std::vector<GameObject*> &agents);
+	//Vector2D Cohesion(const std::vector<Object*> &agents);
 
-	//Vector2D Separation(const std::vector<GameObject*> &agents);
+	//Vector2D Separation(const std::vector<Object*> &agents);
 
-	//Vector2D Alignment(const std::vector<GameObject*> &agents);
+	//Vector2D Alignment(const std::vector<Object*> &agents);
 
 	//the following three are the same as above but they use cell-space
 	//partitioning to find the neighbors
-	//Vector2D CohesionPlus(const std::vector<GameObject*> &agents);
-	//Vector2D SeparationPlus(const std::vector<GameObject*> &agents);
-	//Vector2D AlignmentPlus(const std::vector<GameObject*> &agents);
+	//Vector2D CohesionPlus(const std::vector<Object*> &agents);
+	//Vector2D SeparationPlus(const std::vector<Object*> &agents);
+	//Vector2D AlignmentPlus(const std::vector<Object*> &agents);
 
 	/* .......................................................
 
@@ -287,8 +285,8 @@ private:
 
 	void      SetTarget(const Vector2D t) { m_vTarget = t; }
 
-	void      SetTargetAgent1(GameObject* Agent) { m_pTargetAgent1 = Agent; }
-	void      SetTargetAgent2(GameObject* Agent) { m_pTargetAgent2 = Agent; }
+	void      SetTargetAgent1(Object* Agent) { m_pTargetAgent1 = Agent; }
+	void      SetTargetAgent2(Object* Agent) { m_pTargetAgent2 = Agent; }
 
 	void      SetOffset(const Vector2D offset) { m_vOffset = offset; }
 	Vector2D  GetOffset()const { return m_vOffset; }
@@ -305,17 +303,17 @@ private:
 	void SeekOn() { m_iFlags |= seek; }
 	void ArriveOn() { m_iFlags |= arrive; }
 	void WanderOn() { m_iFlags |= wander; }
-	void PursuitOn(GameObject* v) { m_iFlags |= pursuit; m_pTargetAgent1 = v; }
-	void EvadeOn(GameObject* v) { m_iFlags |= evade; m_pTargetAgent1 = v; }
+	void PursuitOn(Object* v) { m_iFlags |= pursuit; m_pTargetAgent1 = v; }
+	void EvadeOn(Object* v) { m_iFlags |= evade; m_pTargetAgent1 = v; }
 	void CohesionOn() { m_iFlags |= cohesion; }
 	void SeparationOn() { m_iFlags |= separation; }
 	void AlignmentOn() { m_iFlags |= allignment; }
 	void ObstacleAvoidanceOn() { m_iFlags |= obstacle_avoidance; }
 	void WallAvoidanceOn() { m_iFlags |= wall_avoidance; }
 	void FollowPathOn() { m_iFlags |= follow_path; }
-	void InterposeOn(GameObject* v1, GameObject* v2) { m_iFlags |= interpose; m_pTargetAgent1 = v1; m_pTargetAgent2 = v2; }
-	void HideOn(GameObject* v) { m_iFlags |= hide; m_pTargetAgent1 = v; }
-	void OffsetPursuitOn(GameObject* v1, const Vector2D offset) { m_iFlags |= offset_pursuit; m_vOffset = offset; m_pTargetAgent1 = v1; }
+	void InterposeOn(Object* v1, Object* v2) { m_iFlags |= interpose; m_pTargetAgent1 = v1; m_pTargetAgent2 = v2; }
+	void HideOn(Object* v) { m_iFlags |= hide; m_pTargetAgent1 = v; }
+	void OffsetPursuitOn(Object* v1, const Vector2D offset) { m_iFlags |= offset_pursuit; m_vOffset = offset; m_pTargetAgent1 = v1; }
 	void FlockingOn() { CohesionOn(); AlignmentOn(); SeparationOn(); WanderOn(); }
 
 	void FleeOff() { if (On(flee))   m_iFlags ^= flee; }

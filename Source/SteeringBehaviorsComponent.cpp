@@ -1,4 +1,6 @@
 #include "SteeringBehaviorsComponent.h"
+#include "ComponentsList.h"
+#include "Component.h"
 #include "Utils.h"
 #include "Object.h"
 #include "Timer.h"
@@ -6,11 +8,9 @@
 
 #include <cassert>
 #include <iostream>
+#include <algorithm>
 
-
-using std::string;
-using std::vector;
-
+using namespace std;
 SteeringBehaviorComponent::SteeringBehaviorComponent(Object* owner) :Component(owner)
 {
 }
@@ -37,10 +37,10 @@ Vector2D SteeringBehaviorComponent::Calculate()
 //------------------------------------------------------------------------
 Vector2D SteeringBehaviorComponent::Seek(Vector2D TargetPos)
 {  //get sprite position
-	Vector2D DesiredVelocity = Vec2DNormalize(TargetPos - owner->getComponent(BodyComponent))
-		* m_pVehicle->getMaxSpeed();
+	Vector2D DesiredVelocity = Vec2DNormalize(TargetPos - owner->getComponent<BodyComponent>()->getPosition()
+		* owner->getComponent<BodyComponent>()->maxSpeed);
 
-	return (DesiredVelocity - m_pVehicle->getVelocity());
+	return (DesiredVelocity - owner->getComponent<BodyComponent>()->getVelocity());
 }
 
 //----------------------------- Flee -------------------------------------
@@ -72,7 +72,7 @@ Vector2D SteeringBehaviorComponent::Seek(Vector2D TargetPos)
 Vector2D SteeringBehaviorComponent::Arrive(Vector2D     TargetPos,
 	Deceleration deceleration)
 {
-	Vector2D ToTarget = TargetPos - m_pVehicle->getSpritePosition();
+	Vector2D ToTarget = TargetPos - owner->getComponent<BodyComponent>()->getPosition();
 
 	//calculate the distance to the target
 	double dist = ToTarget.Length();
@@ -88,14 +88,14 @@ Vector2D SteeringBehaviorComponent::Arrive(Vector2D     TargetPos,
 		double speed = dist / ((double)deceleration * DecelerationTweaker);
 
 		//make sure the velocity does not exceed the max
-		speed = min(speed, m_pVehicle->getMaxSpeed());
+		speed = min((eFloat)speed, owner->getComponent<BodyComponent>()->maxSpeed);
 
 		//from here proceed just like Seek except we don't need to normalize 
 		//the ToTarget vector because we have already gone to the trouble
 		//of calculating its length: dist. 
 		Vector2D DesiredVelocity = ToTarget * speed / dist;
 
-		return (DesiredVelocity - m_pVehicle->getVelocity());
+		return (DesiredVelocity - owner->getComponent<BodyComponent>()->getVelocity());
 	}
 
 	return Vector2D(0, 0);
