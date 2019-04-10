@@ -11,11 +11,11 @@
 using std::string;
 using std::vector;
 
-SteeringBehaviorComponent::SteeringBehaviorComponent(Object* owner) :Object(owner)
+SteeringBehaviorComponent::SteeringBehaviorComponent(Object* owner) :Component(owner)
 {
 }
 
-Vector2D SteeringBehavior::Calculate()
+Vector2D SteeringBehaviorComponent::Calculate()
 {
 	Vector2D force{ 0,0 };
 	std::cout << force.x << " " << force.y << " --> ";
@@ -35,9 +35,9 @@ Vector2D SteeringBehavior::Calculate()
 //  Given a target, this behavior returns a steering force which will
 //  direct the agent towards the target
 //------------------------------------------------------------------------
-Vector2D SteeringBehavior::Seek(Vector2D TargetPos)
-{
-	Vector2D DesiredVelocity = Vec2DNormalize(TargetPos - m_pVehicle->getSpritePosition())
+Vector2D SteeringBehaviorComponent::Seek(Vector2D TargetPos)
+{  //get sprite position
+	Vector2D DesiredVelocity = Vec2DNormalize(TargetPos - owner->getComponent(BodyComponent))
 		* m_pVehicle->getMaxSpeed();
 
 	return (DesiredVelocity - m_pVehicle->getVelocity());
@@ -69,7 +69,7 @@ Vector2D SteeringBehavior::Seek(Vector2D TargetPos)
 //  This behavior is similar to seek but it attempts to arrive at the
 //  target with a zero velocity
 //------------------------------------------------------------------------
-Vector2D SteeringBehavior::Arrive(Vector2D     TargetPos,
+Vector2D SteeringBehaviorComponent::Arrive(Vector2D     TargetPos,
 	Deceleration deceleration)
 {
 	Vector2D ToTarget = TargetPos - m_pVehicle->getSpritePosition();

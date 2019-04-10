@@ -3,7 +3,7 @@
 #include "ContactListener.h"
 #include "BodyComponent.h"
 #include "Texture.h"
-
+#include "Vector2D.h"
 #include "Object.h"
 #include "Initializers.h"
 
@@ -327,7 +327,7 @@ b2Body* PhysicsDevice::FindBody( const BodyComponent* object) const
 b2Vec2 PhysicsDevice::GV2PV(Vector2D gameVec)const
 //**************************************
 {
-	return b2Vec2(RW2PW(gameVec.x), RW2PW(gameVec.y));
+	return b2Vec2(RW2PW((eFloat)gameVec.x), RW2PW((eFloat)gameVec.y));
 }
 
 //**************************************

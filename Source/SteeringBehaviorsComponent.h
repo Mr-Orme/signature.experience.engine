@@ -48,7 +48,9 @@ const double WaypointSeekDist = 20;
 class SteeringBehaviorComponent : public Component
 {
 public:
-
+	SteeringBehaviorComponent(Object* owner);
+	//calculates and sums the steering forces from any active behaviors
+	Vector2D Calculate();
 	enum summing_method { weighted_average, prioritized, dithered };
 
 private:
@@ -263,14 +265,11 @@ private:
 
 
 
-public:
 
-	SteeringBehaviorComponent(GameObject* agent);
 
 	//virtual ~SteeringBehavior();
 
-	//calculates and sums the steering forces from any active behaviors
-	Vector2D Calculate();
+	
 
 	//calculates the component of the steering force that is parallel
 	//with the vehicle heading

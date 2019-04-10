@@ -44,6 +44,7 @@ private:
 	inline float PW2RW(eFloat x)const { return x * fPRV; }
 	inline float RW2PW(eFloat x)const { return x / fPRV; }
 	inline float RW2PW(eInt x)const { return (float)x / fPRV; }
+	inline Vector2D RW2PW(Vector2D vec)const { return { vec.x / fPRV, vec.y / fPRV }; }
 	inline float RW2PWAngle(eFloat x)const { return((float)x*(2.0f*3.14159f) / 360.0f); } //degrees to radians
 	inline float PW2RWAngle(eFloat x)const { return((float)x*360.0f / (2.0f*3.14159f)); } //radians to degrees
 	b2Vec2 GV2PV(Vector2D gameVec)const;
