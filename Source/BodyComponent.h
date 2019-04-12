@@ -26,7 +26,7 @@ public:
 	Vector2D getPosition();
 	eFloat getXPos();
 	eFloat getYPos();
-
+	const eFloat maxSpeed = 5;
 	Vector2D getVelocity();
 
 	eInt getWidth();

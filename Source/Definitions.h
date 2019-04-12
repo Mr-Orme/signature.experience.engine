@@ -19,7 +19,7 @@
 	typedef float			eFloat;
 	typedef Uint32			eInt;
 
-	struct Vector2D
+	/*struct Vector2D
 	{
 		eFloat x;
 		eFloat y;
@@ -66,7 +66,7 @@
 		{
 			return { std::abs((float)src.x),std::abs((float)src.y) };
 		}
-	};
+	};*/
 
 	struct RGBA
 	{

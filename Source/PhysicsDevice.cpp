@@ -3,7 +3,7 @@
 #include "ContactListener.h"
 #include "BodyComponent.h"
 #include "Texture.h"
-
+#include "Vector2D.h"
 #include "Object.h"
 #include "Initializers.h"
 
@@ -14,7 +14,7 @@ PhysicsDevice::~PhysicsDevice()
 {
 }
 
-PhysicsDevice::PhysicsDevice(Vector2D gravity):gravity(gravity.x, gravity.y)
+PhysicsDevice::PhysicsDevice(Vector2D gravity) :gravity({ gravity.x, gravity.y })
 {
 	world = std::make_unique<b2World>(GV2PV(gravity));
 	ContactListener* c1 = new ContactListener();
@@ -79,10 +79,8 @@ bool PhysicsDevice::setLinearVelocity(const BodyComponent* object, Vector2D line
 //**************************************
 {
 	b2Body* body = FindBody(object);
-	b2Vec2 b2LVelocity;
-	b2LVelocity.x = RW2PW(linearVelociy.x);
-	b2LVelocity.y = RW2PW(linearVelociy.y);
-	body -> SetLinearVelocity(b2LVelocity);
+	//b2Vec2 b2LVelocity;
+	body -> SetLinearVelocity(RW2PW(linearVelociy));
 	return true;
 }
 
@@ -213,7 +211,7 @@ bool PhysicsDevice::createFixture( BodyComponent* object, BodyPresets presets)
 	//**********************************************************************************
 
 	// set starting position & angle
-	bd -> position.Set(RW2PW(presets.position.x), RW2PW(presets.position.y));
+	bd -> position.Set(RW2PW((eFloat)presets.position.x), RW2PW((eFloat)presets.position.y));
 	bd -> angle = RW2PWAngle(presets.angle);
 
 	//add the body to the world
@@ -327,7 +325,7 @@ b2Body* PhysicsDevice::FindBody( const BodyComponent* object) const
 b2Vec2 PhysicsDevice::GV2PV(Vector2D gameVec)const
 //**************************************
 {
-	return b2Vec2(RW2PW(gameVec.x), RW2PW(gameVec.y));
+	return b2Vec2(RW2PW((eFloat)gameVec.x), RW2PW((eFloat)gameVec.y));
 }
 
 //**************************************
@@ -370,8 +368,8 @@ bool PhysicsDevice::createJoint( Joints joint)
 		weldJointDef.bodyA = bodyA;
 		weldJointDef.bodyB = bodyB;
 		weldJointDef.collideConnected = joint.CollideConnected;
-		weldJointDef.localAnchorA.Set(RW2PW(joint.AnchorA.x), RW2PW(joint.AnchorA.y));
-		weldJointDef.localAnchorB.Set(RW2PW(joint.AnchorB.x), RW2PW(joint.AnchorB.y));
+		weldJointDef.localAnchorA.Set(RW2PW((eFloat)joint.AnchorA.x), RW2PW((eFloat)joint.AnchorA.y));
+		weldJointDef.localAnchorB.Set(RW2PW((eFloat)joint.AnchorB.x), RW2PW((eFloat)joint.AnchorB.y));
 		weldJointDef.referenceAngle = RW2PWAngle(joint.referenceAngle);
 		return world->CreateJoint(&weldJointDef);
 		break;
