@@ -4,16 +4,16 @@
 #include "Listner.h"
 #include "EventHandler.h"
 
-View::View(EngineDefs::Vector position, ResourceManager* devices):position(position)
+View::View(Vector2D position, ResourceManager* devices):position(position)
 {
 	devices->eventHandler->getListner(EventHandler::Event::AdjustView)->addCallBack(this);
 }
 
 void View::triggered(EventHandler::EventData data)
 {
-	if(std::holds_alternative<EngineDefs::Vector>(data))
+	if(std::holds_alternative<Vector2D>(data))
 	{
-		position += std::get<EngineDefs::Vector>(data);
+		position += std::get<Vector2D>(data);
 	}
 }
 

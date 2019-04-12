@@ -106,7 +106,7 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 		}
 		else if (componentName == "Notification")
 		{
-			newObject->AddComponent(new NotificationEventComponent(newObject, devices, componentElement));
+			newObject->AddComponent(new NotificationCallBackComponent(newObject, devices, componentElement));
 			/*Todo:: This needs a body component, just like a sprite.
 			It's body component determines where the notification is displayed
 			need a triggerComponent. When collision detection detects collision with a trigger component, the event is sent
@@ -136,7 +136,7 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 			can trigger be used with keypresses???? Combined with UserInputTriggerComponent?????
 			*/
 			devices->eventHandler->getListner(EventHandler::Event::Notification)->
-				addCallBack(newObject->getComponent<NotificationEventComponent>());
+				addCallBack(newObject->getComponent<NotificationCallBackComponent>());
 		}
 		else if (componentName == "Joint")
 		{

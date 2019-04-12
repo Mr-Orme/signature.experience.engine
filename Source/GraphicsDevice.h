@@ -37,45 +37,45 @@ public:
 
 	void drawFilledCircle
 	(
-		EngineDefs::Vector position, 
-		EngineDefs::Int radius, 
+		Vector2D position, 
+		eInt radius, 
 		RGBA RGBA
 	);
 	bool drawBox
 	(
-		EngineDefs::Vector topLeft, 
-		EngineDefs::Vector bottomRight, 
+		Vector2D topLeft, 
+		Vector2D bottomRight, 
 		RGBA RGBA
 	);
 	
 	void drawOverlay
 	(
 		//round corner box that contains overlay
-		EngineDefs::Vector topLeft, 
-		EngineDefs::Vector bottomRight, 
+		Vector2D topLeft, 
+		Vector2D bottomRight, 
 		RGBA boxBackgroundColor, 
 		RGBA boxBorderColor,
 		//any objects drawn in stated box
 		//at given position
-		std::map<Texture*, EngineDefs::Vector> objects			
+		std::map<Texture*, Vector2D> objects			
 	);
 
 	//getters
 	SDL_Renderer* getRenderer();
 	//SDL_Window* getWindow();
-	EngineDefs::Int getScreenWidth(){return SCREEN_WIDTH;}
-	EngineDefs::Int getScreenHeight(){return SCREEN_HEIGHT;}
+	eInt getScreenWidth(){return SCREEN_WIDTH;}
+	eInt getScreenHeight(){return SCREEN_HEIGHT;}
 	View* getView();
 	
 	//setters
 	void setView(View* view);
-	bool setFont(const std::string &path, const EngineDefs::Int size, const RGBA color);
+	bool setFont(const std::string &path, const eInt size, const RGBA color);
 	
 	TTF_Font* font{ nullptr };
 	SDL_Color color{ 0,0,0,255 };
 
 private:
-	EngineDefs::Float Center(EngineDefs::Float centerOn, EngineDefs::Float width);
+	eFloat Center(eFloat centerOn, eFloat width);
 	//Parameters
 	const Uint32 SCREEN_WIDTH{ 0 };
 	const Uint32 SCREEN_HEIGHT{ 0 };
@@ -88,11 +88,11 @@ private:
 
 	struct overlay
 	{
-		EngineDefs::Vector topLeft{ 0 };
-		EngineDefs::Vector bottomRight{ 0 };
+		Vector2D topLeft{ 0 };
+		Vector2D bottomRight{ 0 };
 		RGBA boxBackgroundColor{ 0,0,0,0 };
 		RGBA boxBorderColor{ 0,0,0,0 };
-		std::map<Texture*, EngineDefs::Vector> objects;
+		std::map<Texture*, Vector2D> objects;
 	};
 
 	std::vector<overlay> overlays;

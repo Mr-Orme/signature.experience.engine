@@ -20,10 +20,10 @@ struct SpritePresets
 };
 struct RotateBody
 {
-	EngineDefs::Float torque;
-	EngineDefs::Float maxAngularVelocity;
-	EngineDefs::Int radius;
-	EngineDefs::Vector center;
+	eFloat torque;
+	eFloat maxAngularVelocity;
+	eInt radius;
+	Vector2D center;
 };
 
 enum class BodyShape { Rectangle, Circle };
@@ -36,31 +36,31 @@ struct Joints
 	BodyComponent* BodyA;
 	BodyComponent* BodyB;
 	bool CollideConnected;
-	EngineDefs::Vector AnchorA;
-	EngineDefs::Vector AnchorB;
-	EngineDefs::Float referenceAngle;
-	EngineDefs::Float JointLimit;
+	Vector2D AnchorA;
+	Vector2D AnchorB;
+	eFloat referenceAngle;
+	eFloat JointLimit;
 
 };
 
 struct PhysicsStats
 {
-	EngineDefs::Float spinSpeed{ 0.0f };
+	eFloat spinSpeed{ 0.0f };
 	BodyType bodyType{ BodyType::Static };
 	BodyShape bodyShape{BodyShape::Rectangle};
-	EngineDefs::Float density{ 0.0f };
-	EngineDefs::Float friction{ 0.0f };
-	EngineDefs::Float restitution{ 0.0f };
-	EngineDefs::Float angularDamping{ 0.0f };
-	EngineDefs::Float linearDamping{ 0.0f };
-	EngineDefs::Float force{ 0.0f };
+	eFloat density{ 0.0f };
+	eFloat friction{ 0.0f };
+	eFloat restitution{ 0.0f };
+	eFloat angularDamping{ 0.0f };
+	eFloat linearDamping{ 0.0f };
+	eFloat force{ 0.0f };
 	Joints joint;
 	bool physicsOn{ false };
 };
 struct BodyPresets
 {
-	EngineDefs::Vector position{ 0,0 };
-	EngineDefs::Float angle{ 0.0f };
+	Vector2D position{ 0,0 };
+	eFloat angle{ 0.0f };
 	PhysicsStats physics;
 	SpriteComponent* sprite{ nullptr };
 	std::vector<std::unique_ptr<ICallBack>> callBacks;
@@ -71,7 +71,7 @@ struct ObjectFactoryPresets
 	SpritePresets spriteInitializers;
 	BodyPresets bodyInitializers;
 	
-	EngineDefs::Int health{ 0 };//move to new AssetLibraryGame
+	eInt health{ 0 };//move to new AssetLibraryGame
 	ResourceManager* devices{ nullptr };
 };
 #endif // !INITIALIZERS_H

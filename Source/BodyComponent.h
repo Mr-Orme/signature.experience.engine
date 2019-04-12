@@ -21,31 +21,31 @@ public:
 	//Josh::Added more functionality and defined functions in cpp file
 	//TODO::Josh::you may need to add more functionality to the physicsDevice also!!!!
 	
-	EngineDefs::Float getAngle();
+	eFloat getAngle();
 
-	EngineDefs::Vector getPosition();
-	EngineDefs::Float getXPos();
-	EngineDefs::Float getYPos();
+	Vector2D getPosition();
+	eFloat getXPos();
+	eFloat getYPos();
 
-	EngineDefs::Vector getVelocity();
+	Vector2D getVelocity();
 
-	EngineDefs::Int getWidth();
-	EngineDefs::Int getHeight();
+	eInt getWidth();
+	eInt getHeight();
 	
-	//TODO::Josh::change all params for these methods to EngineDefs::Vector, then just grab the correct one
+	//TODO::Josh::change all params for these methods to Vector2D, then just grab the correct one
 	//in the method. This allows for a generic function pointer for all setters in the bodyComponent
 	//class.
-	void setVelocity(EngineDefs::Vector velocity);
-	void setXVelocity(EngineDefs::Float value);
-	void setYVelocity(EngineDefs::Float value);
+	void setVelocity(Vector2D velocity);
+	void setXVelocity(eFloat value);
+	void setYVelocity(eFloat value);
 	
-	void accelerate(EngineDefs::Float force);
-	void deccelerate(EngineDefs::Float force);
+	void accelerate(eFloat force);
+	void deccelerate(eFloat force);
 
-	void setAngle(EngineDefs::Float angle);
-	void rotate(EngineDefs::Float degrees);
+	void setAngle(eFloat angle);
+	void rotate(eFloat degrees);
 
-	void setPosition(EngineDefs::Vector position);	
+	void setPosition(Vector2D position);	
 	
 	void linearStop();
 	

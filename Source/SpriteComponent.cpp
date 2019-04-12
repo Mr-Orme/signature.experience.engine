@@ -43,7 +43,7 @@ SpriteComponent::~SpriteComponent()
 void SpriteComponent::draw()
 //**************************************
 {
-	EngineDefs::Vector updatedPosition;	
+	Vector2D updatedPosition;	
 
 	//adjust position.
 	updatedPosition = getViewAdjustedPosition();
@@ -58,7 +58,7 @@ void SpriteComponent::draw()
 	}
 }
 
-void SpriteComponent::draw(EngineDefs::Vector position, EngineDefs::Float angle)
+void SpriteComponent::draw(Vector2D position, eFloat angle)
 {
 	texture ->draw(devices -> gDevice -> getRenderer(), position, angle, NULL);
 }
@@ -69,7 +69,7 @@ Object* SpriteComponent::update(){return nullptr;}
 
 //**************************************
 //adjusts the position based on the view.
-EngineDefs::Vector SpriteComponent::getViewAdjustedPosition()
+Vector2D SpriteComponent::getViewAdjustedPosition()
 //**************************************
 {	
 	//adjust position.

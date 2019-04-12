@@ -60,7 +60,7 @@ Texture::Texture(GraphicsDevice* gDevice, const std::string & pathOrText, const 
 }
 	   
 
-void Texture::draw(SDL_Renderer* renderer, EngineDefs::Vector position, EngineDefs::Float angle, SDL_Rect* clip)
+void Texture::draw(SDL_Renderer* renderer, Vector2D position, eFloat angle, SDL_Rect* clip)
 {
 	if (sprite)
 	{

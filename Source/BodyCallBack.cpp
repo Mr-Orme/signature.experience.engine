@@ -7,8 +7,8 @@ BodyCallBack::BodyCallBack(
 	ResourceManager* devices, 
 	EventHandler::Event callBackEvent, 
 	BodyComponent* owner, 
-	EngineDefs::Vector adjustAmount, 
-	void(BodyComponent::* BodyMethod)(EngineDefs::Vector) const, EventHandler::EventData secondaryData):
+	Vector2D adjustAmount, 
+	void(BodyComponent::* BodyMethod)(Vector2D) const, EventHandler::EventData secondaryData):
 	owner(owner), adjustAmount(adjustAmount), BodyMethod(BodyMethod), secondaryData(secondaryData)
 {
 	devices->eventHandler->getListner(callBackEvent)->addCallBack(this);

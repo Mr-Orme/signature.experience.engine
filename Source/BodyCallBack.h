@@ -14,8 +14,8 @@ public:
 		ResourceManager* devices,
 		EventHandler::Event callBackEvent,
 		BodyComponent* owner, 
-		EngineDefs::Vector adjustAmount, 
-		void (BodyComponent::*BodyMethod)(EngineDefs::Vector) const, 
+		Vector2D adjustAmount, 
+		void (BodyComponent::*BodyMethod)(Vector2D) const, 
 		EventHandler::EventData secondaryData = 0);
 
 	/*
@@ -28,13 +28,13 @@ public:
 		BodyCallBack also has EventData secondaryData that stores memory address of iDevice key-combo it is looking for
 		calls proper body function based on passed in items secondaryData matches data passed in.
 	???? Can I make this more generic? Probably, only if every compnent I want to use it for requires
-		a EngineDefs::Vector. Unless I can use templates to call the correct overload????
+		a Vector2D. Unless I can use templates to call the correct overload????
 	*/
 	void triggered(EventHandler::EventData data) override;
 	//Pointer to method to call in BodyComponent
-	void (BodyComponent::*BodyMethod)(EngineDefs::Vector) const { nullptr };
+	void (BodyComponent::*BodyMethod)(Vector2D) const { nullptr };
 
-	EngineDefs::Vector adjustAmount{ 0.0f, 0.0f };
+	Vector2D adjustAmount{ 0.0f, 0.0f };
 	BodyComponent* owner{ nullptr };
 	EventHandler::EventData secondaryData{ 0 };
 

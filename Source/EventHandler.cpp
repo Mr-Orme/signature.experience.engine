@@ -17,7 +17,7 @@ void EventHandler::notify(Event event, EventHandler::EventData data)
 {
 	if (auto listnerIter = listners.find(event); listnerIter != listners.end())
 	{
-		listnerIter->second->eventTriggered();
+		listnerIter->second->eventTriggered(data);
 	}
 }
 

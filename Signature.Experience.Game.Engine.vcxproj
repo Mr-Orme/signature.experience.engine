@@ -161,7 +161,7 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
     <ClCompile Include="Source\Engine.cpp" />
     <ClCompile Include="Source\GraphicsDevice.cpp" />
     <ClCompile Include="Source\Listner.cpp" />
-    <ClCompile Include="Source\NotificationEventComponent.cpp" />
+    <ClCompile Include="Source\NotificationCallBackComponent.cpp" />
     <ClCompile Include="Source\StatComponent.cpp" />
     <ClCompile Include="Source\InputDevice.cpp" />
     <ClCompile Include="Source\Object.cpp" />
@@ -192,7 +192,7 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
     <ClInclude Include="Source\GraphicsDevice.h" />
     <ClInclude Include="Source\IEventTrigger.h" />
     <ClInclude Include="Source\Listner.h" />
-    <ClInclude Include="Source\NotificationEventComponent.h" />
+    <ClInclude Include="Source\NotificationCallBackComponent.h" />
     <ClInclude Include="Source\StatComponent.h" />
     <ClInclude Include="Source\Initializers.h" />
     <ClInclude Include="Source\InputDevice.h" />

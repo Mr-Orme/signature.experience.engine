@@ -11,7 +11,7 @@ class ResourceManager;
 class StatComponent : public Component
 {
 public:
-	StatComponent(Object* owner, ResourceManager* devices, EngineDefs::Int health);
+	StatComponent(Object* owner, ResourceManager* devices, eInt health);
 	~StatComponent() {};
 
 	Object* update() final;
@@ -21,9 +21,9 @@ public:
 	bool killObject(std::string &deathSprite);
 	bool killObject();
 
-	EngineDefs::Int getStat();
+	eInt getStat();
 	std::string name;
-	EngineDefs::Int statistic{ 0 };
+	eInt statistic{ 0 };
 	bool isDead{ false };
 	std::unique_ptr<StatComponent> modifier{ nullptr };
 private:

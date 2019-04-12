@@ -13,7 +13,7 @@ class Texture{
 		Texture(GraphicsDevice* gDevice, const std::string & pathOrText, const bool isSprite = true);
         ~Texture();
 
-        void draw(SDL_Renderer* renderer, EngineDefs::Vector position, EngineDefs::Float angle, SDL_Rect* clip = NULL );
+        void draw(SDL_Renderer* renderer, Vector2D position, eFloat angle, SDL_Rect* clip = NULL );
 		
 		int width{ 0 };
 		int height{ 0 };
