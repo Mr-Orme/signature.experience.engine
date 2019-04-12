@@ -12,7 +12,7 @@
 SpriteComponent::SpriteComponent(Object* owner, const SpritePresets& presets):Component(owner)
 {
 	this->devices = presets.Devices;
-	this->texture = presets.spriteTexture;
+	this->texture = std::unique_ptr<Texture>(presets.spriteTexture);
 	//initialized = (devices && texture);
 }
 
@@ -22,11 +22,11 @@ SpriteComponent::SpriteComponent(Object * owner, ResourceManager * devices, tiny
 	componentElement->QueryBoolAttribute("sprite", &isSprite);
 	if (isSprite)
 	{
-		texture = devices->assetLibrary->getArtAsset(componentElement->Attribute("asset"));
+		texture = std::unique_ptr<Texture>(devices->assetLibrary->getArtAsset(componentElement->Attribute("asset")));
 	}
 	else
 	{
-		texture = new Texture(devices->gDevice.get(), componentElement->Attribute("text"), false);
+		texture = std::make_unique<Texture>(devices->gDevice.get(), componentElement->Attribute("text"), false);
 	}
 }
 

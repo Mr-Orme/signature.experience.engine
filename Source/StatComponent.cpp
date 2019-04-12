@@ -26,8 +26,8 @@ bool StatComponent::killObject(std::string &deathSprite)
 	//grab the renderer
 	SpriteComponent* sprite = owner -> getComponent<SpriteComponent>();
 	//change the sprite
-	
-	if(sprite -> texture = devices -> assetLibrary -> getArtAsset(deathSprite))	return true;
+	//Todo::Mr.Orme:: change textures to shared_ptr!!!
+	if(sprite -> texture.get() == devices -> assetLibrary -> getArtAsset(deathSprite))	return true;
 	else return false;
 }
 //**************************************
