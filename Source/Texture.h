@@ -4,6 +4,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "Definitions.h"
+#include "Vector2D.h"
 class GraphicsDevice;
 class Texture{
 

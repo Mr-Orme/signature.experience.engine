@@ -169,11 +169,11 @@ Vector2D PhysicsDevice::getVelocity(const BodyComponent* object) const
 bool PhysicsDevice::createFixture( BodyComponent* object, BodyPresets presets)
 //**************************************
 {
-	Texture* texture{ presets.sprite->texture };
+	Texture* texture{ presets.sprite->texture.get() };
 	
 	if (!texture)
 	{
-		texture = object->getOwner()->getComponent<SpriteComponent>()->texture;
+		texture = object->getOwner()->getComponent<SpriteComponent>()->texture.get();
 	}
 
 	//new body definition
@@ -400,7 +400,7 @@ Vector2D PhysicsDevice::alignCenters(const BodyComponent* object) const
 	b2Body* body = FindBody(object);
 	b2Vec2 physPosition = body -> GetPosition();
 	Vector2D position;
-	Texture* texture = object->getOwner()->getComponent<SpriteComponent>()->texture;
+	Texture* texture = object->getOwner()->getComponent<SpriteComponent>()->texture.get();
 
 		//subtract off half the width.
 		position.x = PW2RW(physPosition.x) - (texture -> width/2);

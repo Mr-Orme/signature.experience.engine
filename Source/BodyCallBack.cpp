@@ -2,6 +2,7 @@
 #include "ResourceManager.h"
 #include "EventHandler.h"
 #include "Listner.h"
+#include "Vector2D.h"
 
 BodyCallBack::BodyCallBack(
 	ResourceManager* devices, 

@@ -3,6 +3,7 @@
 
 #include "Definitions.h"
 #include "ICallBack.h"
+#include "Vector2D.h"
 class ResourceManager;
 class BodyComponent;
 class SpriteComponent;

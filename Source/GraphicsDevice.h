@@ -16,6 +16,7 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 #include "Definitions.h"
+#include "Vector2D.h"
 
 class View;
 class Texture;
@@ -88,8 +89,8 @@ private:
 
 	struct overlay
 	{
-		Vector2D topLeft{ 0 };
-		Vector2D bottomRight{ 0 };
+		Vector2D topLeft{ 0,0 };
+		Vector2D bottomRight{ 0,0 };
 		RGBA boxBackgroundColor{ 0,0,0,0 };
 		RGBA boxBorderColor{ 0,0,0,0 };
 		std::map<Texture*, Vector2D> objects;

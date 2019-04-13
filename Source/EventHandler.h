@@ -6,6 +6,7 @@
 
 
 #include "InputDevice.h"
+#include "Vector2D.h"
 
 class Listner;
 class IEventTrigger;

@@ -14,15 +14,16 @@
 #include <iosfwd>
 #include <limits>
 #include "Utils.h"
+#include "Definitions.h"
 
 
 struct Vector2D
 {
-	double x;
-	double y;
+	eFloat x;
+	eFloat y;
 
 	Vector2D() :x(0.0), y(0.0) {}
-	Vector2D(double a, double b) :x(a), y(b) {}
+	Vector2D(eFloat a, eFloat b) :x(a), y(b) {}
 
 	//sets x and y to zero
 	void Zero() { x = 0.0; y = 0.0; }
@@ -31,14 +32,14 @@ struct Vector2D
 	bool isZero()const { return (x*x + y * y) < MinDouble; }
 
 	//returns the length of the vector
-	inline double    Length()const;
+	inline eFloat    Length()const;
 
 	//returns the squared length of the vector (thereby avoiding the sqrt)
-	inline double    LengthSq()const;
+	inline eFloat    LengthSq()const;
 
 	inline void      Normalize();
 
-	inline double    Dot(const Vector2D& v2)const;
+	inline eFloat    Dot(const Vector2D& v2)const;
 
 	//returns positive if v2 is clockwise of this vector,
 	//negative if anticlockwise (assuming the Y axis is pointing down,
@@ -49,13 +50,13 @@ struct Vector2D
 	inline Vector2D  Perp()const;
 
 	//adjusts x and y so that the length of the vector does not exceed max
-	inline void      Truncate(double max);
+	inline void      Truncate(eFloat max);
 
 	//returns the distance between this vector and th one passed as a parameter
-	inline double    Distance(const Vector2D &v2)const;
+	inline eFloat    Distance(const Vector2D &v2)const;
 
 	//squared version of above.
-	inline double    DistanceSq(const Vector2D &v2)const;
+	inline eFloat    DistanceSq(const Vector2D &v2)const;
 
 	inline void      Reflect(const Vector2D& norm);
 
@@ -63,11 +64,11 @@ struct Vector2D
 	inline Vector2D  GetReverse()const;
 
 
-	double getAngleRadians(const Vector2D & v2)
+	eFloat getAngleRadians(const Vector2D & v2)
 	{
 		return acos(Dot(v2));
 	}
-	double getAngleDegrees(const Vector2D & v2)
+	eFloat getAngleDegrees(const Vector2D & v2)
 	{
 		return getAngleRadians(v2) * 180 / Pi;
 	}
@@ -88,7 +89,7 @@ struct Vector2D
 		return *this;
 	}
 
-	const Vector2D& operator*=(const double& rhs)
+	const Vector2D& operator*=(const eFloat& rhs)
 	{
 		x *= rhs;
 		y *= rhs;
@@ -96,7 +97,7 @@ struct Vector2D
 		return *this;
 	}
 
-	const Vector2D& operator/=(const double& rhs)
+	const Vector2D& operator/=(const eFloat& rhs)
 	{
 		x /= rhs;
 		y /= rhs;
@@ -117,11 +118,11 @@ struct Vector2D
 };
 
 //-----------------------------------------------------------------------some more operator overloads
-inline Vector2D operator*(const Vector2D &lhs, double rhs);
-inline Vector2D operator*(double lhs, const Vector2D &rhs);
+inline Vector2D operator*(const Vector2D &lhs, eFloat rhs);
+inline Vector2D operator*(eFloat lhs, const Vector2D &rhs);
 inline Vector2D operator-(const Vector2D &lhs, const Vector2D &rhs);
 inline Vector2D operator+(const Vector2D &lhs, const Vector2D &rhs);
-inline Vector2D operator/(const Vector2D &lhs, double val);
+inline Vector2D operator/(const Vector2D &lhs, eFloat val);
 std::ostream& operator<<(std::ostream& os, const Vector2D& rhs);
 std::ifstream& operator>>(std::ifstream& is, Vector2D& lhs);
 
@@ -132,7 +133,7 @@ std::ifstream& operator>>(std::ifstream& is, Vector2D& lhs);
 //
 //  returns the length of a 2D vector
 //------------------------------------------------------------------------
-inline double Vector2D::Length()const
+inline eFloat Vector2D::Length()const
 {
 	return sqrt(x * x + y * y);
 }
@@ -142,7 +143,7 @@ inline double Vector2D::Length()const
 //
 //  returns the squared length of a 2D vector
 //------------------------------------------------------------------------
-inline double Vector2D::LengthSq()const
+inline eFloat Vector2D::LengthSq()const
 {
 	return (x * x + y * y);
 }
@@ -152,7 +153,7 @@ inline double Vector2D::LengthSq()const
 //
 //  calculates the dot product
 //------------------------------------------------------------------------
-inline double Vector2D::Dot(const Vector2D &v2)const
+inline eFloat Vector2D::Dot(const Vector2D &v2)const
 {
 	return x * v2.x + y * v2.y;
 }
@@ -189,10 +190,10 @@ inline Vector2D Vector2D::Perp()const
 //
 //  calculates the euclidean distance between two vectors
 //------------------------------------------------------------------------
-inline double Vector2D::Distance(const Vector2D &v2)const
+inline eFloat Vector2D::Distance(const Vector2D &v2)const
 {
-	double ySeparation = v2.y - y;
-	double xSeparation = v2.x - x;
+	eFloat ySeparation = v2.y - y;
+	eFloat xSeparation = v2.x - x;
 
 	return sqrt(ySeparation*ySeparation + xSeparation * xSeparation);
 }
@@ -202,10 +203,10 @@ inline double Vector2D::Distance(const Vector2D &v2)const
 //
 //  calculates the euclidean distance squared between two vectors 
 //------------------------------------------------------------------------
-inline double Vector2D::DistanceSq(const Vector2D &v2)const
+inline eFloat Vector2D::DistanceSq(const Vector2D &v2)const
 {
-	double ySeparation = v2.y - y;
-	double xSeparation = v2.x - x;
+	eFloat ySeparation = v2.y - y;
+	eFloat xSeparation = v2.x - x;
 
 	return ySeparation * ySeparation + xSeparation * xSeparation;
 }
@@ -214,7 +215,7 @@ inline double Vector2D::DistanceSq(const Vector2D &v2)const
 //
 //  truncates a vector so that its length does not exceed max
 //------------------------------------------------------------------------
-inline void Vector2D::Truncate(double max)
+inline void Vector2D::Truncate(eFloat max)
 {
 	if (this->Length() > max)
 	{
@@ -250,9 +251,9 @@ inline Vector2D Vector2D::GetReverse()const
 //------------------------------------------------------------------------
 inline void Vector2D::Normalize()
 {
-	double vector_length = this->Length();
+	eFloat vector_length = this->Length();
 
-	if (vector_length > std::numeric_limits<double>::epsilon())
+	if (vector_length > std::numeric_limits<eFloat>::epsilon())
 	{
 		this->x /= vector_length;
 		this->y /= vector_length;
@@ -266,9 +267,9 @@ inline Vector2D Vec2DNormalize(const Vector2D &v)
 {
 	Vector2D vec = v;
 
-	double vector_length = vec.Length();
+	eFloat vector_length = vec.Length();
 
-	if (vector_length > std::numeric_limits<double>::epsilon())
+	if (vector_length > std::numeric_limits<eFloat>::epsilon())
 	{
 		vec.x /= vector_length;
 		vec.y /= vector_length;
@@ -278,30 +279,30 @@ inline Vector2D Vec2DNormalize(const Vector2D &v)
 }
 
 
-inline double Vec2DDistance(const Vector2D &v1, const Vector2D &v2)
+inline eFloat Vec2DDistance(const Vector2D &v1, const Vector2D &v2)
 {
 
-	double ySeparation = v2.y - v1.y;
-	double xSeparation = v2.x - v1.x;
+	eFloat ySeparation = v2.y - v1.y;
+	eFloat xSeparation = v2.x - v1.x;
 
 	return sqrt(ySeparation*ySeparation + xSeparation * xSeparation);
 }
 
-inline double Vec2DDistanceSq(const Vector2D &v1, const Vector2D &v2)
+inline eFloat Vec2DDistanceSq(const Vector2D &v1, const Vector2D &v2)
 {
 
-	double ySeparation = v2.y - v1.y;
-	double xSeparation = v2.x - v1.x;
+	eFloat ySeparation = v2.y - v1.y;
+	eFloat xSeparation = v2.x - v1.x;
 
 	return ySeparation * ySeparation + xSeparation * xSeparation;
 }
 
-inline double Vec2DLength(const Vector2D& v)
+inline eFloat Vec2DLength(const Vector2D& v)
 {
 	return sqrt(v.x*v.x + v.y*v.y);
 }
 
-inline double Vec2DLengthSq(const Vector2D& v)
+inline eFloat Vec2DLengthSq(const Vector2D& v)
 {
 	return (v.x*v.x + v.y*v.y);
 }
@@ -314,7 +315,7 @@ inline double Vec2DLengthSq(const Vector2D& v)
 
 //inline Vector2D POINTtoVector(const POINT& p)
 //{
-	//return Vector2D((double)p.x, (double)p.y);
+	//return Vector2D((eFloat)p.x, (eFloat)p.y);
 //}
 
 //inline POINTS VectorToPOINTS(const Vector2D& v)
@@ -338,14 +339,14 @@ inline double Vec2DLengthSq(const Vector2D& v)
 
 
 //------------------------------------------------------------------------operator overloads
-inline Vector2D operator*(const Vector2D &lhs, double rhs)
+inline Vector2D operator*(const Vector2D &lhs, eFloat rhs)
 {
 	Vector2D result(lhs);
 	result *= rhs;
 	return result;
 }
 
-inline Vector2D operator*(double lhs, const Vector2D &rhs)
+inline Vector2D operator*(eFloat lhs, const Vector2D &rhs)
 {
 	Vector2D result(rhs);
 	result *= lhs;
@@ -373,7 +374,7 @@ inline Vector2D operator+(const Vector2D &lhs, const Vector2D &rhs)
 }
 
 //overload the / operator
-inline Vector2D operator/(const Vector2D &lhs, double val)
+inline Vector2D operator/(const Vector2D &lhs, eFloat val)
 {
 	Vector2D result(lhs);
 	result.x /= val;
@@ -390,9 +391,9 @@ inline void WrapAround(Vector2D &pos, int MaxX, int MaxY)
 {
 	if (pos.x > MaxX) { pos.x = 0.0; }
 
-	if (pos.x < 0) { pos.x = (double)MaxX; }
+	if (pos.x < 0) { pos.x = (eFloat)MaxX; }
 
-	if (pos.y < 0) { pos.y = (double)MaxY; }
+	if (pos.y < 0) { pos.y = (eFloat)MaxY; }
 
 	if (pos.y > MaxY) { pos.y = 0.0; }
 }
@@ -428,7 +429,7 @@ inline bool InsideRegion(Vector2D p, int left, int top, int right, int bottom)
 inline bool isSecondInFOVOfFirst(Vector2D posFirst,
 	Vector2D facingFirst,
 	Vector2D posSecond,
-	double    fov)
+	eFloat    fov)
 {
 	Vector2D toTarget = Vec2DNormalize(posSecond - posFirst);
 

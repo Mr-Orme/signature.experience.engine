@@ -6,6 +6,8 @@
 #include "InputDevice.h"
 #include "EventHandler.h"
 #include "ResourceManager.h"
+
+#include "Vector2D.h"
 class BodyComponent;
 class BodyCallBack : public ICallBack
 {

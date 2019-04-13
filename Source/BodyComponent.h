@@ -5,7 +5,7 @@
 #include "Component.h"
 #include "Definitions.h"
 
-
+#include "Vector2D.h"
 class BodyCallBack;
 class ResourceManager;
 class Object;
