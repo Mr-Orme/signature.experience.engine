@@ -5,7 +5,7 @@
 #include "ResourceManager.h"
 #include "ComponentsList.h"
 #include "GraphicsDevice.h"
-#include "View.h"
+#include "ViewCallBack.h"
 #include "Texture.h"
 #include "PhysicsDevice.h"
 #include "SoundDevice.h"

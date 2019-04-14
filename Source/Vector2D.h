@@ -70,7 +70,7 @@ struct Vector2D
 	}
 	eFloat getAngleDegrees(const Vector2D & v2)
 	{
-		return getAngleRadians(v2) * 180 / Pi;
+		return (eFloat)(getAngleRadians(v2) * 180 / Pi);
 	}
 	//we need some overloaded operators
 	const Vector2D& operator+=(const Vector2D &rhs)
@@ -232,7 +232,7 @@ inline void Vector2D::Truncate(eFloat max)
 //------------------------------------------------------------------------
 inline void Vector2D::Reflect(const Vector2D& norm)
 {
-	*this += 2.0 * this->Dot(norm) * norm.GetReverse();
+	*this += 2.0f * this->Dot(norm) * norm.GetReverse();
 }
 
 //----------------------- GetReverse ----------------------------------------

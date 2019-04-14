@@ -6,16 +6,17 @@
 #include "Definitions.h"
 
 #include "Vector2D.h"
+
 class BodyCallBack;
 class ResourceManager;
 class Object;
 class BodyComponent : public Component
 {
 public:
-	BodyComponent(Object* owner, ResourceManager* devices, BodyPresets presets);
+	BodyComponent(Object* owner, ResourceManager* devices, BodyPresets& presets);
 	~BodyComponent();
 		
-	Object* update() final;
+	std::vector<std::unique_ptr<Object>> update() final;
 
 	//TODO::Josh::add more functionality for other things Box2D can do.
 	//Josh::Added more functionality and defined functions in cpp file
@@ -24,8 +25,6 @@ public:
 	eFloat getAngle();
 
 	Vector2D getPosition();
-	eFloat getXPos();
-	eFloat getYPos();
 	const eFloat maxSpeed = 5;
 	Vector2D getVelocity();
 
@@ -35,19 +34,16 @@ public:
 	//TODO::Josh::change all params for these methods to Vector2D, then just grab the correct one
 	//in the method. This allows for a generic function pointer for all setters in the bodyComponent
 	//class.
-	void setVelocity(Vector2D velocity);
-	void setXVelocity(eFloat value);
-	void setYVelocity(eFloat value);
-	
-	void accelerate(eFloat force);
-	void deccelerate(eFloat force);
+	void setVelocity(Vector2D velocity);	
+	void accelerate(Vector2D force);
+	void deccelerate(Vector2D force);
 
-	void setAngle(eFloat angle);
-	void rotate(eFloat degrees);
+	void setAngle(Vector2D angle);
+	//void applyRotationalForce(Vector2D degrees);
 
 	void setPosition(Vector2D position);	
 	
-	void linearStop();
+	void linearStop(Vector2D unused);
 	
 	std::unique_ptr<BodyComponent> joinedWith{ nullptr };
 private:

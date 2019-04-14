@@ -4,12 +4,13 @@
 #include <vector>
 #include "EventHandler.h"
 class ICallBack;
+class Object;
 class Listner
 {
 public:
 	void addCallBack(ICallBack* callBack);
 	void removeCallBack(const ICallBack* callBack);
-	void eventTriggered(EventHandler::EventData data = 0);
+	std::vector<std::unique_ptr<Object>> eventTriggered(EventHandler::EventData data = {});
 private:
 	std::vector<ICallBack*> callBacks;
 };

@@ -14,7 +14,7 @@ public:
 	StatComponent(Object* owner, ResourceManager* devices, eInt health);
 	~StatComponent() {};
 
-	Object* update() final;
+	std::vector<std::unique_ptr<Object>> update() final;
 
 	//TODO: move to eventManager when we have one. The event should check for a health stat component.
 	//So there is a killObject method within our ResourceManager.h too, is it related?

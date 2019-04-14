@@ -11,6 +11,7 @@
 
 #ifndef GRAPHICSDEVICE_H
 #define GRAPHICSDEVICE_H
+#include <map>
 
 #include "SDL.h"
 #include "SDL_image.h"

@@ -18,7 +18,7 @@ public:
 	PhysicsDevice(Vector2D gravity);
 	
 	bool update(float dt);
-	bool createFixture(BodyComponent* object, BodyPresets presets);
+	bool createFixture(BodyComponent* object, const BodyPresets& presets);
 	bool createJoint(Joints joint);
 	bool removeObject(BodyComponent* object);
 

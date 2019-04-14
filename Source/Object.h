@@ -1,7 +1,8 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-
+#include <vector>
+#include <memory>
 #include "Definitions.h"
 #include "Component.h"
 
@@ -23,7 +24,7 @@ public:
 	~Object();
 	
 	void AddComponent(Component* component);
-	Object* update();
+	std::vector<std::unique_ptr<Object>> update();
 	void draw();
 	
 	bool removeComponents();

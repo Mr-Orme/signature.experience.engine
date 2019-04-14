@@ -25,6 +25,7 @@ InputDevice::InputDevice()
 	keyStates[UserInputs::QUIT] = false;
 	keyStates[UserInputs::SHIFT] = false;
 	keyStates[UserInputs::B] = false;
+	keyStates[UserInputs::LEFT_CLICK] = false;
 	update();
 }
 
@@ -41,13 +42,39 @@ void InputDevice::update()
 		{
 		case SDL_KEYDOWN:
 			//translates the SDL even to a game event.
-			gEvent = Translate();
+			gEvent = keyTranslate();
 			keyStates.find(gEvent) -> second = true;
 			break;
 		case SDL_KEYUP:
 			//translates the SDL even to a game event.
-			gEvent = Translate();
+			gEvent = keyTranslate();
 			keyStates.find(gEvent) -> second = false;
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			switch (event->button.button)
+			{
+			case SDL_BUTTON_LEFT:
+				keyStates.find(UserInputs::LEFT_CLICK)->second = true;
+				break;
+			case SDL_BUTTON_RIGHT:
+				keyStates.find(UserInputs::RIGHT_CLICK)->second = true;
+				break;
+			}
+			break;
+		case SDL_MOUSEBUTTONUP:
+			switch (event->button.button)
+			{
+			case SDL_BUTTON_LEFT:
+				keyStates.find(UserInputs::LEFT_CLICK)->second = false;
+				break;
+			case SDL_BUTTON_RIGHT:
+				keyStates.find(UserInputs::RIGHT_CLICK)->second = true;
+				break;
+			}
+			break;
+		case SDL_MOUSEMOTION:
+			mousePosition.x = (eFloat)event->motion.x;
+			mousePosition.y = (eFloat)event->motion.y;
 			break;
 		case SDL_QUIT:
 			keyStates.find(UserInputs::QUIT) -> second = true;
@@ -58,9 +85,15 @@ void InputDevice::update()
 	}
 }
 
+Vector2D InputDevice::getMousePosition()
+{
+	return mousePosition;
+}
+
+
 //**************************************
 //converts the SDL event to a game event
-InputDevice::UserInputs InputDevice::Translate()
+InputDevice::UserInputs InputDevice::keyTranslate()
 //**************************************
 {
 	//This switch is here in case we want to add other events, such as mouse events.
@@ -88,7 +121,7 @@ InputDevice::UserInputs InputDevice::Translate()
 		case SDLK_b:
 			return UserInputs::B;
 			break;
-		}
+	}
 
 	return UserInputs::NA;
 }

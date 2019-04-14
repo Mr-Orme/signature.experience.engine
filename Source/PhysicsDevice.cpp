@@ -166,7 +166,7 @@ Vector2D PhysicsDevice::getVelocity(const BodyComponent* object) const
 //**************************************
 //Creates a body and fixture for a passed in object
 //based on passed in values
-bool PhysicsDevice::createFixture( BodyComponent* object, BodyPresets presets)
+bool PhysicsDevice::createFixture( BodyComponent* object, const BodyPresets& presets)
 //**************************************
 {
 	Texture* texture{ presets.sprite->texture.get() };
@@ -204,14 +204,8 @@ bool PhysicsDevice::createFixture( BodyComponent* object, BodyPresets presets)
 	}
 
 	//********Adjust postion because SDL is top left, while box2d is center*************
-	//subtract off half the width.
-	presets.position.x += (texture -> width/2);
-	//subtract off half the height
-	presets.position.y += (texture -> height/2);
-	//**********************************************************************************
-
 	// set starting position & angle
-	bd -> position.Set(RW2PW((eFloat)presets.position.x), RW2PW((eFloat)presets.position.y));
+	bd -> position.Set(RW2PW((eFloat)presets.position.x + (texture->width / 2)), RW2PW((eFloat)presets.position.y+ (texture->height / 2)));
 	bd -> angle = RW2PWAngle(presets.angle);
 
 	//add the body to the world

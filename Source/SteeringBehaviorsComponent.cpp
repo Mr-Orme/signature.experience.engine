@@ -28,6 +28,11 @@ Vector2D SteeringBehaviorComponent::Calculate()
 	//Arrive(m_vTarget, SteeringBehavior::Deceleration::normal);
 }
 
+std::vector<std::unique_ptr<Object>> SteeringBehaviorComponent::update()
+{
+	return std::vector<std::unique_ptr<Object>>();
+}
+
 /////////////////////////////////////////////////////////////////////////////// START OF BEHAVIORS
 
 //------------------------------- Seek -----------------------------------
@@ -51,7 +56,7 @@ Vector2D SteeringBehaviorComponent::Seek(Vector2D TargetPos)
 {
 	//only flee if the target is within 'panic distance'. Work in distance
 	//squared space.
-	const double PanicDistanceSq = 100.0f * 100.0;
+	const eFloat PanicDistanceSq = 100.0f * 100.0;
 	if (Vec2DDistanceSq(m_pVehicle->Pos(), target) > PanicDistanceSq)
 	{
 	  return Vector2D(0,0);
@@ -75,17 +80,17 @@ Vector2D SteeringBehaviorComponent::Arrive(Vector2D     TargetPos,
 	Vector2D ToTarget = TargetPos - owner->getComponent<BodyComponent>()->getPosition();
 
 	//calculate the distance to the target
-	double dist = ToTarget.Length();
+	eFloat dist = ToTarget.Length();
 
 	if (dist > 0)
 	{
 		//because Deceleration is enumerated as an int, this value is required
 		//to provide fine tweaking of the deceleration..
-		const double DecelerationTweaker = 0.5;
+		const eFloat DecelerationTweaker = 0.5;
 
 		//calculate the speed required to reach the target given the desired
 		//deceleration
-		double speed = dist / ((double)deceleration * DecelerationTweaker);
+		eFloat speed = dist / ((eFloat)deceleration * DecelerationTweaker);
 
 		//make sure the velocity does not exceed the max
 		speed = min((eFloat)speed, owner->getComponent<BodyComponent>()->maxSpeed);
@@ -112,7 +117,7 @@ Vector2D SteeringBehavior::Pursuit(const GameObject* evader)
 	//for the evader's current position.
 	Vector2D ToEvader = evader->getSpritePosition() - m_pVehicle->getSpritePosition();
 
-	double RelativeHeading = m_pVehicle->getHeading().Dot(evader->getHeading());
+	eFloat RelativeHeading = m_pVehicle->getHeading().Dot(evader->getHeading());
 
 	if ((ToEvader.Dot(m_pVehicle->getHeading()) > 0) &&
 		(RelativeHeading < -0.95))  //acos(0.95)=18 degs
@@ -125,7 +130,7 @@ Vector2D SteeringBehavior::Pursuit(const GameObject* evader)
 	//the lookahead time is propotional to the distance between the evader
 	//and the pursuer; and is inversely proportional to the sum of the
 	//agent's velocities
-	double LookAheadTime = ToEvader.Length() /
+	eFloat LookAheadTime = ToEvader.Length() /
 		(m_pVehicle->getMaxSpeed + evader->getSpeed());
 
 	//now seek to the predicted future position of the evader
@@ -146,13 +151,13 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 
 		//uncomment the following two lines to have Evade only consider pursuers
 		//within a 'threat range'
-		const double ThreatRange = 100.0;
+		const eFloat ThreatRange = 100.0;
 		if (ToPursuer.LengthSq() > ThreatRange * ThreatRange) return Vector2D();
 
 		//the lookahead time is propotional to the distance between the pursuer
 		//and the pursuer; and is inversely proportional to the sum of the
 		//agents' velocities
-		double LookAheadTime = ToPursuer.Length() /
+		eFloat LookAheadTime = ToPursuer.Length() /
 			(m_pVehicle->getMaxSpeed() + pursuer->getSpeed());
 
 		//now flee away from predicted future position of the pursuer
@@ -168,7 +173,7 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 	{
 		//this behavior is dependent on the update rate, so this line must
 		//be included when using time independent framerate.
-		double JitterThisTimeSlice = m_dWanderJitter * 1/100;
+		eFloat JitterThisTimeSlice = m_dWanderJitter * 1/100;
 
 		//first, add a small random vector to the target's position
 		m_vWanderTarget += Vector2D(RandomClamped() * JitterThisTimeSlice,
@@ -214,7 +219,7 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 		BaseGameEntity* ClosestIntersectingObstacle = NULL;
 
 		//this will be used to track the distance to the CIB
-		double DistToClosestIP = MaxDouble;
+		eFloat DistToClosestIP = MaxDouble;
 
 		//this will record the transformed local coordinates of the CIB
 		Vector2D LocalPosOfClosestObstacle;
@@ -239,7 +244,7 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 					//if the distance from the x axis to the object's position is less
 					//than its radius + half the width of the detection box then there
 					//is a potential intersection.
-					double ExpandedRadius = (*curOb)->BRadius() + m_pVehicle->BRadius();
+					eFloat ExpandedRadius = (*curOb)->BRadius() + m_pVehicle->BRadius();
 
 					if (fabs(LocalPos.y) < ExpandedRadius)
 					{
@@ -248,13 +253,13 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 						//given by the formula x = cX +/-sqrt(r^2-cY^2) for y=0.
 						//We only need to look at the smallest positive value of x because
 						//that will be the closest point of intersection.
-						double cX = LocalPos.x;
-						double cY = LocalPos.y;
+						eFloat cX = LocalPos.x;
+						eFloat cY = LocalPos.y;
 
 						//we only need to calculate the sqrt part of the above equation once
-						double SqrtPart = sqrt(ExpandedRadius*ExpandedRadius - cY * cY);
+						eFloat SqrtPart = sqrt(ExpandedRadius*ExpandedRadius - cY * cY);
 
-						double ip = cX - SqrtPart;
+						eFloat ip = cX - SqrtPart;
 
 						if (ip <= 0.0)
 						{
@@ -286,7 +291,7 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 		{
 			//the closer the agent is to an object, the stronger the
 			//steering force should be
-			double multiplier = 1.0 + (m_dDBoxLength - LocalPosOfClosestObstacle.x) /
+			eFloat multiplier = 1.0 + (m_dDBoxLength - LocalPosOfClosestObstacle.x) /
 				m_dDBoxLength;
 
 			//calculate the lateral force
@@ -295,7 +300,7 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 
 			//apply a braking force proportional to the obstacles distance from
 			//the vehicle.
-			const double BrakingWeight = 0.2;
+			const eFloat BrakingWeight = 0.2;
 
 			SteeringForce.x = (ClosestIntersectingObstacle->BRadius() -
 				LocalPosOfClosestObstacle.x) *
@@ -319,8 +324,8 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 		//the feelers are contained in a std::vector, m_Feelers
 		CreateFeelers();
 
-		double DistToThisIP = 0.0;
-		double DistToClosestIP = MaxDouble;
+		eFloat DistToThisIP = 0.0;
+		eFloat DistToClosestIP = MaxDouble;
 
 		//this will hold an index into the vector of walls
 		int ClosestWall = -1;
@@ -454,7 +459,7 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 		//heading vectors.
 		if (NeighborCount > 0)
 		{
-			AverageHeading /= (double)NeighborCount;
+			AverageHeading /= (eFloat)NeighborCount;
 
 			AverageHeading -= m_pVehicle->getHeading();
 		}
@@ -492,7 +497,7 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 		if (NeighborCount > 0)
 		{
 			//the center of mass is the average of the sum of positions
-			CenterOfMass /= (double)NeighborCount;
+			CenterOfMass /= (eFloat)NeighborCount;
 
 			//now seek towards that position
 			SteeringForce = Seek(CenterOfMass);
@@ -552,7 +557,7 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 		Vector2D AverageHeading;
 
 		//This count the number of vehicles in the neighborhood
-		double    NeighborCount = 0.0;
+		eFloat    NeighborCount = 0.0;
 
 		//iterate through the neighbors and sum up all the position vectors
 		for (MovingEntity* pV = m_pVehicle->World()->CellSpace()->begin();
@@ -615,7 +620,7 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 		if (NeighborCount > 0)
 		{
 			//the center of mass is the average of the sum of positions
-			CenterOfMass /= (double)NeighborCount;
+			CenterOfMass /= (eFloat)NeighborCount;
 
 			//now seek towards that position
 			SteeringForce = Seek(CenterOfMass);
@@ -640,7 +645,7 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 		//taken to reach the mid way point at the current time at at max speed.
 		Vector2D MidPoint = (AgentA->getSpritePosition() + AgentB->getSpritePosition()) / 2.0;
 
-		double TimeToReachMidPoint = Vec2DDistance(m_pVehicle->getSpritePosition(), MidPoint) /
+		eFloat TimeToReachMidPoint = Vec2DDistance(m_pVehicle->getSpritePosition(), MidPoint) /
 			m_pVehicle->getMaxSpeed();
 
 		//now we have T, we assume that agent A and agent B will continue on a
@@ -661,7 +666,7 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 	Vector2D SteeringBehavior::Hide(const GameObject*           hunter,
 		const vector<BaseGameEntity*>& obstacles)
 	{
-		double    DistToClosest = MaxDouble;
+		eFloat    DistToClosest = MaxDouble;
 		Vector2D BestHidingSpot;
 
 		std::vector<BaseGameEntity*>::const_iterator curOb = obstacles.begin();
@@ -676,7 +681,7 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 
 			//work in distance-squared space to find the closest hiding
 			//spot to the agent
-			double dist = Vec2DDistanceSq(HidingSpot, m_pVehicle->getSpritePosition());
+			eFloat dist = Vec2DDistanceSq(HidingSpot, m_pVehicle->getSpritePosition());
 
 			if (dist < DistToClosest)
 			{
@@ -708,13 +713,13 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 	//  away from its bounding radius and directly opposite the hunter
 	//------------------------------------------------------------------------
 	Vector2D SteeringBehavior::GetHidingPosition(const Vector2D& posOb,
-		const double     radiusOb,
+		const eFloat     radiusOb,
 		const Vector2D& posHunter)
 	{
 		//calculate how far away the agent is to be from the chosen obstacle's
 		//bounding radius
-		const double DistanceFromBoundary = 30.0;
-		double       DistAway = radiusOb + DistanceFromBoundary;
+		const eFloat DistanceFromBoundary = 30.0;
+		eFloat       DistAway = radiusOb + DistanceFromBoundary;
 
 		//calculate the heading toward the object from the hunter
 		Vector2D ToOb = Vec2DNormalize(posOb - posHunter);
@@ -772,7 +777,7 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 		//the lookahead time is propotional to the distance between the leader
 		//and the pursuer; and is inversely proportional to the sum of both
 		//agent's velocities
-		double LookAheadTime = ToOffset.Length() /
+		eFloat LookAheadTime = ToOffset.Length() /
 			(m_pVehicle->getMaxSpeed() + leader->getSpeed());
 
 		//now Arrive at the predicted future position of the offset
@@ -855,7 +860,7 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 			//a vertex buffer rqd for drawing the detection box
 			static std::vector<Vector2D> box(4);
 
-			double length = Prm.MinDetectionBoxLength +
+			eFloat length = Prm.MinDetectionBoxLength +
 				(m_pVehicle->getSpeed() / m_pVehicle->getMaxSpeed()) *
 				Prm.MinDetectionBoxLength;
 
@@ -891,7 +896,7 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 			BaseGameEntity* ClosestIntersectingObstacle = NULL;
 
 			//this will be used to track the distance to the CIB
-			double DistToClosestIP = MaxDouble;
+			eFloat DistToClosestIP = MaxDouble;
 
 			//this will record the transformed local coordinates of the CIB
 			Vector2D LocalPosOfClosestObstacle;
@@ -975,7 +980,7 @@ Vector2D SteeringBehavior::Evade(const GameObject* pursuer)
 
 		if (On(follow_path))
 		{
-			double sd = sqrt(m_dWaypointSeekDistSq);
+			eFloat sd = sqrt(m_dWaypointSeekDistSq);
 			if (m_pVehicle->ID() == 0) { gdi->TextAtPos(5, NextSlot, "SeekDistance(D/C):"); gdi->TextAtPos(160, NextSlot, ttos(sd)); NextSlot += SlotSize; }
 
 			if (KEYDOWN('D')) { m_dWaypointSeekDistSq += 1.0; }

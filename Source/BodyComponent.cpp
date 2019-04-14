@@ -11,17 +11,18 @@
 
 
 
-BodyComponent::BodyComponent(Object* owner, ResourceManager* devices, BodyPresets presets)
+BodyComponent::BodyComponent(Object* owner, ResourceManager* devices, BodyPresets & presets)
 	:Component(owner), devices(devices)
 {
-	for (auto& callBack : presets.callBacks)
+	/*for (auto& callBack : presets.callBacks)
 	{
 		callBacks.push_back(std::unique_ptr<BodyCallBack>(static_cast<BodyCallBack*>(callBack.release())));		
 	}
-	presets.callBacks.clear();
+	presets.callBacks.clear();*/
+	callBacks = std::move(presets.callBacks);
 	
 	//Create fixture.
-	devices->pDevice->createFixture(this, std::move(presets));
+	devices->pDevice->createFixture(this, presets);
 
 }
 //**************************************
@@ -42,17 +43,16 @@ BodyComponent::~BodyComponent()
 
 //**************************************
 //
-Object* BodyComponent::update()
+std::vector<std::unique_ptr<Object>> BodyComponent::update()
 //**************************************
 {
 	if (joinedWith)
 	{
-		if (Object* returnedObject = joinedWith->update(); returnedObject)
-		{
+		auto returnedObject = joinedWith->update(); 
+		
 			return returnedObject;
-		}
 	}
-	return nullptr;
+	return std::vector<std::unique_ptr<Object>>();
 }
 
 eFloat BodyComponent::getAngle()
@@ -80,25 +80,10 @@ void BodyComponent::setVelocity(Vector2D velocity)
 {
 	devices->pDevice->setLinearVelocity(this, velocity);
 }
-void BodyComponent::setXVelocity(eFloat value)
+void BodyComponent::setAngle(Vector2D angle)
 {
-	devices->pDevice->setLinearVelocity
-	(
-		this, 
-		{ value, devices->pDevice->getLinearVelocity(this).y }
-	);
-}
-void BodyComponent::setYVelocity(eFloat value)
-{
-	devices->pDevice->setLinearVelocity
-	(
-		this,
-		{ devices->pDevice->getLinearVelocity(this).x, value }
-	);
-}
-void BodyComponent::setAngle(eFloat angle)
-{
-	devices->pDevice->setAngle(this, angle);
+	
+	devices->pDevice->setAngle(this, angle.getAngleDegrees({ 0,1 }));
 }
 
 void BodyComponent::setPosition(Vector2D position)
@@ -106,38 +91,25 @@ void BodyComponent::setPosition(Vector2D position)
 	devices->pDevice->setTransform(this, position, devices->pDevice->getAngle(this));
 }
 
-void BodyComponent::accelerate(eFloat force)
+void BodyComponent::accelerate(Vector2D force)
 {
-	devices->pDevice->accelerate
-	(
-		this,
-		{
-			force*cos(getAngle() * PI / 180.0f - PI / 2),
-			force*sin(getAngle() * PI / 180.0f - PI / 2)
-		}
-	);
+	force.Normalize();
+	devices->pDevice->accelerate(this, force);
 }
-void BodyComponent::deccelerate(eFloat force)
+void BodyComponent::deccelerate(Vector2D force)
 {
+	force.Normalize();
 	accelerate(force*-1);
 }
 
-eFloat BodyComponent::getXPos()
-{
-	return getPosition().x;
-}
 
-eFloat BodyComponent::getYPos()
-{
-	return getPosition().y;
-}
+//void BodyComponent::applyRotationalForce(Vector2D degrees)
+//{
+//
+//	setAngle(getAngle() + degrees);
+//}
 
-void BodyComponent::rotate(eFloat degrees)
-{
-	setAngle(getAngle() + degrees);
-}
-
-void BodyComponent::linearStop()
+void BodyComponent::linearStop(Vector2D notUsed)
 {
 	devices->pDevice->setLinearVelocity(this, { 0,0 });
 }

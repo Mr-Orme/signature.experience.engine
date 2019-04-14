@@ -11,6 +11,7 @@
     <Physics create="true" gravityX="0" gravityY="0"></Physics>
     <AssetLibrary create="true">
       <Asset name="Button" spritePath="./Assets/Images/button.png"></Asset>
+      <Asset name ="Ship" spritePath ="./Assets/Images/ship.png"></Asset>
     </AssetLibrary>
     <Sound create="false">
       <SoundEffect name="" path="" background="false" event=""></SoundEffect>
@@ -28,8 +29,16 @@
         <Component name="Body" x="930.0f" y="30.0f" density="15.0f" restitution="0.0f" angularDamping="0.0f" linearDamping="0.0f" bodyType="STATIC" bodyShape="RECTANGLE" physicsOn = "false"/>
       </JointParams>      
     </Joint>
-    <Component name="UserInput">
-      <MouseClick event="CREATE_OBJECT"/>
+                                 <!--LEFT_CLICK/CreateObject-->
+    <Component name="UserInput" trigger="8" event="0">
+      <CallBack name="ObjectCreation">
+        <Component name ="Sprite" asset="Ship" sprite="true" />
+        <Component name ="Body" x="100.0f" y ="100.0f" density="15.0f" restitution="0.0f" angularDamping="1.0f" linearDamping="1.0f" bodyType="DYNAMIC" bodyShape="CIRCLE" physicsOn = "true"/>
+        <Component name="Steering">
+          <Behavior name="Seek" target="MOUSE"/>
+          <Behavior name="Arrive"/>
+        </Component>
+      </CallBack>
     </Component>
   </Object>
   <Object type="Button">

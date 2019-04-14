@@ -1,5 +1,5 @@
-#ifndef VIEW_H
-#define VIEW_H
+#ifndef VIEWCALLBACK_H
+#define VIEWCALLBACK_H
 #include "Definitions.h"
 #include "ICallBack.h"
 
@@ -11,7 +11,7 @@ public:
 	View() = delete;
 	View(Vector2D position, ResourceManager* devices);
 
-	void triggered(EventHandler::EventData data) override;
+	Object* triggered(EventHandler::EventData data) override;
 
 	Vector2D position;
 

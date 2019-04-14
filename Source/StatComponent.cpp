@@ -50,7 +50,7 @@ eInt StatComponent::getStat()
 
 //**************************************
 //checks for death and deals with it
-Object* StatComponent::update()
+std::vector<std::unique_ptr<Object>> StatComponent::update()
 //**************************************
 {
 	//if dead
@@ -75,6 +75,6 @@ Object* StatComponent::update()
 		//kill it
 		killObject();
 	}
-	return nullptr;
+	return std::vector<std::unique_ptr<Object>>();
 }
 //commented out finish and added destructor in its place.

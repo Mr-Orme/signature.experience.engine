@@ -8,13 +8,16 @@ NotificationCallBackComponent::NotificationCallBackComponent(Object * owner, Res
 	:SpriteComponent(owner, devices, componentElement)
 {}
 
-void NotificationCallBackComponent::triggered(EventHandler::EventData data)
+Object* NotificationCallBackComponent::triggered(EventHandler::EventData data)
 {
+	
 	if (std::holds_alternative<IEventTrigger*>(data))
 	{
+		//checks that the triggering event is one of the events that triggers this notification.
 		if (std::find(triggers.begin(), triggers.end(), std::get<IEventTrigger*>(data)) != triggers.end())
 			draw();
 	}
+	return nullptr;
 }
 
 void NotificationCallBackComponent::addTrigger(IEventTrigger * triggerForMe)

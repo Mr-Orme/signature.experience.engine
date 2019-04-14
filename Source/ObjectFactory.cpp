@@ -1,7 +1,7 @@
 #include "ObjectFactory.h"
 #include "Component.h"
 #include "ComponentsList.h"
-#include "View.h"
+#include "ViewCallBack.h"
 #include "ResourceManager.h"
 #include "Texture.h"
 #include "Object.h"
@@ -9,46 +9,11 @@
 #include "Initializers.h"
 #include "Listner.h"
 #include "PhysicsDevice.h"
+#include "ObjectCreationCallBack.h"
 
 
 using namespace std;
 
-//TODO:: Make this into a conversion constructor!
-
-//TODO:: Make this into a conversion constructor!!
-BodyComponent* createBodyComponent(Object* newObject, ResourceManager* devices, tinyxml2::XMLElement * componentElement, SpriteComponent* sprite = nullptr)
-{
-	BodyPresets initializers;
-	initializers.sprite = sprite;
-	componentElement->QueryFloatAttribute("x", (float*)(&initializers.position.x));
-	componentElement->QueryFloatAttribute("y", (float*)(&initializers.position.y));
-	componentElement->QueryFloatAttribute("density", (float*)(&initializers.physics.density));
-	componentElement->QueryFloatAttribute("restitution", (float*)(&initializers.physics.restitution));
-	componentElement->QueryFloatAttribute("angularDamping", (float*)(&initializers.physics.angularDamping));
-	componentElement->QueryFloatAttribute("linearDamping", (float*)(&initializers.physics.linearDamping));
-
-	if ((string)componentElement->Attribute("bodyType") == "DYNAMIC")
-	{
-		initializers.physics.bodyType = BodyType::Dynamic;
-	}
-	else if ((string)componentElement->Attribute("bodyType") == "STATIC")
-	{
-		initializers.physics.bodyType = BodyType::Static;
-	}
-
-	if ((string)componentElement->Attribute("bodyShape") == "RECTANGLE")
-	{
-		initializers.physics.bodyShape = BodyShape::Rectangle;
-	}
-	else if ((string)componentElement->Attribute("bodyShape") == "CIRCLE")
-	{
-		initializers.physics.bodyShape = BodyShape::Circle;
-	}
-
-	componentElement->QueryBoolAttribute("physicsOn", &initializers.physics.physicsOn);
-
-	return new BodyComponent(newObject, devices, std::move(initializers));
-}
 JointType setJointType(string type)
 {
 	if (type == "Revolute") {return JointType::Revolute;}
@@ -67,11 +32,21 @@ ObjectFactory::ObjectFactory(ResourceManager * devices):devices(devices)
 {
 }
 
-Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
+Object * ObjectFactory::create(tinyxml2::XMLElement * objectElement) 
 {
-	Object* newObject = new Object();
-	ObjectFactoryPresets presets;
-	presets.objectType = objectElement->Attribute("type");
+	
+	std::unique_ptr<ObjectFactoryPresets> presets = std::move(createPresetsFromXML(objectElement));
+	Object* newObject = create(presets.get());
+	return newObject;
+}
+Object * ObjectFactory::create(ObjectFactoryPresets* presets) 
+{
+	return nullptr;
+}
+std::unique_ptr<ObjectFactoryPresets> ObjectFactory::createPresetsFromXML(tinyxml2::XMLElement * objectElement)
+{
+	std::unique_ptr<ObjectFactoryPresets> presets = std::make_unique<ObjectFactoryPresets>();
+	presets->objectType = objectElement->Attribute("type");
 	//ToDo:: Need to finish initializing components!
 	for (
 		tinyxml2::XMLElement* componentElement = objectElement->FirstChildElement();
@@ -82,135 +57,246 @@ Object * ObjectFactory::Create(tinyxml2::XMLElement * objectElement)
 		string componentName = componentElement->Attribute("name");
 		if (componentName == "Sprite")
 		{
-			newObject->AddComponent(new SpriteComponent(newObject, devices, componentElement));			
+			addSpritePresets(&presets->spriteInitializers, componentElement);
 		}
 		else if (componentName == "Body")
 		{
-			newObject->AddComponent(createBodyComponent(newObject,devices, componentElement, newObject->getComponent<SpriteComponent>()));
-			if (SpriteComponent* sprite = newObject->getComponent<SpriteComponent>(); sprite)
+			addBodyPresets(&presets->bodyInitializers, componentElement);
+		}
+		/*	else if (componentName == "Stat")
 			{
-				sprite->spriteBody = newObject->getComponent<BodyComponent>();
-			}
-		}
-		else if (componentName == "Stat")
-		{
 
-			newObject->AddComponent(new StatComponent(newObject, devices, stoi(componentElement->Attribute("health"))));
+				newObject->AddComponent(new StatComponent(newObject, devices, stoi(componentElement->Attribute("health"))));
 
-		}
+			}*/
 		else if (componentName == "Input")
 		{
-			//TODO::need to change XML to include the input for this trigger.
-			//newObject->AddComponent(new UserInputTriggerComponent(newObject,devices));
+
+			addUserInputPresets(&presets->userInputInitializers, componentElement);
 
 		}
-		else if (componentName == "Notification")
-		{
-			newObject->AddComponent(new NotificationCallBackComponent(newObject, devices, componentElement));
-			/*Todo:: This needs a body component, just like a sprite.
-			It's body component determines where the notification is displayed
-			need a triggerComponent. When collision detection detects collision with a trigger component, the event is sent
-			to the eventHandler.
-			class TriggerComponent
-			{
-			public:
-				EventHandler::Event
-			};
-			BUT HOW DO I KNOW WHICH NOTIFICATION??? Do I need to store the trigger in the event?
-			Pass trigger with call to event handler? So, yes, must store trigger in notification! If it is multi-inherited
-			with a component, then more information can be sent... perhaps also send the object collided with? 
-			Do I need to create a struct of all possible event information to pass around???
-			This should take care of all collision events, maybe even input events??? death events???
-			struct EventInfo
-			{
-				Object* primaryObject;
-				Object* secondaryObject;
-			};
-			Therefore, notifications need a trigger object created at the same time!. Can trigger multiple notifications this way
-			Even if most notifications are one off!
-			Trigger can handle all events where there is a collision
-				Trigger, can handle a sound event, collision detector passes in two objects colliding.. Primary is player (has userInputComponent). 
-					each callBack can decide to play or not. 
-				Trigger can handle a item pick up
-				Trigger can handle battle damage
-			can trigger be used with keypresses???? Combined with UserInputTriggerComponent?????
-			*/
-			devices->eventHandler->getListner(EventHandler::Event::Notification)->
-				addCallBack(newObject->getComponent<NotificationCallBackComponent>());
-		}
+		//else if (componentName == "Notification")
+		//{
+		//	newObject->AddComponent(new NotificationCallBackComponent(newObject, devices, componentElement));
+		//	/*Todo:: This needs a body component, just like a sprite.
+		//	It's body component determines where the notification is displayed
+		//	need a triggerComponent. When collision detection detects collision with a trigger component, the event is sent
+		//	to the eventHandler.
+		//	class TriggerComponent
+		//	{
+		//	public:
+		//		EventHandler::Event
+		//	};
+		//	BUT HOW DO I KNOW WHICH NOTIFICATION??? Do I need to store the trigger in the event?
+		//	Pass trigger with call to event handler? So, yes, must store trigger in notification! If it is multi-inherited
+		//	with a component, then more information can be sent... perhaps also send the object collided with?
+		//	Do I need to create a struct of all possible event information to pass around???
+		//	This should take care of all collision events, maybe even input events??? death events???
+		//	struct EventInfo
+		//	{
+		//		Object* primaryObject;
+		//		Object* secondaryObject;
+		//	};
+		//	Therefore, notifications need a trigger object created at the same time!. Can trigger multiple notifications this way
+		//	Even if most notifications are one off!
+		//	Trigger can handle all events where there is a collision
+		//		Trigger, can handle a sound event, collision detector passes in two objects colliding.. Primary is player (has userInputComponent).
+		//			each callBack can decide to play or not.
+		//		Trigger can handle a item pick up
+		//		Trigger can handle battle damage
+		//	can trigger be used with keypresses???? Combined with UserInputTriggerComponent?????
+		//	*/
+		//	devices->eventHandler->getListner(EventHandler::Event::Notification)->
+		//		addCallBack(newObject->getComponent<NotificationCallBackComponent>());
+		//}
 		else if (componentName == "Joint")
 		{
-			for (
-				tinyxml2::XMLElement* JointParams = componentElement->FirstChildElement();
-				JointParams;
-				JointParams = JointParams->NextSiblingElement()
-				)
-			{
-				int jointNumber;
-				JointParams->QueryIntAttribute("jointNumber", &jointNumber);
-				
-				tinyxml2::XMLElement* jointComponent = JointParams->FirstChildElement();
-				SpriteComponent* sprite{ new SpriteComponent(newObject, devices, jointComponent) };
-				
-				jointComponent = jointComponent->NextSiblingElement();
-				BodyComponent* body{ createBodyComponent(newObject, devices, jointComponent, sprite) };
-				
-				sprite->spriteBody = body;
-
-				//First one just gets added. Future ones must follow the chain to the end!
-				if (jointNumber == 0)
-				{
-					newObject->AddComponent(sprite);
-					newObject->AddComponent(body);
-				}
-				else
-				{
-					//********Create the joint***************
-					Joints presets;
-					SpriteComponent* currSprite = newObject->getComponent<SpriteComponent>();
-					BodyComponent* currBody = newObject->getComponent<BodyComponent>();
-					int joinTo;
-					JointParams->QueryIntAttribute("joinTo", &joinTo);
-					//TODO::this doesn't work with the head case!
-					if (joinTo == 0) presets.BodyB = currBody;
-					while (currSprite->sprite)
-					{						
-						currSprite = currSprite->sprite.get();
-						currBody = currBody->joinedWith.get();
-						if (joinTo--; joinTo == 0) presets.BodyB = currBody;
-					}
-
-					if (!presets.BodyB)
-					{
-						return nullptr;
-					}
-
-					currSprite->sprite = unique_ptr<SpriteComponent>(sprite);
-					currBody->joinedWith = unique_ptr<BodyComponent>(body);
-										
-					presets.BodyA = body;
-					presets.type = setJointType((string)componentElement->Attribute("type"));
-					componentElement->QueryBoolAttribute("collide", &presets.CollideConnected);
-					JointParams->QueryIntAttribute("anchorXFromCenter", (int*)(&presets.AnchorA.x));
-					JointParams->QueryIntAttribute("anchorYFromCenter", (int*)(&presets.AnchorA.y));
-					JointParams->QueryIntAttribute("joinToAnchorXFromCenter", (int*)(&presets.AnchorB.x));
-					JointParams->QueryIntAttribute("joinToAnchorYFromCenter", (int*)(&presets.AnchorB.y));
-					JointParams->QueryIntAttribute("referenceAngle", (int*)(&presets.referenceAngle));
-					
-					//TODO::flush out for other types of joints that need other information!
-					switch (presets.type)
-					{
-					case JointType::Weld:
-					default:
-						break;
-					}
-
-					devices->pDevice->createJoint(presets);
-					//***************************************
-				}				
-			}
-		}	
+			addJointPresets(&presets->bodyInitializers.physics.joint, componentElement);
+		}
+		else if (componentName == "Steering")
+		{
+			addSteeringPresets(&presets->steeringInitializers, componentElement);
+		}
 	}
-	return newObject;
+	return presets;
 }
+void ObjectFactory::addSpritePresets(SpritePresets* presets, tinyxml2::XMLElement * componentElement)
+{
+	presets->createSprite = true;
+	componentElement->QueryBoolAttribute("sprite", &presets->isSprite);
+	if (presets->isSprite)
+	{
+		presets->assetOrText = componentElement->Attribute("asset");
+	}
+	else
+	{
+		presets->assetOrText = componentElement->Attribute("text");
+	}
+
+}
+void ObjectFactory::addBodyPresets(BodyPresets* presets, tinyxml2::XMLElement * componentElement)
+{
+	presets->createBody = true;
+	componentElement->QueryFloatAttribute("x", (float*)(&presets->position.x));
+	componentElement->QueryFloatAttribute("y", (float*)(&presets->position.y));
+	componentElement->QueryFloatAttribute("density", (float*)(&presets->physics.density));
+	componentElement->QueryFloatAttribute("restitution", (float*)(&presets->physics.restitution));
+	componentElement->QueryFloatAttribute("angularDamping", (float*)(&presets->physics.angularDamping));
+	componentElement->QueryFloatAttribute("linearDamping", (float*)(&presets->physics.linearDamping));
+
+	if ((string)componentElement->Attribute("bodyType") == "DYNAMIC")
+	{
+		presets->physics.bodyType = BodyType::Dynamic;
+	}
+	else if ((string)componentElement->Attribute("bodyType") == "STATIC")
+	{
+		presets->physics.bodyType = BodyType::Static;
+	}
+
+	if ((string)componentElement->Attribute("bodyShape") == "RECTANGLE")
+	{
+		presets->physics.bodyShape = BodyShape::Rectangle;
+	}
+	else if ((string)componentElement->Attribute("bodyShape") == "CIRCLE")
+	{
+		presets->physics.bodyShape = BodyShape::Circle;
+	}
+
+	componentElement->QueryBoolAttribute("physicsOn", &presets->physics.physicsOn);
+
+}
+void ObjectFactory::addUserInputPresets(UserInputPresets* presets, tinyxml2::XMLElement * componentElement)
+{
+	presets->createUserInput = true;
+	int temp;
+	//1. Get trigger from XML
+	componentElement->QueryIntAttribute("trigger", &temp);
+	presets->TriggeredInput = (InputDevice::UserInputs)temp;
+		
+	//2. Create callback based on event
+	componentElement->QueryIntAttribute("event", &temp);
+	switch (EventHandler::Event(temp))
+	{
+	case EventHandler::Event::CreateObject:
+	{		
+		devices->eventHandler->getListner(EventHandler::Event::CreateObject)->
+			addCallBack(new ObjectCreationCallBack(this, createPresetsFromXML(componentElement->FirstChildElement())));
+		break;
+	}
+	default:
+		break;
+	}
+
+	/* 4. Add to event handler */
+}
+void ObjectFactory::addJointPresets(Joints* presets, tinyxml2::XMLElement * componentElement)
+{
+	for (
+		tinyxml2::XMLElement* JointParams = componentElement->FirstChildElement();
+		JointParams;
+		JointParams = JointParams->NextSiblingElement()
+		)
+	{
+		presets->createJoint = true;
+		JointParams->QueryIntAttribute("jointNumber", &presets->jointNumber);
+
+		tinyxml2::XMLElement* jointComponent = JointParams->FirstChildElement();
+		addSpritePresets(&presets->jointSprite, jointComponent);
+
+		jointComponent = jointComponent->NextSiblingElement();
+		presets->jointBody = std::make_unique<BodyPresets>();
+		addBodyPresets(presets->jointBody.get(), jointComponent);
+		if (presets->jointNumber != 0)
+		{
+			JointParams->QueryIntAttribute("joinTo", &presets->joinTo);
+			presets->type = setJointType((string)componentElement->Attribute("type"));
+			componentElement->QueryBoolAttribute("collide", &presets->CollideConnected);
+			JointParams->QueryIntAttribute("anchorXFromCenter", (int*)(&presets->AnchorA.x));
+			JointParams->QueryIntAttribute("anchorYFromCenter", (int*)(&presets->AnchorA.y));
+			JointParams->QueryIntAttribute("joinToAnchorXFromCenter", (int*)(&presets->AnchorB.x));
+			JointParams->QueryIntAttribute("joinToAnchorYFromCenter", (int*)(&presets->AnchorB.y));
+			JointParams->QueryIntAttribute("referenceAngle", (int*)(&presets->referenceAngle));
+		}
+		presets = &presets->jointBody->physics.joint;
+		//First one just gets added. Future ones must follow the chain to the end!
+		//if (jointNumber == 0)
+		//{
+		//	addJointPresets
+		///*	newObject->AddComponent(sprite);
+		//	newObject->AddComponent(body);*/
+		//}
+		//else
+		//{
+			//********Create the joint***************
+			//Joints presets;
+			//SpriteComponent* currSprite = newObject->getComponent<SpriteComponent>();
+			//BodyComponent* currBody = newObject->getComponent<BodyComponent>();
+			//int joinTo;
+			//JointParams->QueryIntAttribute("joinTo", &joinTo);
+			////TODO::this doesn't work with the head case!
+			//if (joinTo == 0) presets.BodyB = currBody;
+			//while (currSprite->sprite)
+			//{
+			//	currSprite = currSprite->sprite.get();
+			//	currBody = currBody->joinedWith.get();
+			//	if (joinTo--; joinTo == 0) presets.BodyB = currBody;
+			//}
+
+			//if (!presets.BodyB)
+			//{
+			//	return nullptr;
+			//}
+
+			//currSprite->sprite = unique_ptr<SpriteComponent>(sprite);
+			//currBody->joinedWith = unique_ptr<BodyComponent>(body);
+
+			//presets.BodyA = body;
+			//presets.type = setJointType((string)componentElement->Attribute("type"));
+			//componentElement->QueryBoolAttribute("collide", &presets.CollideConnected);
+			//JointParams->QueryIntAttribute("anchorXFromCenter", (int*)(&presets.AnchorA.x));
+			//JointParams->QueryIntAttribute("anchorYFromCenter", (int*)(&presets.AnchorA.y));
+			//JointParams->QueryIntAttribute("joinToAnchorXFromCenter", (int*)(&presets.AnchorB.x));
+			//JointParams->QueryIntAttribute("joinToAnchorYFromCenter", (int*)(&presets.AnchorB.y));
+			//JointParams->QueryIntAttribute("referenceAngle", (int*)(&presets.referenceAngle));
+
+			////TODO::flush out for other types of joints that need other information!
+			//switch (presets.type)
+			//{
+			//case JointType::Weld:
+			//default:
+			//	break;
+			//}
+
+			//devices->pDevice->createJoint(presets);
+			//***************************************
+		//}
+	}
+
+}
+void ObjectFactory::addSteeringPresets(SteeringPresets* presets, tinyxml2::XMLElement * componentElement)
+{
+	
+	for (
+		tinyxml2::XMLElement* behaviorElement = componentElement->FirstChildElement();
+		behaviorElement;
+		behaviorElement = behaviorElement->NextSiblingElement()
+		)
+	{
+		presets->createSteering = true;
+		if (behaviorElement->Attribute("name") == "Seek")
+		{
+			presets->seek = true;
+			presets->target = behaviorElement->Attribute("target");
+		}
+		else if (behaviorElement->Attribute("name") == "Arrive")
+		{
+			presets->arrive = true;
+		}
+	}
+
+	
+}
+
+
+
 

@@ -2,6 +2,7 @@
 #define NOTIFICATION_CALLBACK_H
 
 #include <set>
+#include <vector>
 #include "SpriteComponent.h"
 #include "ICallBack.h"
 
@@ -18,7 +19,7 @@ public:
 	4. if, matches a trigger in set, then this is the trigger we are looking for, draw!
 	*/
 	NotificationCallBackComponent(Object* owner, ResourceManager* devices, tinyxml2::XMLElement* componentElement);
-	void triggered(EventHandler::EventData data) override;
+	Object* triggered(EventHandler::EventData data) override;
 	void addTrigger(IEventTrigger* triggerforMe);
 private:
 	std::set<IEventTrigger*> triggers;

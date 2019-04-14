@@ -2,8 +2,11 @@
 #define INPUTDEVICE_H
 
 #include <memory>
+#include <map>
+#include <string>
 #include "SDL.h"
 #include "Definitions.h"
+#include "Vector2D.h"
 
 
 class InputDevice{
@@ -28,11 +31,12 @@ public:
 		QUIT,
 		NUM_EVENTS
 	};
-
+	Vector2D getMousePosition();
+	UserInputs text2Input(std::string inputString);
 	std::map<UserInputs, bool> keyStates;
 private:
-
-	UserInputs Translate();
+	Vector2D mousePosition{ 0,0 };
+	UserInputs keyTranslate();
 	std::unique_ptr<SDL_Event> event {nullptr}; 	
 };
 

@@ -16,7 +16,7 @@ public:
 	~SpriteComponent();
 
 	//deleted start, no need for functionality since constructor is called on creation
-	Object* update() override;
+	std::vector<std::unique_ptr<Object>> update() override;
 	//finish functionality added to destructor
 
 	void draw();

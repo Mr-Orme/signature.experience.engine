@@ -51,10 +51,11 @@ public:
 	SteeringBehaviorComponent(Object* owner);
 	//calculates and sums the steering forces from any active behaviors
 	Vector2D Calculate();
+	std::vector<std::unique_ptr<Object>> update() override;
 	enum summing_method { weighted_average, prioritized, dithered };
 
-private:
 
+private:
 	enum behavior_type
 	{
 		none = 0x00000,
@@ -75,9 +76,6 @@ private:
 		flock = 0x08000,
 		offset_pursuit = 0x10000,
 	};
-
-private:
-
 
 
 	//the steering force created by the combined effect of all
@@ -282,7 +280,7 @@ private:
 	//renders visual aids and info for seeing how each behavior is
 	//calculated
 	//void      RenderAids();
-
+public:
 	void      SetTarget(const Vector2D t) { m_vTarget = t; }
 
 	void      SetTargetAgent1(Object* Agent) { m_pTargetAgent1 = Agent; }

@@ -23,20 +23,20 @@ void  Object::AddComponent(Component* component)
 
 //**************************************
 //runs the update method for all attached components
- Object* Object::update()
+std::vector<std::unique_ptr<Object>> Object::update()
 //**************************************
 
 {
-	 Object* newObject = nullptr;
+	std::vector<std::unique_ptr<Object>> newObjects;
 	for (auto& component : components)
 	{
-		if( auto tempObject = component ->update(); tempObject != nullptr)
+		if( auto temp = component ->update(); temp.size() > 0)
 		{
-			newObject = tempObject;
+			newObjects.insert(newObjects.end(), std::make_move_iterator(temp.begin()), std::make_move_iterator(temp.end()));
 		}
 			
 	}
-	return newObject;
+	return newObjects;
 }
 void  Object::draw()
 {

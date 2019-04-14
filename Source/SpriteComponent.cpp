@@ -2,7 +2,7 @@
 #include "BodyComponent.h"
 #include "Texture.h"
 #include "AssetLibrary.h"
-#include "View.h"
+#include "ViewCallBack.h"
 #include "ResourceManager.h"
 #include "PhysicsDevice.h"
 #include "GraphicsDevice.h"
@@ -65,7 +65,7 @@ void SpriteComponent::draw(Vector2D position, eFloat angle)
 
 
 
-Object* SpriteComponent::update(){return nullptr;}
+std::vector<std::unique_ptr<Object>> SpriteComponent::update(){return std::vector<std::unique_ptr<Object>>();}
 
 //**************************************
 //adjusts the position based on the view.

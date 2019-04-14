@@ -7,7 +7,7 @@
 
 #include "InputDevice.h"
 #include "GraphicsDevice.h"
-#include "View.h"
+#include "ViewCallBack.h"
 #include "Texture.h"
 #include "PhysicsDevice.h"
 #include "SoundDevice.h"
@@ -165,7 +165,7 @@ ResourceManager::ResourceManager(std::string assetPath)
 		levelElement = levelElement->NextSiblingElement("Object")
 		)
 	{
-		objects.push_back(std::unique_ptr<Object>(factory->Create(levelElement)));
+		objects.push_back(std::unique_ptr<Object>(factory->create(levelElement)));
 	}
 
 	//***********************************************************
@@ -209,7 +209,6 @@ void ResourceManager::update()
 	for (auto objectIter = objects.begin(); objectIter != objects.end(); )
 	{
 		if (
-			//Todo::changed to StatComponenet but may have to deal with health later.
 			StatComponent* compHealth = (*objectIter)->getComponent<StatComponent>(); 
 			compHealth != nullptr && compHealth->isDead)
 		{
@@ -225,10 +224,10 @@ void ResourceManager::update()
 	}
 	for (auto& object : objects)
 	{
-		Object* temp = object->update();
-		if (temp != nullptr)
+		std::vector<std::unique_ptr<Object>> temp = object->update();
+		if (!temp.empty())
 		{
-			newObjects.push_back(std::unique_ptr<Object>(temp));
+			newObjects.insert(newObjects.end(), std::make_move_iterator(temp.begin()), std::make_move_iterator(temp.end()));
 		}
 	}
 

@@ -1,7 +1,10 @@
 #ifndef ASSETLIBRARY_H
 #define ASSETLIBRARY_H
 
+#include <string>
+#include <map>
 #include "Definitions.h"
+
 
 class ResourceManager;
 class Texture;

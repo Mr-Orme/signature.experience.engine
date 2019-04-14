@@ -18,7 +18,7 @@ public:
 		BodyComponent* owner, 
 		Vector2D adjustAmount, 
 		void (BodyComponent::*BodyMethod)(Vector2D) const, 
-		EventHandler::EventData secondaryData = 0);
+		EventHandler::EventData secondaryData = {});
 
 	/*
 	1. Keypressed
@@ -32,13 +32,13 @@ public:
 	???? Can I make this more generic? Probably, only if every compnent I want to use it for requires
 		a Vector2D. Unless I can use templates to call the correct overload????
 	*/
-	void triggered(EventHandler::EventData data) override;
+	Object* triggered(EventHandler::EventData data) override;
 	//Pointer to method to call in BodyComponent
 	void (BodyComponent::*BodyMethod)(Vector2D) const { nullptr };
 
 	Vector2D adjustAmount{ 0.0f, 0.0f };
 	BodyComponent* owner{ nullptr };
-	EventHandler::EventData secondaryData{ 0 };
+	EventHandler::EventData secondaryData{ };
 
 
 };

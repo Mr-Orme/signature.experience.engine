@@ -15,10 +15,11 @@ BodyCallBack::BodyCallBack(
 	devices->eventHandler->getListner(callBackEvent)->addCallBack(this);
 }
 
-void BodyCallBack::triggered(EventHandler::EventData data)
+Object* BodyCallBack::triggered(EventHandler::EventData data)
 {
 	if (data == secondaryData)
 	{
 		(owner->*BodyMethod)(adjustAmount);
 	}
+	return nullptr;
 }

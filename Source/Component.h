@@ -1,5 +1,7 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
+#include <vector>
+#include <memory>
 
 #include "Definitions.h"
 #include "Initializers.h"
@@ -15,7 +17,7 @@ public:
 
 	Object* getOwner() const;
 
-	virtual Object* update()=0;
+	virtual std::vector<std::unique_ptr<Object>> update()=0;
 	
 protected:
 	Object * owner{ nullptr };

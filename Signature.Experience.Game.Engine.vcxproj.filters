@@ -69,9 +69,6 @@
     <ClCompile Include="Source\Texture.cpp">
       <Filter>Source Files\Devices</Filter>
     </ClCompile>
-    <ClCompile Include="Source\View.cpp">
-      <Filter>Source Files\Devices</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ResourceManager.cpp">
       <Filter>Source Files\Devices</Filter>
     </ClCompile>
@@ -117,6 +114,18 @@
     <ClCompile Include="Source\Vector2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ObjectCreationCallBack.cpp">
+      <Filter>Source Files\Devices\EventHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ViewCallBack.cpp">
+      <Filter>Source Files\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Initializers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ICallBack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ContactListener.h">
@@ -150,9 +159,6 @@
       <Filter>Header Files\Devices</Filter>
     </ClInclude>
     <ClInclude Include="Source\Texture.h">
-      <Filter>Header Files\Devices</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\View.h">
       <Filter>Header Files\Devices</Filter>
     </ClInclude>
     <ClInclude Include="Source\InputDevice.h">
@@ -214,6 +220,12 @@
     </ClInclude>
     <ClInclude Include="Source\Vector2D.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ObjectCreationCallBack.h">
+      <Filter>Header Files\Devices\EventHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ViewCallBack.h">
+      <Filter>Header Files\Devices</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

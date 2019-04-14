@@ -1,6 +1,8 @@
 #ifndef RESOURCEMANAGER_H
 #define RESOURCEMANAGER_H
 
+#include <vector>
+#include <memory>
 #include "Definitions.h"
 
 class ObjectFactory;

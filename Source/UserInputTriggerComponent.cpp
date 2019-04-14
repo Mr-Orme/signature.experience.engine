@@ -3,7 +3,7 @@
 #include "ResourceManager.h"
 #include "Object.h"
 #include "AssetLibrary.h"
-
+using namespace std;
 //UserInputTriggerComponent::UserInputTriggerComponent(Object* owner, ResourceManager* devices):Component(owner)
 //{
 //	this->devices = devices;
@@ -43,17 +43,18 @@ UserInputTriggerComponent::UserInputTriggerComponent(Object * owner, ResourceMan
 	eventToTrigger = EventHandler::Event::UserInput;
 }
 
-void UserInputTriggerComponent::triggerEvent(EventHandler::EventData data)
+vector<std::unique_ptr<Object>> UserInputTriggerComponent::triggerEvent(EventHandler::EventData data)
 {
-	devices->eventHandler->notify(eventToTrigger, data);
+	return devices->eventHandler->notify(eventToTrigger, data);
 }
 
-Object * UserInputTriggerComponent::update()
+vector<std::unique_ptr<Object>> UserInputTriggerComponent::update()
 {
+	std::vector<std::unique_ptr<Object>> toBeReturned;
 	if (auto inputTrigger = devices->iDevice->keyStates.find(TriggeredInput); 
 	inputTrigger != devices->iDevice->keyStates.end() && inputTrigger ->second)
 	{
-		triggerEvent(&inputTrigger->first);
+		toBeReturned = triggerEvent(inputTrigger->first);
 	}
-	return nullptr;
+	return toBeReturned;
 }

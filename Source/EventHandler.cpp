@@ -1,6 +1,9 @@
+#include <vector>
 #include "EventHandler.h"
 #include "Listner.h"
+#include "Object.h"
 
+using namespace std;
 EventHandler::EventHandler()
 {
 	for (int currEvent = 0; currEvent < (int)Event::NumEvents; currEvent++)
@@ -13,12 +16,16 @@ EventHandler::~EventHandler()
 {
 }
 
-void EventHandler::notify(Event event, EventHandler::EventData data)
+vector<std::unique_ptr<Object>> EventHandler::notify(Event event, EventHandler::EventData data)
 {
+	
+	vector<std::unique_ptr<Object>> toBeReturned;
 	if (auto listnerIter = listners.find(event); listnerIter != listners.end())
 	{
-		listnerIter->second->eventTriggered(data);
+		auto temp = listnerIter->second->eventTriggered(data);
+		toBeReturned.insert(toBeReturned.end(), std::make_move_iterator(temp.begin()), std::make_move_iterator(temp.end()));
 	}
+	return toBeReturned;
 }
 
 Listner * EventHandler::getListner(Event event)

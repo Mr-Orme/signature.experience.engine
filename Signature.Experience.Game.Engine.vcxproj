@@ -160,8 +160,11 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
     <ClCompile Include="Source\ContactListener.cpp" />
     <ClCompile Include="Source\Engine.cpp" />
     <ClCompile Include="Source\GraphicsDevice.cpp" />
+    <ClCompile Include="Source\ICallBack.cpp" />
+    <ClCompile Include="Source\Initializers.cpp" />
     <ClCompile Include="Source\Listner.cpp" />
     <ClCompile Include="Source\NotificationCallBackComponent.cpp" />
+    <ClCompile Include="Source\ObjectCreationCallBack.cpp" />
     <ClCompile Include="Source\StatComponent.cpp" />
     <ClCompile Include="Source\InputDevice.cpp" />
     <ClCompile Include="Source\Object.cpp" />
@@ -177,7 +180,7 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
     <ClCompile Include="Source\Timer.cpp" />
     <ClCompile Include="Source\UserInputTriggerComponent.cpp" />
     <ClCompile Include="Source\Vector2D.cpp" />
-    <ClCompile Include="Source\View.cpp" />
+    <ClCompile Include="Source\ViewCallBack.cpp" />
     <ClCompile Include="ThirdParty\tinyxml2-master\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +198,7 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
     <ClInclude Include="Source\IEventTrigger.h" />
     <ClInclude Include="Source\Listner.h" />
     <ClInclude Include="Source\NotificationCallBackComponent.h" />
+    <ClInclude Include="Source\ObjectCreationCallBack.h" />
     <ClInclude Include="Source\StatComponent.h" />
     <ClInclude Include="Source\Initializers.h" />
     <ClInclude Include="Source\InputDevice.h" />
@@ -211,7 +215,7 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
     <ClInclude Include="Source\UserInputTriggerComponent.h" />
     <ClInclude Include="Source\Utils.h" />
     <ClInclude Include="Source\Vector2D.h" />
-    <ClInclude Include="Source\View.h" />
+    <ClInclude Include="Source\ViewCallBack.h" />
     <ClInclude Include="ThirdParty\tinyxml2-master\tinyxml2.h" />
   </ItemGroup>
   <ItemGroup>
