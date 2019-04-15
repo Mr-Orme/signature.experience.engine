@@ -22,7 +22,7 @@ public:
 	~AssetLibrary();
 	
 	//Todo::Will convert all string values to pass by reference. const, if possible
-	Texture* getArtAsset(std::string name);
+	std::shared_ptr<Texture> getArtAsset(std::string name);
 	bool addArtAsset(std::string name, std::string path);	
 	
 	bool addSoundEffect(std::string name, std::string path);
@@ -36,7 +36,7 @@ public:
 
 private:
 	//Will pass string values to pass by reference
-	std::map<std::string, std::unique_ptr<Texture>> artLibrary;	
+	std::map<std::string, std::shared_ptr<Texture>> artLibrary;	
 	std::map<std::string, std::unique_ptr<SoundEffect> > soundEffectLibrary;
 	std::map<std::string, std::unique_ptr<BackgroundMusic> > musicLibrary;
 	ResourceManager* devices{ nullptr };

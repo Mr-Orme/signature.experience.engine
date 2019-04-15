@@ -16,7 +16,7 @@
 #include <list>
 
 #include "Component.h"
-
+#include "Initializers.h"
 #include "Vector2D.h"
 
 
@@ -48,7 +48,7 @@ const double WaypointSeekDist = 20;
 class SteeringBehaviorComponent : public Component
 {
 public:
-	SteeringBehaviorComponent(Object* owner);
+	SteeringBehaviorComponent(Object* owner, SteeringPresets& presets);
 	//calculates and sums the steering forces from any active behaviors
 	Vector2D Calculate();
 	std::vector<std::unique_ptr<Object>> update() override;

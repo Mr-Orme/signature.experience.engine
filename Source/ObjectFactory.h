@@ -23,7 +23,7 @@ private:
 	void addSpritePresets(SpritePresets* presets, tinyxml2::XMLElement * componentElement);
 	void addBodyPresets(BodyPresets* presets, tinyxml2::XMLElement * componentElement);
 	void addUserInputPresets(UserInputPresets* presets, tinyxml2::XMLElement * componentElement);
-	void addJointPresets(Joints* presets, tinyxml2::XMLElement * componentElement);
+	void addJointPresets(PrimaryJoint* presets, tinyxml2::XMLElement * componentElement);
 	void addSteeringPresets(SteeringPresets* presets, tinyxml2::XMLElement * componentElement);
 
 };

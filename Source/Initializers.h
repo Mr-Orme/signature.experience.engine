@@ -1,6 +1,6 @@
 #ifndef INITIALIZERS_H
 #define INITIALIZERS_H
-
+#include <memory>
 #include "Definitions.h"
 #include "Vector2D.h"
 #include "InputDevice.h"
@@ -16,12 +16,12 @@ class Texture;
 struct SpritePresets
 {
 	bool createSprite{ false };
-	bool isSprite{ false };
-	std::string assetOrText;
+	//bool isSprite{ false };
+	//std::string assetOrText;
 	//std::string textString;
 	//std::string vAlign;
 	//std::string hAlign;
-	Texture* spriteTexture{ nullptr };
+	std::shared_ptr<Texture> spriteTexture{ nullptr };
 	ResourceManager* Devices{ nullptr };
 
 };
@@ -36,38 +36,18 @@ struct RotateBody
 enum class BodyShape { Rectangle, Circle };
 enum class BodyType { Static, Kinematic, Dynamic };
 enum class JointType{Revolute, Distance, Prismatic, Wheel, Weld, Pulley, Friction, Gear, Mouse, Rope, None};
-struct BodyPresets;
-
-struct Joints
-{
-	bool createJoint{ false };
-	int jointNumber{ 0 };
-	int joinTo{ 0 };
-	JointType type{ JointType::None };
-	BodyComponent* BodyA{ nullptr };
-	BodyComponent* BodyB{ nullptr };
-	bool CollideConnected{ false };
-	Vector2D AnchorA{ 0.0f, 0.0f };
-	Vector2D AnchorB{ 0.0f, 0.0f };
-	eFloat referenceAngle{ 0.0f };
-	eFloat JointLimit{ 0.0f };
-	std::unique_ptr<BodyPresets> jointBody{ nullptr };
-	SpritePresets jointSprite;
-
-};
-
 struct PhysicsStats
 {
 	eFloat spinSpeed{ 0.0f };
 	BodyType bodyType{ BodyType::Static };
-	BodyShape bodyShape{BodyShape::Rectangle};
+	BodyShape bodyShape{ BodyShape::Rectangle };
 	eFloat density{ 0.0f };
 	eFloat friction{ 0.0f };
 	eFloat restitution{ 0.0f };
 	eFloat angularDamping{ 0.0f };
 	eFloat linearDamping{ 0.0f };
 	eFloat force{ 0.0f };
-	Joints joint;
+
 	bool physicsOn{ false };
 };
 struct BodyPresets
@@ -81,6 +61,34 @@ struct BodyPresets
 	SpriteComponent* sprite{ nullptr };
 	std::vector<std::unique_ptr<BodyCallBack>> callBacks;
 };
+
+struct SecondayJoint
+{
+	BodyPresets bodyInitializers;
+	SpritePresets spriteInitializers;
+	
+	JointType type{ JointType::None };
+	BodyComponent* BodyB{ nullptr };
+	
+	
+	bool CollideConnected{ false };
+	Vector2D AnchorA{ 0.0f, 0.0f };
+	Vector2D AnchorB{ 0.0f, 0.0f };
+	eFloat referenceAngle{ 0.0f };
+	eFloat JointLimit{ 0.0f };
+	std::unique_ptr<SecondayJoint> jointPresets{ nullptr };
+
+};
+struct PrimaryJoint
+{
+	bool createJoint{ false };
+	BodyComponent* BodyA{ nullptr };
+	BodyPresets bodyInitializers;
+	SpritePresets spriteInitializers;
+	SecondayJoint joinedTo;
+};
+
+
 struct UserInputPresets
 {
 	bool createUserInput{ false };
@@ -102,6 +110,7 @@ struct ObjectFactoryPresets
 	BodyPresets bodyInitializers;
 	UserInputPresets userInputInitializers;
 	SteeringPresets steeringInitializers;
+	PrimaryJoint jointInitializers;
 	
 	//eInt health{ 0 };//move to new AssetLibraryGame
 	ResourceManager* devices{ nullptr };

@@ -24,7 +24,7 @@ public:
 	
 	Vector2D getViewAdjustedPosition();
 		
-	std::unique_ptr<Texture> texture{ nullptr };
+	std::shared_ptr<Texture> texture{ nullptr };
 	std::unique_ptr<SpriteComponent> sprite{ nullptr };
 	//Hack::because the sprite and corresponding body can be and different depths, we need to keep the sprite and it's body associated.
 	BodyComponent* spriteBody{ nullptr };

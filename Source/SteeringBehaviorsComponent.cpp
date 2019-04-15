@@ -11,7 +11,7 @@
 #include <algorithm>
 
 using namespace std;
-SteeringBehaviorComponent::SteeringBehaviorComponent(Object* owner) :Component(owner)
+SteeringBehaviorComponent::SteeringBehaviorComponent(Object* owner, SteeringPresets& presets) :Component(owner)
 {
 }
 

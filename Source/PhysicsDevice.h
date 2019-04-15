@@ -19,7 +19,7 @@ public:
 	
 	bool update(float dt);
 	bool createFixture(BodyComponent* object, const BodyPresets& presets);
-	bool createJoint(Joints joint);
+	bool createJoint(PrimaryJoint& joint);
 	bool removeObject(BodyComponent* object);
 
 	bool setTransform( const BodyComponent* object, Vector2D position, eFloat angle);

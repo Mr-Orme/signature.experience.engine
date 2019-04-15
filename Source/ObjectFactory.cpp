@@ -1,5 +1,4 @@
 #include "ObjectFactory.h"
-#include "Component.h"
 #include "ComponentsList.h"
 #include "ViewCallBack.h"
 #include "ResourceManager.h"
@@ -41,7 +40,43 @@ Object * ObjectFactory::create(tinyxml2::XMLElement * objectElement)
 }
 Object * ObjectFactory::create(ObjectFactoryPresets* presets) 
 {
-	return nullptr;
+	Object* newObject = new Object;
+	if (presets->spriteInitializers.createSprite)
+	{
+		newObject->AddComponent(new SpriteComponent(newObject, presets->spriteInitializers));
+		presets->bodyInitializers.sprite = newObject->getComponent<SpriteComponent>();
+	}
+	if (presets->bodyInitializers.createBody)
+	{
+		newObject->AddComponent(new BodyComponent(newObject, devices, presets->bodyInitializers));
+	}
+	if (presets->userInputInitializers.createUserInput)
+	{
+		newObject->AddComponent(new UserInputTriggerComponent(newObject, devices, presets->userInputInitializers.TriggeredInput));
+	}
+	if (presets->steeringInitializers.createSteering)
+	{
+		newObject->AddComponent(new SteeringBehaviorComponent(newObject, presets->steeringInitializers));
+	}
+	if (presets->jointInitializers.createJoint)
+	{
+		//Create primary joint components & add to presets
+		newObject->AddComponent(new SpriteComponent(newObject, presets->jointInitializers.spriteInitializers));
+		presets->jointInitializers.bodyInitializers.sprite = newObject->getComponent<SpriteComponent>();
+		newObject->AddComponent(new BodyComponent(newObject, devices, presets->jointInitializers.bodyInitializers));
+		presets->jointInitializers.BodyA = newObject->getComponent<BodyComponent>();		
+
+		//create secondary joint components & add to presets.
+		presets->jointInitializers.bodyInitializers.sprite->sprite = std::make_unique<SpriteComponent>(newObject, presets->jointInitializers.joinedTo.spriteInitializers);
+		presets->jointInitializers.joinedTo.bodyInitializers.sprite = presets->jointInitializers.bodyInitializers.sprite->sprite.get();
+		presets->jointInitializers.BodyA->joinedWith = std::make_unique<BodyComponent>(newObject, devices, presets->jointInitializers.joinedTo.bodyInitializers);
+		presets->jointInitializers.joinedTo.BodyB = presets->jointInitializers.BodyA->joinedWith.get();
+		
+		devices->pDevice->createJoint(presets->jointInitializers);
+
+	}
+
+	return newObject;
 }
 std::unique_ptr<ObjectFactoryPresets> ObjectFactory::createPresetsFromXML(tinyxml2::XMLElement * objectElement)
 {
@@ -69,7 +104,7 @@ std::unique_ptr<ObjectFactoryPresets> ObjectFactory::createPresetsFromXML(tinyxm
 				newObject->AddComponent(new StatComponent(newObject, devices, stoi(componentElement->Attribute("health"))));
 
 			}*/
-		else if (componentName == "Input")
+		else if (componentName == "UserInput")
 		{
 
 			addUserInputPresets(&presets->userInputInitializers, componentElement);
@@ -111,7 +146,7 @@ std::unique_ptr<ObjectFactoryPresets> ObjectFactory::createPresetsFromXML(tinyxm
 		//}
 		else if (componentName == "Joint")
 		{
-			addJointPresets(&presets->bodyInitializers.physics.joint, componentElement);
+			addJointPresets(&presets->jointInitializers, componentElement);
 		}
 		else if (componentName == "Steering")
 		{
@@ -123,14 +158,16 @@ std::unique_ptr<ObjectFactoryPresets> ObjectFactory::createPresetsFromXML(tinyxm
 void ObjectFactory::addSpritePresets(SpritePresets* presets, tinyxml2::XMLElement * componentElement)
 {
 	presets->createSprite = true;
-	componentElement->QueryBoolAttribute("sprite", &presets->isSprite);
-	if (presets->isSprite)
+	presets->Devices = devices;
+	bool isSprite{ false };
+	componentElement->QueryBoolAttribute("sprite", &isSprite);
+	if (isSprite)
 	{
-		presets->assetOrText = componentElement->Attribute("asset");
+		presets->spriteTexture= devices->assetLibrary->getArtAsset(componentElement->Attribute("asset"));
 	}
 	else
 	{
-		presets->assetOrText = componentElement->Attribute("text");
+		presets->spriteTexture = std::make_shared<Texture>(devices->gDevice.get(), componentElement->Attribute("text"), false);
 	}
 
 }
@@ -189,35 +226,35 @@ void ObjectFactory::addUserInputPresets(UserInputPresets* presets, tinyxml2::XML
 
 	/* 4. Add to event handler */
 }
-void ObjectFactory::addJointPresets(Joints* presets, tinyxml2::XMLElement * componentElement)
+void ObjectFactory::addJointPresets(PrimaryJoint* presets, tinyxml2::XMLElement * componentElement)
 {
-	for (
-		tinyxml2::XMLElement* JointParams = componentElement->FirstChildElement();
-		JointParams;
-		JointParams = JointParams->NextSiblingElement()
-		)
-	{
-		presets->createJoint = true;
-		JointParams->QueryIntAttribute("jointNumber", &presets->jointNumber);
+	int jointNumber = 0;
+	//*************Primary Joint******************
+	tinyxml2::XMLElement* JointParams = componentElement->FirstChildElement();
+	presets->createJoint = true;
+	tinyxml2::XMLElement* jointComponent = JointParams->FirstChildElement();
+	addSpritePresets(&presets->spriteInitializers, jointComponent);
 
-		tinyxml2::XMLElement* jointComponent = JointParams->FirstChildElement();
-		addSpritePresets(&presets->jointSprite, jointComponent);
-
-		jointComponent = jointComponent->NextSiblingElement();
-		presets->jointBody = std::make_unique<BodyPresets>();
-		addBodyPresets(presets->jointBody.get(), jointComponent);
-		if (presets->jointNumber != 0)
-		{
-			JointParams->QueryIntAttribute("joinTo", &presets->joinTo);
-			presets->type = setJointType((string)componentElement->Attribute("type"));
-			componentElement->QueryBoolAttribute("collide", &presets->CollideConnected);
-			JointParams->QueryIntAttribute("anchorXFromCenter", (int*)(&presets->AnchorA.x));
-			JointParams->QueryIntAttribute("anchorYFromCenter", (int*)(&presets->AnchorA.y));
-			JointParams->QueryIntAttribute("joinToAnchorXFromCenter", (int*)(&presets->AnchorB.x));
-			JointParams->QueryIntAttribute("joinToAnchorYFromCenter", (int*)(&presets->AnchorB.y));
-			JointParams->QueryIntAttribute("referenceAngle", (int*)(&presets->referenceAngle));
-		}
-		presets = &presets->jointBody->physics.joint;
+	jointComponent = jointComponent->NextSiblingElement();
+		
+	addBodyPresets(&presets->bodyInitializers, jointComponent);
+	
+	//*************Secondary Joint******************		
+	JointParams = JointParams->NextSiblingElement();
+	jointComponent = JointParams->FirstChildElement();
+	addSpritePresets(&presets->joinedTo.spriteInitializers, jointComponent);
+	jointComponent = jointComponent->NextSiblingElement();
+	addBodyPresets(&presets->joinedTo.bodyInitializers, jointComponent);
+	
+	presets->joinedTo.type = setJointType((string)componentElement->Attribute("type"));
+	JointParams->QueryBoolAttribute("collide", &presets->joinedTo.CollideConnected);
+	JointParams->QueryIntAttribute("anchorXFromCenter", (int*)(&presets->joinedTo.AnchorA.x));
+	JointParams->QueryIntAttribute("anchorYFromCenter", (int*)(&presets->joinedTo.AnchorA.y));
+	JointParams->QueryIntAttribute("joinToAnchorXFromCenter", (int*)(&presets->joinedTo.AnchorB.x));
+	JointParams->QueryIntAttribute("joinToAnchorYFromCenter", (int*)(&presets->joinedTo.AnchorB.y));
+	JointParams->QueryIntAttribute("referenceAngle", (int*)(&presets->joinedTo.referenceAngle));
+		
+		
 		//First one just gets added. Future ones must follow the chain to the end!
 		//if (jointNumber == 0)
 		//{
@@ -270,7 +307,7 @@ void ObjectFactory::addJointPresets(Joints* presets, tinyxml2::XMLElement * comp
 			//devices->pDevice->createJoint(presets);
 			//***************************************
 		//}
-	}
+	
 
 }
 void ObjectFactory::addSteeringPresets(SteeringPresets* presets, tinyxml2::XMLElement * componentElement)
@@ -283,12 +320,13 @@ void ObjectFactory::addSteeringPresets(SteeringPresets* presets, tinyxml2::XMLEl
 		)
 	{
 		presets->createSteering = true;
-		if (behaviorElement->Attribute("name") == "Seek")
+		std::string behavior = behaviorElement->Attribute("name");
+		if (behavior == "Seek")
 		{
 			presets->seek = true;
 			presets->target = behaviorElement->Attribute("target");
 		}
-		else if (behaviorElement->Attribute("name") == "Arrive")
+		else if (behavior == "Arrive")
 		{
 			presets->arrive = true;
 		}

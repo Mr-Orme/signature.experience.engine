@@ -11,6 +11,7 @@
 
 #include "UserInputTriggerComponent.h"
 #include "NotificationCallBackComponent.h"
+#include "SteeringBehaviorsComponent.h"
 //#include "BackpackComponent.h"
 //#include "InventoryComponent.h"
 //#include "GhostComponent.h"

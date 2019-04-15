@@ -16,14 +16,14 @@ AssetLibrary::~AssetLibrary()
 {
 }
 
-Texture * AssetLibrary::getArtAsset(std::string searchString)
+std::shared_ptr<Texture> AssetLibrary::getArtAsset(std::string searchString)
 {
-	return artLibrary.find(searchString)->second.get();
+	return artLibrary.find(searchString)->second;
 }
 
 bool AssetLibrary::addArtAsset(std::string name, std::string path)
 {
-	artLibrary[name] = std::make_unique<Texture>(devices->gDevice.get(), path);
+	artLibrary[name] = std::make_shared<Texture>(devices->gDevice.get(), path);
 
 	if (!artLibrary[name]->initialzied) 
 	{ 

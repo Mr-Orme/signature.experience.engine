@@ -335,18 +335,18 @@ Vector2D PhysicsDevice::PV2GV(b2Vec2 physicsVec)const
 
 //**************************************
 //Creates a revolute joint using the passed objects and anchor points
-bool PhysicsDevice::createJoint( Joints joint)
+bool PhysicsDevice::createJoint( PrimaryJoint& joint)
 //**************************************
 {
 	//find corresponding bodies for objects
 	b2Body* bodyA = FindBody(joint.BodyA);
-	b2Body* bodyB = FindBody(joint.BodyB);
+	b2Body* bodyB = FindBody(joint.joinedTo.BodyB);
 	if(bodyA == NULL || bodyB == NULL)
 	{
 		return false;
 	}
 	//TODO::Flush out other joint types!
-	switch (joint.type)
+	switch (joint.joinedTo.type)
 	{
 	case JointType::Revolute:
 		break;
@@ -361,10 +361,10 @@ bool PhysicsDevice::createJoint( Joints joint)
 		b2WeldJointDef weldJointDef;
 		weldJointDef.bodyA = bodyA;
 		weldJointDef.bodyB = bodyB;
-		weldJointDef.collideConnected = joint.CollideConnected;
-		weldJointDef.localAnchorA.Set(RW2PW((eFloat)joint.AnchorA.x), RW2PW((eFloat)joint.AnchorA.y));
-		weldJointDef.localAnchorB.Set(RW2PW((eFloat)joint.AnchorB.x), RW2PW((eFloat)joint.AnchorB.y));
-		weldJointDef.referenceAngle = RW2PWAngle(joint.referenceAngle);
+		weldJointDef.collideConnected = joint.joinedTo.CollideConnected;
+		weldJointDef.localAnchorA.Set(RW2PW((eFloat)joint.joinedTo.AnchorA.x), RW2PW((eFloat)joint.joinedTo.AnchorA.y));
+		weldJointDef.localAnchorB.Set(RW2PW((eFloat)joint.joinedTo.AnchorB.x), RW2PW((eFloat)joint.joinedTo.AnchorB.y));
+		weldJointDef.referenceAngle = RW2PWAngle(joint.joinedTo.referenceAngle);
 		return world->CreateJoint(&weldJointDef);
 		break;
 		

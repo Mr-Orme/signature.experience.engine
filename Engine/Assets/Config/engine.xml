@@ -31,7 +31,7 @@
     </Joint>
                                  <!--LEFT_CLICK/CreateObject-->
     <Component name="UserInput" trigger="8" event="0">
-      <CallBack name="ObjectCreation">
+      <CallBack name="ObjectCreation" type="Ship">
         <Component name ="Sprite" asset="Ship" sprite="true" />
         <Component name ="Body" x="100.0f" y ="100.0f" density="15.0f" restitution="0.0f" angularDamping="1.0f" linearDamping="1.0f" bodyType="DYNAMIC" bodyShape="CIRCLE" physicsOn = "true"/>
         <Component name="Steering">

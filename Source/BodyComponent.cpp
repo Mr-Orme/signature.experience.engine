@@ -19,11 +19,13 @@ BodyComponent::BodyComponent(Object* owner, ResourceManager* devices, BodyPreset
 		callBacks.push_back(std::unique_ptr<BodyCallBack>(static_cast<BodyCallBack*>(callBack.release())));		
 	}
 	presets.callBacks.clear();*/
-	callBacks = std::move(presets.callBacks);
+	//callBacks = std::move(presets.callBacks);
 	
 	//Create fixture.
 	devices->pDevice->createFixture(this, presets);
-
+	this->devices = devices;
+	
+	
 }
 //**************************************
 //**************************************
