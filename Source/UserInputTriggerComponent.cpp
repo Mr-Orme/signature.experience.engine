@@ -35,12 +35,12 @@ using namespace std;
 //	return nullptr;
 //}
 
-UserInputTriggerComponent::UserInputTriggerComponent(Object * owner, ResourceManager * devices, InputDevice::UserInputs input):
+UserInputTriggerComponent::UserInputTriggerComponent(Object * owner, ResourceManager * devices, InputDevice::UserInputs input, EventHandler::Event triggeringEvent):
 	Component(owner), 
 	devices(devices),
 	TriggeredInput(input)
 {
-	eventToTrigger = EventHandler::Event::UserInput;
+	eventToTrigger = triggeringEvent;
 }
 
 vector<std::unique_ptr<Object>> UserInputTriggerComponent::triggerEvent(EventHandler::EventData data)
@@ -52,9 +52,21 @@ vector<std::unique_ptr<Object>> UserInputTriggerComponent::update()
 {
 	std::vector<std::unique_ptr<Object>> toBeReturned;
 	if (auto inputTrigger = devices->iDevice->keyStates.find(TriggeredInput); 
-	inputTrigger != devices->iDevice->keyStates.end() && inputTrigger ->second)
+	inputTrigger != devices->iDevice->keyStates.end()) 
 	{
-		toBeReturned = triggerEvent(inputTrigger->first);
+		if (inputTrigger->second)
+		{
+			if (canBeTriggered)
+			{
+				toBeReturned = triggerEvent(inputTrigger->first);
+				canBeTriggered = false;
+			}
+		}
+		else
+		{
+			canBeTriggered = true;
+		}
 	}
+
 	return toBeReturned;
 }

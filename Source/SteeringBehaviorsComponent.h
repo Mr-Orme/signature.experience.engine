@@ -56,6 +56,8 @@ public:
 
 
 private:
+	ResourceManager* devices;
+	SteeringPresets::TargetType targetType;
 	enum behavior_type
 	{
 		none = 0x00000,

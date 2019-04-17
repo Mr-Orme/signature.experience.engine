@@ -37,6 +37,7 @@ public:
 	void setVelocity(Vector2D velocity);	
 	void accelerate(Vector2D force);
 	void deccelerate(Vector2D force);
+	void applyForce(Vector2D forceVec);
 
 	void setAngle(Vector2D angle);
 	//void applyRotationalForce(Vector2D degrees);

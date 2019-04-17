@@ -67,11 +67,11 @@ struct SecondayJoint
 	BodyPresets bodyInitializers;
 	SpritePresets spriteInitializers;
 	
-	JointType type{ JointType::None };
+	
 	BodyComponent* BodyB{ nullptr };
 	
 	
-	bool CollideConnected{ false };
+	
 	Vector2D AnchorA{ 0.0f, 0.0f };
 	Vector2D AnchorB{ 0.0f, 0.0f };
 	eFloat referenceAngle{ 0.0f };
@@ -82,6 +82,8 @@ struct SecondayJoint
 struct PrimaryJoint
 {
 	bool createJoint{ false };
+	JointType type{ JointType::None };
+	bool CollideConnected{ false };
 	BodyComponent* BodyA{ nullptr };
 	BodyPresets bodyInitializers;
 	SpritePresets spriteInitializers;
@@ -93,15 +95,19 @@ struct UserInputPresets
 {
 	bool createUserInput{ false };
 	InputDevice::UserInputs TriggeredInput;
+	int triggeringEvent;
 	//ICallBack* callback;
 
 };
 struct SteeringPresets
 {
+	enum TargetType{setVector, mouse};
 	bool createSteering{ false };
 	bool seek{ false };
 	bool arrive{ false };
-	std::string target;
+	TargetType type;
+	Vector2D staticTargetVector;
+	ResourceManager* devices;
 };
 struct ObjectFactoryPresets
 {

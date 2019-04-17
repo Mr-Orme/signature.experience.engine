@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 #include "tinyxml2.h"
 
 #include "ResourceManager.h"
@@ -204,6 +205,7 @@ ResourceManager::~ResourceManager()
 void ResourceManager::update()
 {
 	iDevice->update();
+	
 	pDevice->update(1.0f / FPS);
 
 	for (auto objectIter = objects.begin(); objectIter != objects.end(); )
@@ -222,6 +224,10 @@ void ResourceManager::update()
 			objectIter++;
 		}
 	}
+	//if (objects.size() > 5)
+	//{
+	//	cout << objects[5]->getComponent<BodyComponent>()->getPosition().x << ", " << objects[5]->getComponent<BodyComponent>()->getPosition().y << endl;
+	//}
 	for (auto& object : objects)
 	{
 		std::vector<std::unique_ptr<Object>> temp = object->update();

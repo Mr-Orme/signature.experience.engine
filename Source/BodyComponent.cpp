@@ -1,3 +1,4 @@
+#include <iostream>
 #include "BodyComponent.h"
 #include "SpriteComponent.h"
 #include "ResourceManager.h"
@@ -90,6 +91,7 @@ void BodyComponent::setAngle(Vector2D angle)
 
 void BodyComponent::setPosition(Vector2D position)
 {
+	
 	devices->pDevice->setTransform(this, position, devices->pDevice->getAngle(this));
 }
 
@@ -102,6 +104,11 @@ void BodyComponent::deccelerate(Vector2D force)
 {
 	force.Normalize();
 	accelerate(force*-1);
+}
+
+void BodyComponent::applyForce(Vector2D forceVec)
+{
+	devices->pDevice->setLinearImpulse(this, forceVec, { 0,0 });
 }
 
 

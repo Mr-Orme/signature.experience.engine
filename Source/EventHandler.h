@@ -26,7 +26,7 @@ public:
 		UserInput,
 		AdjustView,
 		NumEvents};
-	using EventData = std::variant<IEventTrigger*, Vector2D, const InputDevice::UserInputs, ObjectFactoryPresets* > ;
+	using EventData = std::variant<IEventTrigger*, Vector2D, const InputDevice::UserInputs, ObjectFactoryPresets*, bool > ;
 	///Vector2D --> View: to adjust view based on triggered event.
 	///IEventTrigger* --> Notifications: to make sure the proper event triggered for the notification to display.
 	///UserInputs --> UserInputTrigger: to specificy which user input event happened.

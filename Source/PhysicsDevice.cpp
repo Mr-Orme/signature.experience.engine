@@ -1,3 +1,4 @@
+#include <iostream>
 #include "PhysicsDevice.h"
 #include "SpriteComponent.h"
 #include "ContactListener.h"
@@ -33,19 +34,26 @@ bool PhysicsDevice::update(float dt)
 
 //**************************************
 //Moves body to a set location & angle
-bool PhysicsDevice::setTransform(const BodyComponent* object, Vector2D position, eFloat angle)
+bool PhysicsDevice::setTransform(BodyComponent* object, Vector2D position, eFloat angle)
 //**************************************
 {
 	//finds which body this object is attached to.
 	//based on value set in UserData field of body
 	b2Body* body = FindBody(object);
+	Texture* texture = object->getOwner()->getComponent<SpriteComponent>()->texture.get();
 
+	//subtract off half the width.
+	position.x += (texture->width / 2);
+	//subtract off half the height
+	position.y += (texture->height / 2);
 	//Applies' Box2D transform.
+	
 	body -> SetTransform
 		(
 			GV2PV(position), 
 			RW2PWAngle(angle)
 		);
+	
 	return true;
 	
 }
@@ -346,7 +354,7 @@ bool PhysicsDevice::createJoint( PrimaryJoint& joint)
 		return false;
 	}
 	//TODO::Flush out other joint types!
-	switch (joint.joinedTo.type)
+	switch (joint.type)
 	{
 	case JointType::Revolute:
 		break;
@@ -361,7 +369,7 @@ bool PhysicsDevice::createJoint( PrimaryJoint& joint)
 		b2WeldJointDef weldJointDef;
 		weldJointDef.bodyA = bodyA;
 		weldJointDef.bodyB = bodyB;
-		weldJointDef.collideConnected = joint.joinedTo.CollideConnected;
+		weldJointDef.collideConnected = joint.CollideConnected;
 		weldJointDef.localAnchorA.Set(RW2PW((eFloat)joint.joinedTo.AnchorA.x), RW2PW((eFloat)joint.joinedTo.AnchorA.y));
 		weldJointDef.localAnchorB.Set(RW2PW((eFloat)joint.joinedTo.AnchorB.x), RW2PW((eFloat)joint.joinedTo.AnchorB.y));
 		weldJointDef.referenceAngle = RW2PWAngle(joint.joinedTo.referenceAngle);

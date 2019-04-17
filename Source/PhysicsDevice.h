@@ -22,7 +22,7 @@ public:
 	bool createJoint(PrimaryJoint& joint);
 	bool removeObject(BodyComponent* object);
 
-	bool setTransform( const BodyComponent* object, Vector2D position, eFloat angle);
+	bool setTransform(BodyComponent* object, Vector2D position, eFloat angle);
 	bool setLinearVelocity( const BodyComponent* object, Vector2D linearVelociy);
 	bool setAngularVelocity( const BodyComponent* object, eFloat angularVelocity);
 	bool setTorque(const BodyComponent* object, eFloat torque);
@@ -51,6 +51,7 @@ private:
 	b2Vec2 GV2PV(Vector2D gameVec)const;
 	Vector2D PV2GV(b2Vec2 physicsVec)const;
 	Vector2D alignCenters(const  BodyComponent* object)const;
+	
 
 	
 	bool destroyJoint(BodyComponent* object);

@@ -49,10 +49,12 @@ Object * ObjectFactory::create(ObjectFactoryPresets* presets)
 	if (presets->bodyInitializers.createBody)
 	{
 		newObject->AddComponent(new BodyComponent(newObject, devices, presets->bodyInitializers));
+		newObject->getComponent<SpriteComponent>()->spriteBody = newObject->getComponent<BodyComponent>();
 	}
 	if (presets->userInputInitializers.createUserInput)
 	{
-		newObject->AddComponent(new UserInputTriggerComponent(newObject, devices, presets->userInputInitializers.TriggeredInput));
+		newObject->AddComponent(new UserInputTriggerComponent(newObject, devices, presets->userInputInitializers.TriggeredInput, (EventHandler::Event)presets->userInputInitializers.triggeringEvent));
+		
 	}
 	if (presets->steeringInitializers.createSteering)
 	{
@@ -64,12 +66,14 @@ Object * ObjectFactory::create(ObjectFactoryPresets* presets)
 		newObject->AddComponent(new SpriteComponent(newObject, presets->jointInitializers.spriteInitializers));
 		presets->jointInitializers.bodyInitializers.sprite = newObject->getComponent<SpriteComponent>();
 		newObject->AddComponent(new BodyComponent(newObject, devices, presets->jointInitializers.bodyInitializers));
+		newObject->getComponent<SpriteComponent>()->spriteBody = newObject->getComponent<BodyComponent>();
 		presets->jointInitializers.BodyA = newObject->getComponent<BodyComponent>();		
 
 		//create secondary joint components & add to presets.
 		presets->jointInitializers.bodyInitializers.sprite->sprite = std::make_unique<SpriteComponent>(newObject, presets->jointInitializers.joinedTo.spriteInitializers);
 		presets->jointInitializers.joinedTo.bodyInitializers.sprite = presets->jointInitializers.bodyInitializers.sprite->sprite.get();
 		presets->jointInitializers.BodyA->joinedWith = std::make_unique<BodyComponent>(newObject, devices, presets->jointInitializers.joinedTo.bodyInitializers);
+		presets->jointInitializers.bodyInitializers.sprite->sprite->spriteBody = presets->jointInitializers.BodyA->joinedWith.get();
 		presets->jointInitializers.joinedTo.BodyB = presets->jointInitializers.BodyA->joinedWith.get();
 		
 		devices->pDevice->createJoint(presets->jointInitializers);
@@ -211,11 +215,16 @@ void ObjectFactory::addUserInputPresets(UserInputPresets* presets, tinyxml2::XML
 	presets->TriggeredInput = (InputDevice::UserInputs)temp;
 		
 	//2. Create callback based on event
-	componentElement->QueryIntAttribute("event", &temp);
-	switch (EventHandler::Event(temp))
+	componentElement->QueryIntAttribute("event", &presets->triggeringEvent);
+	switch (EventHandler::Event(presets->triggeringEvent))
 	{
 	case EventHandler::Event::CreateObject:
-	{		
+	{	
+		/*
+		call backs:
+		user input for keyboard, adjusts view
+		mouse clicks need to vary and be able to set....
+		*/
 		devices->eventHandler->getListner(EventHandler::Event::CreateObject)->
 			addCallBack(new ObjectCreationCallBack(this, createPresetsFromXML(componentElement->FirstChildElement())));
 		break;
@@ -228,32 +237,32 @@ void ObjectFactory::addUserInputPresets(UserInputPresets* presets, tinyxml2::XML
 }
 void ObjectFactory::addJointPresets(PrimaryJoint* presets, tinyxml2::XMLElement * componentElement)
 {
-	int jointNumber = 0;
+	//int jointNumber = 0;
 	//*************Primary Joint******************
-	tinyxml2::XMLElement* JointParams = componentElement->FirstChildElement();
 	presets->createJoint = true;
+
+	tinyxml2::XMLElement* JointParams = componentElement->FirstChildElement();
+	presets->type = setJointType((string)JointParams->Attribute("type"));
+	JointParams->QueryBoolAttribute("collide", &presets->CollideConnected);
+	
 	tinyxml2::XMLElement* jointComponent = JointParams->FirstChildElement();
 	addSpritePresets(&presets->spriteInitializers, jointComponent);
 
 	jointComponent = jointComponent->NextSiblingElement();
-		
 	addBodyPresets(&presets->bodyInitializers, jointComponent);
 	
 	//*************Secondary Joint******************		
 	JointParams = JointParams->NextSiblingElement();
-	jointComponent = JointParams->FirstChildElement();
-	addSpritePresets(&presets->joinedTo.spriteInitializers, jointComponent);
-	jointComponent = jointComponent->NextSiblingElement();
-	addBodyPresets(&presets->joinedTo.bodyInitializers, jointComponent);
-	
-	presets->joinedTo.type = setJointType((string)componentElement->Attribute("type"));
-	JointParams->QueryBoolAttribute("collide", &presets->joinedTo.CollideConnected);
 	JointParams->QueryIntAttribute("anchorXFromCenter", (int*)(&presets->joinedTo.AnchorA.x));
 	JointParams->QueryIntAttribute("anchorYFromCenter", (int*)(&presets->joinedTo.AnchorA.y));
 	JointParams->QueryIntAttribute("joinToAnchorXFromCenter", (int*)(&presets->joinedTo.AnchorB.x));
 	JointParams->QueryIntAttribute("joinToAnchorYFromCenter", (int*)(&presets->joinedTo.AnchorB.y));
 	JointParams->QueryIntAttribute("referenceAngle", (int*)(&presets->joinedTo.referenceAngle));
-		
+
+	jointComponent = JointParams->FirstChildElement();
+	addSpritePresets(&presets->joinedTo.spriteInitializers, jointComponent);
+	jointComponent = jointComponent->NextSiblingElement();
+	addBodyPresets(&presets->joinedTo.bodyInitializers, jointComponent);		
 		
 		//First one just gets added. Future ones must follow the chain to the end!
 		//if (jointNumber == 0)
@@ -312,6 +321,7 @@ void ObjectFactory::addJointPresets(PrimaryJoint* presets, tinyxml2::XMLElement 
 }
 void ObjectFactory::addSteeringPresets(SteeringPresets* presets, tinyxml2::XMLElement * componentElement)
 {
+	presets->devices = devices;
 	
 	for (
 		tinyxml2::XMLElement* behaviorElement = componentElement->FirstChildElement();
@@ -324,7 +334,14 @@ void ObjectFactory::addSteeringPresets(SteeringPresets* presets, tinyxml2::XMLEl
 		if (behavior == "Seek")
 		{
 			presets->seek = true;
-			presets->target = behaviorElement->Attribute("target");
+			int temp;
+			behaviorElement->QueryIntAttribute("target", &temp);
+			presets->type = SteeringPresets::TargetType(temp);
+			if (presets->type == SteeringPresets::TargetType::setVector)
+			{
+				behaviorElement->QueryFloatAttribute("targetX", &presets->staticTargetVector.x);
+				behaviorElement->QueryFloatAttribute("targetY", &presets->staticTargetVector.y);
+			}
 		}
 		else if (behavior == "Arrive")
 		{

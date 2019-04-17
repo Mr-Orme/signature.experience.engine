@@ -1,4 +1,5 @@
 #include "SteeringBehaviorsComponent.h"
+#include "ResourceManager.h"
 #include "ComponentsList.h"
 #include "Component.h"
 #include "Utils.h"
@@ -13,16 +14,28 @@
 using namespace std;
 SteeringBehaviorComponent::SteeringBehaviorComponent(Object* owner, SteeringPresets& presets) :Component(owner)
 {
+	devices = presets.devices;
+	if (presets.seek) SeekOn();
+	if (presets.arrive) ArriveOn();
+	targetType = presets.type;
+	if (targetType == SteeringPresets::TargetType::setVector)
+	{
+		m_vTarget = presets.staticTargetVector;
+	}
+	else
+	{
+		m_vTarget = devices->iDevice->getMousePosition();
+	}
 }
 
 Vector2D SteeringBehaviorComponent::Calculate()
 {
 	Vector2D force{ 0,0 };
-	std::cout << force.x << " " << force.y << " --> ";
+	//std::cout << force.x << " " << force.y << " --> ";
 	if (isSeekOn())  force += Seek(m_vTarget);
-	std::cout << force.x << " " << force.y << " --> ";
+	//std::cout << force.x << " " << force.y << " --> ";
 	if (isArriveOn()) force += Arrive(m_vTarget, slow);
-	std::cout << force.x << " " << force.y << std::endl;
+	//std::cout << force.x << " " << force.y << std::endl;
 	return force;
 
 	//Arrive(m_vTarget, SteeringBehavior::Deceleration::normal);
@@ -30,6 +43,14 @@ Vector2D SteeringBehaviorComponent::Calculate()
 
 std::vector<std::unique_ptr<Object>> SteeringBehaviorComponent::update()
 {
+	//cout << owner->getComponent<BodyComponent>()->getPosition()<< endl;
+	if (targetType == SteeringPresets::TargetType::mouse)
+	{
+		m_vTarget = devices->iDevice->getMousePosition();
+	}
+	owner->getComponent<BodyComponent>()->setPosition(owner->getComponent<BodyComponent>()->getPosition()+ Calculate());
+	//owner->getComponent<BodyComponent>()->applyForce(owner->getComponent<BodyComponent>()->getPosition() + 100*Calculate());
+	//cout << owner->getComponent<BodyComponent>()->getPosition()  << endl;
 	return std::vector<std::unique_ptr<Object>>();
 }
 

@@ -40,7 +40,6 @@ std::vector<std::unique_ptr<Object>> Object::update()
 }
 void  Object::draw()
 {
-	//Todo::MrOrme need to not draw if notification component...
 	if (getComponent <NotificationCallBackComponent>() == nullptr)
 	{
 		if (SpriteComponent* sprite = getComponent<SpriteComponent>(); sprite != nullptr)

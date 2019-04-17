@@ -11,9 +11,6 @@ ObjectCreationCallBack::ObjectCreationCallBack(ObjectFactory * objectFactory, st
 Object* ObjectCreationCallBack::triggered(EventHandler::EventData data)
 {
 
-	if (std::holds_alternative<ObjectFactoryPresets*>(data))
-	{
-		return objectFactory->create(std::get<ObjectFactoryPresets*>(data));
-	}
-	return nullptr;
+	
+	return objectFactory->create(presets.get());
 }

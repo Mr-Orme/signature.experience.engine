@@ -10,12 +10,17 @@ class ResourceManager;
 class UserInputTriggerComponent : public Component, public ITrigger
 {
 public:
-	UserInputTriggerComponent(Object* owner, ResourceManager* devices, InputDevice::UserInputs TriggeredInput);
+	UserInputTriggerComponent(
+		Object* owner,
+		ResourceManager* devices,
+		InputDevice::UserInputs TriggeredInput,
+		EventHandler::Event = EventHandler::Event::UserInput);
 	std::vector<std::unique_ptr<Object>> triggerEvent(EventHandler::EventData data) override;
 	std::vector<std::unique_ptr<Object>> update() override;
 private:
 	ResourceManager* devices;
 	InputDevice::UserInputs TriggeredInput;
+	bool canBeTriggered{ true };
 
 
 };
