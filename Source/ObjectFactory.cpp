@@ -229,6 +229,8 @@ void ObjectFactory::addUserInputPresets(UserInputPresets* presets, tinyxml2::XML
 			addCallBack(new ObjectCreationCallBack(this, createPresetsFromXML(componentElement->FirstChildElement())));
 		break;
 	}
+	case EventHandler::Event::UserInput:
+
 	default:
 		break;
 	}

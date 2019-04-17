@@ -26,6 +26,7 @@ InputDevice::InputDevice()
 	keyStates[UserInputs::SHIFT] = false;
 	keyStates[UserInputs::B] = false;
 	keyStates[UserInputs::LEFT_CLICK] = false;
+	keyStates[UserInputs::RIGHT_CLICK] = false;
 	update();
 }
 
