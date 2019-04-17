@@ -63,7 +63,7 @@ std::vector<std::unique_ptr<Object>> SteeringBehaviorComponent::update()
 //------------------------------------------------------------------------
 Vector2D SteeringBehaviorComponent::Seek(Vector2D TargetPos)
 {  //get sprite position
-	Vector2D DesiredVelocity = Vec2DNormalize(TargetPos - owner->getComponent<BodyComponent>()->getPosition()
+	Vector2D DesiredVelocity = Vec2DNormalize((TargetPos - owner->getComponent<BodyComponent>()->getPosition())
 		* owner->getComponent<BodyComponent>()->maxSpeed);
 
 	return (DesiredVelocity - owner->getComponent<BodyComponent>()->getVelocity());
