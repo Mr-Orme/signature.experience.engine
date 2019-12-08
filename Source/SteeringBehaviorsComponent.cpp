@@ -17,6 +17,7 @@ SteeringBehaviorComponent::SteeringBehaviorComponent(Object* owner, SteeringPres
 	devices = presets.devices;
 	if (presets.seek) SeekOn();
 	if (presets.arrive) ArriveOn();
+	if (presets.flee) FleeOn();
 	targetType = presets.type;
 	if (targetType == SteeringPresets::TargetType::setVector)
 	{
@@ -36,6 +37,7 @@ Vector2D SteeringBehaviorComponent::Calculate()
 	//std::cout << force.x << " " << force.y << " --> ";
 	if (isArriveOn()) force += Arrive(m_vTarget, slow);
 	//std::cout << force.x << " " << force.y << std::endl;
+	if (isFleeOn()) force += Flee(m_vTarget);
 	return force;
 
 	//Arrive(m_vTarget, SteeringBehavior::Deceleration::normal);
@@ -74,22 +76,23 @@ Vector2D SteeringBehaviorComponent::Seek(Vector2D TargetPos)
 //
 //  Does the opposite of Seek
 //------------------------------------------------------------------------
-/*Vector2D SteeringBehavior::Flee(Vector2D TargetPos)
+Vector2D SteeringBehaviorComponent::Flee(Vector2D TargetPos)
 {
 	//only flee if the target is within 'panic distance'. Work in distance
 	//squared space.
 	const eFloat PanicDistanceSq = 100.0f * 100.0;
-	if (Vec2DDistanceSq(m_pVehicle->Pos(), target) > PanicDistanceSq)
+
+	if (Vec2DDistanceSq(owner->getComponent<BodyComponent>()->getPosition(), TargetPos) > PanicDistanceSq)
 	{
 	  return Vector2D(0,0);
 	}
 
 
-	Vector2D DesiredVelocity = Vec2DNormalize(m_pVehicle->getSpritePosition() - TargetPos)
-		* m_pVehicle->getSpeed;
+	Vector2D DesiredVelocity = Vec2DNormalize(TargetPos - owner->getComponent<BodyComponent>()->getPosition()
+		* owner->getComponent<BodyComponent>()->maxSpeed);
 
-	return (DesiredVelocity - m_pVehicle->getVelocity());
-}*/
+	return (DesiredVelocity - owner->getComponent<BodyComponent>()->getVelocity());
+}
 
 //--------------------------- Arrive -------------------------------------
 //

@@ -185,7 +185,7 @@ private:
 
 	//this behavior returns a vector that moves the agent away
 	//from a target position
-	//Vector2D Flee(Vector2D TargetPos);
+	Vector2D Flee(Vector2D TargetPos);
 
 	//this behavior is similar to seek but it attempts to arrive 
 	//at the target position with a zero velocity

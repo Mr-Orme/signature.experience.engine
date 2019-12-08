@@ -105,6 +105,7 @@ struct SteeringPresets
 	bool createSteering{ false };
 	bool seek{ false };
 	bool arrive{ false };
+	bool flee{ false };
 	TargetType type;
 	Vector2D staticTargetVector;
 	ResourceManager* devices;

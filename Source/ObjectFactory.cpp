@@ -349,6 +349,18 @@ void ObjectFactory::addSteeringPresets(SteeringPresets* presets, tinyxml2::XMLEl
 		{
 			presets->arrive = true;
 		}
+		else if (behavior == "Flee")
+		{
+			presets->flee = true;
+			int temp;
+			behaviorElement->QueryIntAttribute("target", &temp);
+			presets->type = SteeringPresets::TargetType(temp);
+			if (presets->type == SteeringPresets::TargetType::setVector)
+			{
+				behaviorElement->QueryFloatAttribute("targetX", &presets->staticTargetVector.x);
+				behaviorElement->QueryFloatAttribute("targetY", &presets->staticTargetVector.y);
+			}
+		}
 	}
 
 	
