@@ -194,7 +194,7 @@ private:
 
 	//this behavior predicts where an agent will be in time T and seeks
 	//towards that point to intercept it.
-	//Vector2D Pursuit(const Object* agent);
+	Vector2D Pursuit(const Object* agent);
 
 	//this behavior maintains a position, in the direction of offset
 	//from the target vehicle

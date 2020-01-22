@@ -132,18 +132,18 @@ Vector2D SteeringBehaviorComponent::Arrive(Vector2D     TargetPos,
 	return Vector2D(0, 0);
 }
 
-/*//------------------------------ Pursuit ---------------------------------
+//------------------------------ Pursuit ---------------------------------
 //
 //  this behavior creates a force that steers the agent towards the
 //  evader
 //------------------------------------------------------------------------
-Vector2D SteeringBehavior::Pursuit(const GameObject* evader)
+Vector2D SteeringBehaviorComponent::Pursuit(const Object* evader)
 {
 	//if the evader is ahead and facing the agent then we can just seek
 	//for the evader's current position.
-	Vector2D ToEvader = evader->getSpritePosition() - m_pVehicle->getSpritePosition();
-
-	eFloat RelativeHeading = m_pVehicle->getHeading().Dot(evader->getHeading());
+	Vector2D ToEvader = evader->getComponent<BodyComponent>()->getPosition() - owner->getComponent<BodyComponent>()->getPosition();
+	//Josh: Unfortunately we don't have anything resembling a heading. Will have to inquire about creating a function here.
+	eFloat RelativeHeading = owner->getHeading().Dot(evader->getHeading());
 
 	if ((ToEvader.Dot(m_pVehicle->getHeading()) > 0) &&
 		(RelativeHeading < -0.95))  //acos(0.95)=18 degs
@@ -164,7 +164,7 @@ Vector2D SteeringBehavior::Pursuit(const GameObject* evader)
 }
 
 
-//----------------------------- Evade ------------------------------------
+/*//----------------------------- Evade ------------------------------------
 //
 //  similar to pursuit except the agent Flees from the estimated future
 //  position of the pursuer
