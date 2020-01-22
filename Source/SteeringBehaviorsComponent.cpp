@@ -80,7 +80,7 @@ Vector2D SteeringBehaviorComponent::Flee(Vector2D TargetPos)
 {
 	//only flee if the target is within 'panic distance'. Work in distance
 	//squared space.
-	const eFloat PanicDistanceSq = 100.0f * 100.0;
+	/*const eFloat PanicDistanceSq = 100.0f * 100.0;
 
 	if (Vec2DDistanceSq(owner->getComponent<BodyComponent>()->getPosition(), TargetPos) > PanicDistanceSq)
 	{
@@ -91,7 +91,8 @@ Vector2D SteeringBehaviorComponent::Flee(Vector2D TargetPos)
 	Vector2D DesiredVelocity = Vec2DNormalize(TargetPos - owner->getComponent<BodyComponent>()->getPosition()
 		* owner->getComponent<BodyComponent>()->maxSpeed);
 
-	return (DesiredVelocity - owner->getComponent<BodyComponent>()->getVelocity());
+	return (DesiredVelocity - owner->getComponent<BodyComponent>()->getVelocity());*/
+	return (Seek(TargetPos) * (-1));
 }
 
 //--------------------------- Arrive -------------------------------------

@@ -35,7 +35,8 @@
         <Component name ="Sprite" asset="Ship" sprite="true" />
         <Component name ="Body" x="100.0f" y ="100.0f" density="15.0f" restitution="0.0f" angularDamping="1.0f" linearDamping="1.0f" bodyType="DYNAMIC" bodyShape="CIRCLE" physicsOn = "true"/>
         <Component name="Steering">
-          <Behavior name="Seek" target="1"/>
+          <!--<Behavior name="Seek" target="1"/>-->
+          <Behavior name="Flee" target="1"/>
         </Component>
         <Component name="UserInput" trigger="1" event="3">
           <CallBack name ="BodyCallBack" x="0.0f" y ="2.0f"></CallBack>
