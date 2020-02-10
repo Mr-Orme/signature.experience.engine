@@ -1,4 +1,6 @@
 #pragma once
+#include "SDL_Events.h"
+#include "SDL_Render.h"
 //Total windows
 const int TOTAL_WINDOWS = 3;
 
