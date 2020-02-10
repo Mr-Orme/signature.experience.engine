@@ -172,6 +172,7 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
     <ClCompile Include="Source\UserInputComponent.cpp" />
     <ClCompile Include="Source\View.cpp" />
     <ClCompile Include="ThirdParty\tinyxml2-master\tinyxml2.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AssetLibrary.h" />
@@ -196,6 +197,7 @@ xcopy "$(ProjectDir)Assets" "$(ProjectDir)Engine\Assets" /E /I /F /Y</Command>
     <ClInclude Include="Source\UserInputComponent.h" />
     <ClInclude Include="Source\View.h" />
     <ClInclude Include="ThirdParty\tinyxml2-master\tinyxml2.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Assets\Config\assets.xml">
