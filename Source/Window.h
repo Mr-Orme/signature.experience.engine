@@ -2,6 +2,8 @@
 #include "GraphicsDevice.h"
 //Total windows
 const int TOTAL_WINDOWS = 3;
+//Our custom windows
+LWindow gWindows[TOTAL_WINDOWS];
 
 class LWindow
 {

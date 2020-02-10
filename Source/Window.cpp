@@ -1,4 +1,6 @@
 #include "Window.h"
+#include <sstream>
+
 
 bool LWindow::init()
 {
